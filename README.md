@@ -4,7 +4,7 @@
 ## Wie funktoniert es? 
 
 Für Visio einfach die Git Erweiterung herunterladen:
-![Extension](/github-preview.png)
+![Extension](/preview.png)
 
 
 Um das Repository zu kopieren 
