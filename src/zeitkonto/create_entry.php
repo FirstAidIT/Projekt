@@ -1,5 +1,5 @@
 <?php
-include 'db_connection.php'; 
+include '../datenbank/db_connection.php'; 
 
 
 $zuordnung = filter_input(INPUT_POST, 'Zuordnung');

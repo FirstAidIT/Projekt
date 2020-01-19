@@ -1,5 +1,5 @@
 <?php
-include 'db_connection.php'; 
+include '../datenbank/db_connection.php'; 
 
 $sql="SELECT zuordnung, 
 erfassungs_tag, 
