@@ -3,14 +3,16 @@
 
 ## Wie funktoniert es? 
 
+Für Visio einfach die Git Erweiterung herunterladen:
+![Extension in  Visio]
+
+
 Um das Repository zu kopieren 
 
 https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository
 
 Um euren Stand zu comitten 
 
- Wählt als erstes den Develop Branch 
- - git checkout develop 
 Terminal im Sourcecodeordner öffnen/
                                      
                                      
