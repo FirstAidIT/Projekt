@@ -2,7 +2,7 @@
 <head>
 <meta charset="utf-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-  
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="stylesheet" href="/main.css">
 <title>WI-Projekt</title>
 <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
@@ -89,6 +89,28 @@ function check_email($email) {
 }
 
 ?>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="benutzerverwaltungma.php">Benutzerverwaltung <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="einzelprojekt.php">Projekt bearbeiten</a>
+      </li>
+    </ul>
+
+    <ul class="navbar-nav ml-auto">
+    </li>
+    <li class="nav-item ">
+        <a class="fas fa-user fa-2x" href="mitarbeiterverwaltung.php" ></a>
+    </li>
+    </ul>
+  </div>
+</nav>
+
 <h3>Neuen Mitarbeiter anlegen</h3>
 <form class = "form-horizontal" action="benutzerverwaltungma.php" method="post">
     

@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-  
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="stylesheet" href="/main.css">
 <title>Benutzerverwaltung Manager</title>
 <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
@@ -12,13 +12,6 @@
 </head>
 <body>
 <?php
-
-
-
-/* Update 20.1.
-Noch fehlend
--Suche nach einzelnen Mitarbeitern
-*/
 
 require 'inc/db.php';
 
@@ -42,6 +35,8 @@ if (isset($_GET['aktion']) and $_GET['aktion']=='loeschen') {
 
 //Bestehenden User ändern
 if (isset($_POST['aktion']) and $_POST['aktion']=='korrigieren') {
+
+    $emailalt = $_POST['emailalt'];
     $upd_id = "";
     if (isset($_POST['mitarbeiterID'])) {
         $upd_id = (INT) trim($_POST['mitarbeiterID']);
@@ -63,6 +58,28 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='korrigieren') {
         $upd_rolle = trim($_POST['rolle']);
     }
 
+    $statement = $db->prepare("SELECT* FROM person WHERE email = '$upd_email'");
+    $statement->execute(array('Max')); 
+    $anzahl_user = $statement->rowCount();
+
+
+
+    if(check_email($upd_email) == false){
+        ?>
+        <meta http-equiv="refresh" content="5; URL=benutzerverwaltungma.php?aktion=bearbeiten&mitarbeiterID=<?php echo $upd_id; ?>"> 
+        <?php
+        echo "Bitte eine gültige E-Mail angeben";
+    }
+
+    else {
+        if ($anzahl_user > 0 && $upd_email != $emailalt){
+            ?>
+            <meta http-equiv="refresh" content="5; URL=benutzerverwaltungma.php?aktion=bearbeiten&mitarbeiterID=<?php echo $upd_id; ?>"> 
+            <?php
+            echo ("E-Mail bereits vergeben");
+        }
+
+        else{
     $hashed_password = password_hash($upd_passwort, PASSWORD_DEFAULT);
 
     
@@ -78,6 +95,8 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='korrigieren') {
             echo '<p class="feedbackerfolg">Datensatz wurde geändert</p>';
             $modus_aendern = false;
         }
+    }
+    }
     }
 }
 
@@ -101,7 +120,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
         $rolle = trim($_POST['rolle']);
     }
 
-
+    $mail = $_POST['email'];
     $passwortwdh = $_POST['passwortwdh'];
 
 
@@ -196,24 +215,47 @@ if (!count($daten)) {
 } else {
 ?>
 
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
- <form action="" method="get">
-    suchen nach:
-    <input type="hidden" name="aktion" value="suchen">
-    <input type="text" name="suchbegriff" id="suchbegriff">
-    <input type="submit" value="suchen">
- </form>
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="benutzerverwaltungma.php">Benutzerverwaltung <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="einzelprojekt.php">Projekt bearbeiten</a>
+      </li>
+    </ul>
+
+    <ul class="navbar-nav ml-auto">
+    </li>
+    <li class="nav-item ">
+        <a class="fas fa-user fa-2x" href="mitarbeiterverwaltung.php" ></a>
+    </li>
+    </ul>
+  </div>
+</nav>
+
+<form action="" method="get">
+        Mitarbeiter suchen:
+        <input  type="hidden" name="aktion" value="suchen">
+        <input  type="text" name="suchbegriff" id="suchbegriff" value ="Email oder Name" onfocus="if(this.value=='Email oder Name')   this.value='';" onblur="if(this.value==''){this.value='Email oder Name';}" >
+        <input  type="submit" value="suchen" class="w3-btn w3-black">
+</form>
+
+
+
+
 
  <?php
 
- // Nach einem Mitarbeiter suchen
- // Die IDs der Mitarbeiter stimmen überein, die Tabellenansicht funktioniert aber noch nicht
+
  if ($modus_aendern == false ) {
     $daten = array();
     if ( isset($_GET['suchbegriff']) and trim ($_GET['suchbegriff']) != '' )
     {
         $suchbegriff = trim ($_GET['suchbegriff']);
-        echo "<p>Gesucht wird nach: <b>$suchbegriff</b></p>"; 
+        //echo "<p>Gesucht wird nach: <b>$suchbegriff</b></p>"; 
         $suche_nach = "%{$suchbegriff}%";
         $suche = $db->prepare("SELECT mitarbeiterID, email, passwort, name, rolle 
                      FROM person
@@ -221,24 +263,12 @@ if (!count($daten)) {
         $suche->bindParam(1, $suche_nach, PDO::PARAM_STR);
         $suche->bindParam(2, $suche_nach, PDO::PARAM_STR);
         $suche->execute();
-        while ($row = $suche->fetch()) {
-            $mitarbeiterID = $row['mitarbeiterID'];
-            $email = $row['email'];
-            $passwort = $row['passwort'];
-            $name = $row['name'];
-            $rolle = $row['rolle'];
-            //Mitarbeiter ID wird immer richtig ausgegeben
-            echo $mitarbeiterID;
+
+        while ($datensatzsuche = $suche->fetchObject()) {
+            $daten[] = $datensatzsuche;
         }
-        /*while ($suche->fetch()) {
-            $daten[] = (object) array($mitarbeiterID = $['mitarbeiterID'], 
-                              'passwort'=> $passwort,
-                              'email'   => $email, 
-                              'name'  => $name, 
-                              'rolle' => $rolle);
-        }*/
         $suche = null;
-        $mitarbeiterID       = '';
+        //$mitarbeiterID       = '';
         $email   = '';
         $name  = '';
         $rolle = '';     
@@ -255,6 +285,8 @@ if (!count($daten)) {
     }
 
 ?>
+
+
     <table class = "table table-dark">
         <thead class="thead-dark">
             <tr>
@@ -385,6 +417,28 @@ function PassStrength($Password) {
 
 if ($modus_aendern == true){
 ?>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="benutzerverwaltungma.php">Benutzerverwaltung <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="einzelprojekt.php">Projekt bearbeiten</a>
+      </li>
+    </ul>
+
+    <ul class="navbar-nav ml-auto">
+    </li>
+    <li class="nav-item ">
+        <a class="fas fa-user fa-2x" href="mitarbeiterverwaltung.php" ></a>
+    </li>
+    </ul>
+  </div>
+</nav>
+
 <form class = "form-horizontal" action="benutzerverwaltungma.php" method="post">
 
 
@@ -392,10 +446,14 @@ if ($modus_aendern == true){
     <!--MitarbeiterID-->
     <label>
         <input type="hidden" name="mitarbeiterID" id="mitarbeiterID" value="<?php echo $mitarbeiterID; ?>">
-    </label>
-    <!--Mail-->
+    </label><br>
+    E-Mail:
+    <br>
     <label>
-        <input type="hidden" name="email" id="email" value="<?php echo $email; ?>">
+        <input type="text" name="email" id="email" value="<?php echo $email; ?>">
+    </label>
+    <label>
+        <input type="hidden" name="emailalt" id="emailalt" value="<?php echo $email; ?>">
     </label><br>
     <label>Name: <br>
         <input type="text" name="name" id="name" value="<?php echo $name; ?>">       

@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-  
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="stylesheet" href="/main.css">
 <title>Mitarbeiterverwaltung</title>
 <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
@@ -27,8 +27,8 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
         $upd_email = trim($_POST['email']);
     }
     $upd_passwort = "";
-    if (isset($_POST['passwort'])) {
-        $upd_passwort = trim($_POST['passwort']);
+    if (isset($_POST['passwortneu1'])) {
+        $upd_passwort = trim($_POST['passwortneu1']);
     }
     $upd_name = "";
     if (isset($_POST['name'])) {
@@ -53,33 +53,53 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
         echo '<p>Die Passwörter stimmen nicht überein</p>';
     }
 
+
+    // Passwörter nur vergleichen und schreiben, wenn ein neues eingegeben wird
     else{
 
-        if(PassStrength($passwortneu1)<30){
-            echo "Bitte ein sicheres Passwort wählen";
-        }
+        if (!empty($passwortneu1)){
 
-        else{
+            if(PassStrength($passwortneu1)<30){
+                echo "Bitte ein sicheres Passwort wählen";
+            }
 
-            $hashed_password = password_hash($upd_passwort, PASSWORD_DEFAULT);
+            else{
 
-            
-            if ($upd_email != '' or $upd_passwort != '' or $upd_name != '' or $upd_rolle != '')
-            {
-                // speichern
-                $update = $db->prepare("UPDATE person SET email =?, passwort=?, name=?, rolle=? WHERE mitarbeiterID=?");
-                $update->execute([$upd_email, $hashed_password, $upd_name, $upd_rolle, $upd_id]);
-                if ($update->execute()) {
-                    ?>
-                    <meta http-equiv="refresh" content="5; URL=mitarbeiterverwaltung.php"> 
-                    <?php
-                    echo '<p class="feedbackerfolg">Datensatz wurde geändert</p>';
+                $hashed_password = password_hash($upd_passwort, PASSWORD_DEFAULT);
+
+                
+                if ($upd_email != '' or $upd_passwort != '' or $upd_name != '' or $upd_rolle != '')
+                {
+                    // speichern
+                    $update = $db->prepare("UPDATE person SET email =?, passwort=?, name=?, rolle=? WHERE mitarbeiterID=?");
+                    $update->execute([$upd_email, $hashed_password, $upd_name, $upd_rolle, $upd_id]);
+                    if ($update->execute()) {
+                        ?>
+                        <meta http-equiv="refresh" content="5; URL=mitarbeiterverwaltung.php"> 
+                        <?php
+                        echo '<p class="feedbackerfolg">Datensatz wurde geändert</p>';
+                    }
                 }
             }
+    }
+    else{
+        if ($upd_email != ''or $upd_name != '' or $upd_rolle != '')
+        {
+            // speichern
+            $update = $db->prepare("UPDATE person SET email =?, name=?, rolle=? WHERE mitarbeiterID=?");
+            $update->execute([$upd_email, $upd_name, $upd_rolle, $upd_id]);
+            if ($update->execute()) {
+                ?>
+                <meta http-equiv="refresh" content="5; URL=mitarbeiterverwaltung.php"> 
+                <?php
+                echo '<p class="feedbackerfolg">Datensatz wurde geändert</p>';
+            }
         }
+        echo "Kein neues Passwort";
+    }
 }
 }
-$dseinlesen = $db->prepare("SELECT mitarbeiterID, email, passwort, name, rolle FROM person WHERE email = 'peter@test.de' ");
+$dseinlesen = $db->prepare("SELECT mitarbeiterID, email, passwort, name, rolle FROM person WHERE email = 'andker94@web.de' ");
         $dseinlesen->execute();
         while ($row = $dseinlesen->fetch()) {
             $mitarbeiterID = $row['mitarbeiterID'];
@@ -147,6 +167,28 @@ function PassStrength($Password) {
 }
 
 ?>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="benutzerverwaltungma.php">Benutzerverwaltung <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="einzelprojekt.php">Projekt bearbeiten</a>
+      </li>
+    </ul>
+
+    <ul class="navbar-nav ml-auto">
+    </li>
+    <li class="nav-item ">
+        <a class="fas fa-user fa-2x" href="mitarbeiterverwaltung.php" ></a>
+    </li>
+    </ul>
+  </div>
+</nav>
+
 <form class = "form-horizontal" action="mitarbeiterverwaltung.php" method="post">
 
 
@@ -167,7 +209,7 @@ function PassStrength($Password) {
     <label>Neues Passwort:<br>
         <input type="password" name="passwortneu1" id="passwortneu1" value="">
     </label><br>
-    <label>Neues Passwort:<br>
+    <label>Neues Passwort wiederholen:<br>
         <input type="password" name="passwortneu2" id="passwortneu2" value="">
     </label><br>
     Rolle:<br>
