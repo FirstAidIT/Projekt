@@ -1,11 +1,12 @@
 <?php
-include '../datenbank/db_connection.php'; 
+include 'datenbank/db_connection.php'; 
 include 'get_entries.php'; 
 ?> 
 
 <div class = "container">
 <h2>Zeiterfassung</h2>
 <p>Hier können Sie Ihre persönlichen Zeiten erfassen und ändern</p>
+<h4>Projektarbeit</h4>
 <table class = "table table-striped">
 <tr>
     <th>Kunde</th>
@@ -29,6 +30,26 @@ if (!empty($result)){
    } 
 }
 ?>
+</table>
+
+<h4>Zeiterfassung außerhalb der Projektarbeit</h4>
+
+<table class = "table table-striped">
+   <tr>
+      <th>Datum</th>
+      <th>aufgewendete Zeit</th>
+      <th>Kommentar</th>
+   </tr>
+   <?php if (!empty($resultExtraHours)) {
+      foreach ($resultExtraHours as $row) {
+         echo'<tr>';
+         echo '<td>'.$row["erfassungs_tag"].'</td>';
+         echo'<td>'.$row["stunden_zahl"].'</td>';
+         echo'<td>'.$row["kommentar"].'</td>';
+         echo '</tr> ';
+      }
+   }
+   ?>
 </table>
 
    <button class= "btn btn-success"  data-toggle = "modal" data-target="#myModal">Nicht zuordenbare Stunden</button>
