@@ -23,7 +23,7 @@
     }
 
     .bottom-position {
-    position: absolute;
+    position: fixed;
     bottom: 5%;
     right: 5%;
     }
@@ -38,6 +38,14 @@
       height: 60px;
       box-shadow: 0px 1px 1px 1px rgba(202, 202, 202, 0.3);
     }
+
+    .btn-timer-clicked {
+      border-radius: 40px;
+      height: 60px;
+      width: 140px;
+      box-shadow: 0px 1px 1px 1px rgba(202, 202, 202, 0.3);
+    }
+
 
     .btn-time, i {
       font-size: 30px;
@@ -56,6 +64,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.6.3/js/all.js" integrity="sha384- EIHISlAOj4zgYieurP0SdoiBYfGJKkgWedPHH4jCzpCXLmzVsw1ouK59MuUtP4a1" crossorigin="anonymous"></script>
     <script src="src/zeitkonto/script.js" type="text/javascript"></script>
+    <script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="//rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.js"></script>
+    <link href="//rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.css" rel="stylesheet">
 
 </head>
 <body>
