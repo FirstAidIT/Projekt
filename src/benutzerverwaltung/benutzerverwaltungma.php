@@ -20,9 +20,9 @@ require 'inc/db.php';
 /* Updates nach Termin mit Auftraggeber
 
 - Fehlermeldungen auf der gleichen Seite
-- Alles auf Buttons!!*/
+- Alles auf Buttons!!
 
-//User löschen
+User löschen*/
 
 $nochfalsch = false;
 $modus_aenderung;
