@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="stylesheet" href="/main.css">
 <title>WI-Projekt</title>
-<!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
@@ -111,23 +111,23 @@ function check_email($email) {
   </div>
 </nav>
 
-<h3>Neuen Mitarbeiter anlegen</h3>
-<form class = "form-horizontal" action="benutzerverwaltungma.php" method="post">
-    
+
+<form action="benutzerverwaltungma.php" method="post">
+    <h3>Neuen Mitarbeiter anlegen</h3>
     <label>
-        <input type="hidden" name="mitarbeiterID" id="mitarbeiterID" value="">
+        <input type="hidden" name="mitarbeiterID" class= "form-control" id="mitarbeiterID" value="">
     </label><br>
     <label>E-Mail: <br>
-        <input type="text" name="email" id="email" value="">
+        <input type="text" name="email" class= "form-control" id="email" value="">
     </label><br>
     <label>Passwort:<br>
-        <input type="password" name="passwort" id="passwort" value="">
+        <input type="password" name="passwort" class= "form-control" id="passwort" value="">
     </label><br>
     <label>Passwort wiederholen:<br>
-        <input type="password" name="passwortwdh" id="passwortwdh" value="">
+        <input type="password" name="passwortwdh" class= "form-control" id="passwortwdh" value="">
     </label><br> 
     <label>Name: <br>
-        <input type="text" name="name" id="name" value="">       
+        <input type="text" name="name" class= "form-control" id="name" value="">       
     </label><br>
     Rolle:<br>
     <select name = "rolle">
@@ -136,7 +136,8 @@ function check_email($email) {
         <option value ="Management">Management</option>
         value=""
     </select><br> <br>
-    <input type="submit" name="aktion" onclick="return confirm('Soll der Mitarbeiter wirklich angelegt werden?')" value="speichern" class="w3-btn w3-green">
-    <input type="submit" name="back" value="Zurück" class="w3-btn w3-black" href = "benutzerverwaltungma.php">
-
+    <input type="submit" name="aktion" onclick="return confirm('Soll der Mitarbeiter wirklich angelegt werden?')" value="speichern" class="btn btn-success">
+    <!--<button type="button" class="btn btn-success">Anlegen</button>-->
+    <input type="hidden" name="back" value="Zurück" class="w3-btn w3-black" href = "benutzerverwaltungma.php">
+    <!--<button type="button" class="btn btn-primary">Zurück</button>-->
 </form>

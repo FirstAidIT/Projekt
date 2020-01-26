@@ -17,6 +17,8 @@
 
 require 'inc/db.php';
 
+$erfolg = false;
+
 if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
     $upd_id = "";
     if (isset($_POST['mitarbeiterID'])) {
@@ -42,29 +44,27 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
     $passwortneu1 = $_POST ['passwortneu1'];
     $passwortneu2 = $_POST ['passwortneu2'];
 
-    if(PassStrength($passwortneu1)<30){
 
-    }
 
-    if ($passwortneu1!=$passwortneu2){
-        ?>
-        <meta http-equiv="refresh" content="5; URL=mitarbeiterverwaltung.php"> 
-        <?php
-        echo '<p>Die Passwörter stimmen nicht überein</p>';
-    }
 
 
     // Passwörter nur vergleichen und schreiben, wenn ein neues eingegeben wird
-    else{
+
 
         if (!empty($passwortneu1)){
 
+
             if(PassStrength($passwortneu1)<30){
-                echo "Bitte ein sicheres Passwort wählen";
+                //echo "Bitte ein sicheres Passwort wählen";
             }
 
             else{
 
+                if ($passwortneu1!=$passwortneu2){
+                   // echo '<p>Die Passwörter stimmen nicht überein</p>';
+                }
+
+                else {
                 $hashed_password = password_hash($upd_passwort, PASSWORD_DEFAULT);
 
                 
@@ -74,12 +74,16 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
                     $update = $db->prepare("UPDATE person SET email =?, passwort=?, name=?, rolle=? WHERE mitarbeiterID=?");
                     $update->execute([$upd_email, $hashed_password, $upd_name, $upd_rolle, $upd_id]);
                     if ($update->execute()) {
+                        /*
                         ?>
                         <meta http-equiv="refresh" content="5; URL=mitarbeiterverwaltung.php"> 
                         <?php
+                        */
                         echo '<p class="feedbackerfolg">Datensatz wurde geändert</p>';
+                        $erfolg = true;
                     }
                 }
+            }
             }
     }
     else{
@@ -89,17 +93,14 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
             $update = $db->prepare("UPDATE person SET email =?, name=?, rolle=? WHERE mitarbeiterID=?");
             $update->execute([$upd_email, $upd_name, $upd_rolle, $upd_id]);
             if ($update->execute()) {
-                ?>
-                <meta http-equiv="refresh" content="5; URL=mitarbeiterverwaltung.php"> 
-                <?php
                 echo '<p class="feedbackerfolg">Datensatz wurde geändert</p>';
+                $erfolg = true;
             }
         }
-        echo "Kein neues Passwort";
     }
 }
-}
-$dseinlesen = $db->prepare("SELECT mitarbeiterID, email, passwort, name, rolle FROM person WHERE email = 'andker94@web.de' ");
+
+$dseinlesen = $db->prepare("SELECT mitarbeiterID, email, passwort, name, rolle FROM person WHERE email = 'andreas@kerscher.de' ");
         $dseinlesen->execute();
         while ($row = $dseinlesen->fetch()) {
             $mitarbeiterID = $row['mitarbeiterID'];
@@ -189,7 +190,7 @@ function PassStrength($Password) {
   </div>
 </nav>
 
-<form class = "form-horizontal" action="mitarbeiterverwaltung.php" method="post">
+<form class = "form-horizontal" style= "width:400;  margin:auto;" action="mitarbeiterverwaltung.php" method="post">
 
 
     <h3>Eigene Informationen bearbeiten</h3>
@@ -201,17 +202,17 @@ function PassStrength($Password) {
         <input type="hidden" name="email" id="email" value="<?php echo $email;?>">
     </label><br>
     <label>Name:<br>
-        <input type="text" name="name" id="name" value="<?php echo $name; ?>">       
+        <input type="text" name="name" class= "form-control" id="name" value="<?php echo $name; ?>">        
     </label><br>
     <label>Altes Passwort:<br>
-        <input type="password" name="passwort" id="passwort" value="">
+        <input type="password" name="passwort" class= "form-control" id="passwort" value="">
     </label><br>
     <label>Neues Passwort:<br>
-        <input type="password" name="passwortneu1" id="passwortneu1" value="">
-    </label><br>
+        <input type="password" name="passwortneu1" class= "form-control" id="passwortneu1" value="">
+    </label><?php if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen'){ if (!empty($passwortneu1)){ if (PassStrength($passwortneu1)<30){ echo '<span style="color:#FF0000">Bitte ein sicheres Passwort angeben!</span>';}}}?><br>
     <label>Neues Passwort wiederholen:<br>
-        <input type="password" name="passwortneu2" id="passwortneu2" value="">
-    </label><br>
+        <input type="password" name="passwortneu2" class= "form-control" id="passwortneu2" value="">    
+    </label><?php if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {  if (!empty($passwortneu1)){if ($passwortneu1 != $passwortneu2 ){ if (PassStrength($passwortneu1)>=30){ echo '<span style="color:#FF0000">Die angegebenen Passwörter stimmen nicht überein!</span>';}}}}?><br>
     Rolle:<br>
     <select name = "rolle">
         <option value ="Mitarbeiter">Mitarbeiter</option>
@@ -219,7 +220,7 @@ function PassStrength($Password) {
         <option value ="Management">Management</option>
         value="<?php echo $rolle; ?>"
     </select><br> <br>
-    <input type="submit" onclick="return confirm('Änderungen wirklich übernehmen?')" class="w3-btn w3-green" name = "aktion" value="Übernehmen">
+    <input type="submit" onclick="return confirm('Änderungen wirklich übernehmen?')" class="btn btn-success" name = "aktion" value="Übernehmen">
 
 
 </form>

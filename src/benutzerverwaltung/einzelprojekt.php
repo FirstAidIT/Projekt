@@ -16,21 +16,24 @@
 
 require 'inc/db.php';
 
-if (isset($_GET['aktion']) and $_GET['aktion']=='loeschen') {
-    if (isset($_GET['projektID'])) {
-        $projektID =$_GET['projektID'];
+if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt loeschen') {
+    if (isset($_POST['projektID'])) {
+        $projektID =$_POST['projektID'];
         if ($projektID > 0)
         {
             $loeschen = $db->prepare("DELETE FROM projekt WHERE projektID=(?) LIMIT 1");
             $loeschen->bindParam(1, $projektID, PDO::PARAM_STR);
             if ($loeschen->execute()) {
+                ?>
+                <meta http-equiv="refresh" content="5; URL=einzelprojekt.php"> 
+                <?php
                 echo "<p>Datensatz wurde gelöscht</p>";
             }
         }       
     }
 }
 
-if (isset($_POST['aktion']) and $_POST['aktion']=='korrigieren') {
+if (isset($_POST['aktion']) and $_POST['aktion']=='Änderungen übernehmen') {
     $upd_erstellungsdatum = "";
     if (isset($_POST['erstellungsdatum'])) {
         $upd_erstellungsdatum = trim($_POST['erstellungsdatum']);
@@ -72,21 +75,33 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='korrigieren') {
         $upd_potenzial = trim($_POST['potenzial']);
     }
 
+    $statement = $db->prepare("SELECT* FROM projekt WHERE projektname = '$upd_projektname'");
+    $statement->execute(array('Max')); 
+    $anzahl_projekte = $statement->rowCount();
 
-    if ($upd_erstellungsdatum != '' or $upd_aufwand != '')
-    {
-        // speichern
-        $update = $db->prepare("UPDATE projekt SET erstellungsdatum =?, aufwand=?, projektname=?, wahrscheinlichkeit=? , kunde=?, budget=?, dauer=?, archivierungsdatum=?, potenzial=? WHERE projektID=?");
-        $update->execute([$upd_erstellungsdatum, $upd_aufwand, $upd_projektname, $upd_wahrscheinlichkeit, $upd_kunde, $upd_budget, $upd_dauer, $upd_archivierungsdatum, $upd_potenzial, $upd_projektID]);
-        if ($update->execute()) {
-            ?>
-            <meta http-equiv="refresh" content="5; URL=einzelprojekt.php"> 
-            <?php
-            echo '<p class="feedbackerfolg">Datensatz wurde geändert</p>';
-            $modus_aendern = false;
-        }
+    if ($anzahl_projekte > 0){
+        ?>
+        <meta http-equiv="refresh" content="5; URL=einzelprojekt.php"> 
+        <?php
+        echo "Dieser Projektname ist bereits vorhanden";
     }
-    else echo "Bitte geben sie alle notwendigen Informationen an!";
+
+    else{
+        if ($upd_erstellungsdatum != '' or $upd_aufwand != '')
+        {
+            // speichern
+            $update = $db->prepare("UPDATE projekt SET erstellungsdatum =?, aufwand=?, projektname=?, wahrscheinlichkeit=? , kunde=?, budget=?, dauer=?, archivierungsdatum=?, potenzial=? WHERE projektID=?");
+            $update->execute([$upd_erstellungsdatum, $upd_aufwand, $upd_projektname, $upd_wahrscheinlichkeit, $upd_kunde, $upd_budget, $upd_dauer, $upd_archivierungsdatum, $upd_potenzial, $upd_projektID]);
+            if ($update->execute()) {
+                ?>
+                <meta http-equiv="refresh" content="5; URL=einzelprojekt.php"> 
+                <?php
+                echo '<p class="feedbackerfolg">Datensatz wurde geändert</p>';
+                $modus_aendern = false;
+            }
+        }
+        else echo "Bitte geben sie alle notwendigen Informationen an!";
+    }   
 }
 
 $modus_aendern = false;
@@ -128,19 +143,22 @@ if (!count($daten)) {
   </div>
 </nav>
 
-    <table class = "table table-dark">
+<br>
+<?php
+if ($modus_aendern==false){?>
+    <table class = "table table-success">
         <thead class="thead-dark">
             <tr>
-                <th scope="col">Erstellung</th>
-                <th scope="col">Aufwand</th>
-                <th scope="col">Projektname</th>
-                <th scope="col">Wahrscheinlichkeit</th>
-                <th scope="col">Kunde</th>
-                <th scope="col">Budget</th>
-                <th scope="col">ProjektID</th>
-                <th scope="col">Dauer</th>
-                <th scope="col">Archivierung</th>
-                <th scope="col">Potenzial</th>
+            <th scope="col">Projektname</th>
+            <th scope="col">Aufwand (h)</th>
+            <th scope="col">Erstellung</th>
+            <th scope="col">Wahrscheinlichkeit (%)</th>
+            <th scope="col">Kunde</th>
+            <th scope="col">Budget (€)</th>
+            <!--<th scope="col">ProjektID</th>-->
+            <th scope="col">Dauer</th>
+            <th scope="col">Archivierung</th>
+            <th scope="col">Bearbeiten</th>
             </tr>
         </thead>
         <tbody>
@@ -148,21 +166,21 @@ if (!count($daten)) {
             foreach ($daten as $inhalt) {
             ?>			
                 <tr>
-                    <td><?php echo sicherheit($inhalt->erstellungsdatum); ?></td>
+                    <td><?php echo sicherheit($inhalt->projektname); ?> <br> <?php echo sicherheit($inhalt->potenzial); ?></td>
                     <td><?php echo sicherheit($inhalt->aufwand); ?></td>
-                    <td><?php echo sicherheit($inhalt->projektname); ?></td>
+                    <td><?php echo sicherheit($inhalt->erstellungsdatum); ?></td>
                     <td><?php echo sicherheit($inhalt->wahrscheinlichkeit); ?></td>
                     <td><?php echo sicherheit($inhalt->kunde); ?></td>
                     <td><?php echo sicherheit($inhalt->budget); ?></td>
-                    <td><?php echo sicherheit($inhalt->projektID); ?></td>
+                    <!--<td><?php echo sicherheit($inhalt->projektID); ?></td>-->
                     <td><?php echo sicherheit($inhalt->dauer); ?></td>
                     <td><?php echo sicherheit($inhalt->archivierungsdatum); ?></td>
-                    <td><?php echo sicherheit($inhalt->potenzial); ?></td>
                     <!--<td><a href = "?aktion=anzeigen&mitarbeiterID=<?php echo $inhalt->projektID; ?>" class="w3-btn w3-black">Anzeigen</a></td>-->
-                    <td><a href = "?aktion=bearbeiten&projektID=<?php echo $inhalt->projektID; ?>" class="w3-btn w3-black">Bearbeiten</a></td>
+                    <td><a href = "?aktion=bearbeiten&projektID=<?php echo $inhalt->projektID; ?>" class="btn btn-secondary">Bearbeiten</a></td>
                 </tr>
-            <?php
+                <?php
             }
+        }
 }
 
 if ( $modus_aendern == true and isset($_GET['projektID']) ) {
@@ -195,22 +213,23 @@ function sicherheit($inhalt='') {
 }
 if ($modus_aendern == true){
     ?>
+    <div style = "width:400; margin:auto">
     <form class = "form-horizontal" action="einzelprojekt.php" method="post">
     
-    
+        <br>
         <h3>Projekt  bearbeiten</h3>
         
         <label>
             <input type="hidden" name="projektID" id="projektID" value="<?php echo $projektID; ?>">
         </label><br>
-        <label>Erstellungsdatum: <br>
-            <input type="date" name="erstellungsdatum" id="erstellungsdatum" value="<?php echo $erstellungsdatum; ?>">
+        <label>Projektame: <br>
+            <input type="text" name="projektname" id="projektname" value="<?php echo $projektname; ?>">       
         </label><br>
         <label>Aufwand:<br>
             <input type="text" name="aufwand" id="aufwand" value="<?php echo $aufwand; ?>">
         </label><br>
-        <label>Projektame: <br>
-            <input type="text" name="projektname" id="projektname" value="<?php echo $projektname; ?>">       
+        <label>Erstellungsdatum: <br>
+            <input type="date" name="erstellungsdatum" id="erstellungsdatum" value="<?php echo $erstellungsdatum; ?>">
         </label><br>
         <label>Wahrscheinlichkeit: <br>
             <input type="text" name="wahrscheinlichkeit" id="wahrscheinlichkeit" value="<?php echo $wahrscheinlichkeit; ?>">       
@@ -234,18 +253,20 @@ if ($modus_aendern == true){
            <option value ="+++">+++</option>
            value="<?php echo $potenzial; ?>"
         </select><br> <br>
-        <input type="hidden" name="aktion" value="speichern"><br>
-        <a href = "?aktion=loeschen&projektID=<?php echo $inhalt->projektID; ?>" onclick="return confirm('Soll das Projekt wirklich gelöscht werden?')"  class="w3-btn w3-red">Löschen</a></td>
-    
+        <br>
+        <!--<a href = "?aktion=loeschen&projektID=<?php echo $inhalt->projektID; ?>" onclick="return confirm('Soll das Projekt wirklich gelöscht werden?')"  class="btn btn-danger">Löschen</a></td>-->
+        <input type="submit" onclick="return confirm('Änderungen übernehmen?')" name="aktion" value="Änderungen übernehmen" class="btn btn-success">
+        <input type ="submit" onclick="return confirm('Soll das Projekt wirklich gelöscht werden?')" name ="aktion" value ="Projekt loeschen" class="btn btn-danger">
+        <!--<input type="hidden" name="aktion" value="speichern">-->
     
     <?php
 } 
 
 if ($modus_aendern == true)
-{   
+{   /*
     echo '<input type="hidden" name="aktion" value="korrigieren">';
-    echo '<input type="submit" class="w3-btn w3-black" value="Projekt ändern">';
-    echo '</form>';
+    echo '<input type="submit" class="btn btn-success" value="Übernehmen">';
+    echo '</form>';*/
 }
             ?>			
         </tbody>
