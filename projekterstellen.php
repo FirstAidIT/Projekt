@@ -133,10 +133,31 @@ function sicherheit($inhalt='') {
         <input type="number" name="aufwand" id="aufwand" value="">       
     </label><br>
     Skills:<br> 
-    <select name = "mitarbeiter">
+    <select name = "skills">
+    <?php
+   // <option value ="Skills">Skills</option> eigentlich eins weiteroben
+   // vlt verbindung zur datenbank hier angebeben
+       
+        $sql = "SELECT * FROM skills ORDER BY skillname";
+        foreach ($pdo->query($sql) as $row) {
+            echo $row['skillname']." "."<br />";
+            }
+        ?>
     </select><br> <br>
     Mitarbeiter:<br>
     <select name = "mitarbeiter">
+
+    <?php
+   // <option value ="Mitarbeiter">Mitarbeiter</option> eigentlich eins weiteroben
+   // vlt verbindung zur datenbank hier angebeben
+   // name könnte problem machen
+       
+        $sql = "SELECT * FROM person ORDER BY name";
+        foreach ($pdo->query($sql) as $row) {
+            echo $row['name']." "."<br />";
+            echo "Rolle: ".$row['rolle']."<br /><br />";
+            }
+        ?>
     </select><br> <br>
 
     <label>Erstellungsdatum: <br>
