@@ -1,6 +1,8 @@
 <?php
 include 'datenbank/db_connection.php';
 include 'get_entries.php';
+include 'check_login.php';
+include 'database.php';
 ?>
 
 <div class="container h-100">
