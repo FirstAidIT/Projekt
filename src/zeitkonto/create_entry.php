@@ -1,41 +1,29 @@
 <?php
-include '/datenbank/db_connection.php'; 
+include './datenbank/db_connection.php'; 
 
+$mitarbeiterID = 1;
 
-$zuordnung = filter_input(INPUT_POST, 'Zuordnung');
+ 
+	if(ISSET($_POST['erfassen'])){
 
-$erfassungs_tag = filter_input(INPUT_POST, 'Erfassungstag');
-$stunden_anzahl = filter_input(INPUT_POST, 'Stunden');
-$kommentar = filter_input(INPUT_POST, 'Kommentar');
-
-$startzeit = filter_input(INPUT_POST, 'Startzeit');
-$endzeit = filter_input(INPUT_POST, 'Endzeit');
-
-$mitarbeiterID = 1; // Set with session user 
-
-    $conn = $db;
-    $insert = "INSERT INTO zeitkonto (
-    mitarbeiterID,
-    zuordnung, 
-    erfassungs_tag, 
-    startzeit, 
-    endzeit, 
-    stunden_anzahl, 
-    kommentar
-     VALUES (
-    '$mitarbeiterID',
-    '$zuordnung', 
-    '$erfassungs_tag', 
-    '$startzeit',
-    '$endzeit',
-    '$stunden_anzahl',
-    '$kommentar' )";
-        if ($conn->query($insert)) { 
-            echo "Neuer Eintrag wurde hinzugefügt";
+        $zuordnung = $_POST['zuordnung'];
+        if (!empty($zuordnung)) {
+            $erfassungs_tag = $_POST['erfassungs_tag_zuordenbar'];
+            $stunden_anzahl = $_POST['stunden_anzahl_zuordenbar'];
         } else {
-            echo "Fehler:". $insert ."
-            ".$conn->error;
+            $erfassungs_tag = $_POST['erfassungs_tag'];
+            $stunden_anzahl = $_POST['stunden_anzahl'];
+            $kommentar = $_POST['kommentar'];
         }
-    $conn = null;
+
+        $create_no_allocate = "INSERT INTO zeitkonto SET zuordnung=?, erfassungs_tag=?, stunden_anzahl=?, mitarbeiterID=?";
+
+       $stmt_update = $db->prepare($create_no_allocate);
+       $stmt_update->execute([$zuordnung, $erfassungs_tag , $stunden_anzahl, $mitarbeiterID ]);
+       
+ 
+		header("location: ./../../index.php");
+    }
+    
 
 ?>
