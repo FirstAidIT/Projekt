@@ -13,6 +13,7 @@
 <body>
 <?php
 
+//Kommentar
 
 require 'inc/db.php';
 
