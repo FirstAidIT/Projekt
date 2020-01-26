@@ -1,3 +1,8 @@
+<?php
+include 'check_login.php';
+include 'database.php';
+?>
+
 <html>
 <head>
 <meta charset="utf-8">
@@ -9,9 +14,9 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
+
+
 <?php
-
-
 require 'inc/db.php';
 
 
