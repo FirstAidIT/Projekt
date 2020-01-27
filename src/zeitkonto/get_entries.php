@@ -1,8 +1,8 @@
 <?php
 include 'datenbank/db_connection.php'; 
-include 'check_login.php';
-include 'database.php';
-?>
+//include 'check_login.php';
+//include 'database.php';
+
 
 $sql= "SELECT 
 zeitkontoID,
@@ -14,7 +14,7 @@ DATE_FORMAT(endzeit,\"%d.%m.%Y\") as endzeit,
 stunden_anzahl,
 stunden_gesamt
 FROM zeitkonto
-WHERE zuordnung is not null";
+WHERE Kunde is not null";
 $result = $db->query($sql);
 $e = function($value) {
     return htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
@@ -31,8 +31,11 @@ DATE_FORMAT(erfassungs_tag,\"%d.%m.%Y\") as erfassungs_tag,
 startzeit, 
 endzeit, 
 stunden_anzahl,
-kommentar 
-FROM zeitkonto";
+kommentar,
+kunde 
+FROM zeitkonto 
+WHERE erfassungs_tag between date_sub(now(),INTERVAL 1 WEEK) and now()";
+
 $result2= $db->query($sql2);
 $e = function($value) {
     return htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
@@ -41,9 +44,10 @@ $e = function($value) {
 
 $mitarbeiterID = 1;
 
-$projekt = "SELECT projektID, projektname 
+$projekt = "SELECT projektID, projektname, kunde, dauer 
 FROM projekt 
-WHERE EXISTS ( SELECT * FROM Arbeiten_an WHERE mitarbeiterID=?)";
+WHERE EXISTS ( SELECT * FROM Arbeiten_an WHERE mitarbeiterID=?)
+";
 
 $stmt = $db->prepare($projekt);
 $stmt-> execute([$mitarbeiterID]);

@@ -1,7 +1,7 @@
 <?php
 include './datenbank/db_connection.php'; 
-include 'check_login.php';
-include 'database.php';
+//include 'check_login.php';
+//include 'database.php';
 
 
 $mitarbeiterID = 1;
@@ -19,10 +19,10 @@ $mitarbeiterID = 1;
             $kommentar = $_POST['kommentar'];
         }
 
-        $create_no_allocate = "INSERT INTO zeitkonto SET zuordnung=?, erfassungs_tag=?, stunden_anzahl=?, mitarbeiterID=?";
+        $create_no_allocate = "INSERT INTO zeitkonto SET zuordnung=?, erfassungs_tag=?, stunden_anzahl=?, kommentar=?, mitarbeiterID=?";
 
        $stmt_update = $db->prepare($create_no_allocate);
-       $stmt_update->execute([$zuordnung, $erfassungs_tag , $stunden_anzahl, $mitarbeiterID ]);
+       $stmt_update->execute([$zuordnung, $erfassungs_tag , $stunden_anzahl, $kommentar, $mitarbeiterID ]);
        
  
 		header("location: ./../../index.php");
