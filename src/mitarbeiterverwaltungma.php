@@ -17,8 +17,13 @@
 include 'check_login.php';
 include 'database.php';
 
+SESSION_START();
+
+
+
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
+
     $email = "";
     if (isset($_POST['email'])) {
         $email = trim($_POST['email']);
@@ -48,6 +53,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
 
     if(check_email($email) == false){
         echo "Bitte eine gültige E-Mail angeben";
+        header("Location: mitarbeiterverwaltungma.php");
     }
 
 else{
@@ -139,8 +145,22 @@ function check_email($email) {
         <option value ="Management">Management</option>
         value=""
     </select><br> <br>
-    <input type="submit" name="aktion" onclick="return confirm('Soll der Mitarbeiter wirklich angelegt werden?')" value="speichern" class="btn btn-success">
+    <?php $check = $_SESSION['check'];
+    $angelegt = $_SESSION['angelegt'];
+    
+    if ($angelegt == true){
+        echo "Benutzer angelegt.";
+        ?><br><br><input type="submit" name="back" value="Zurück" class="btn btn-dark" href = "benutzerverwaltungma.php"><?php
+    }
+    echo "<font color='#FF0000'> $check</font>"?><br>
+    <br><br>
+    <?php if ($angelegt == false){?>
+    <input type="submit" name="aktion" value="speichern" class="btn btn-success"><?php
+    }?>
     <!--<button type="button" class="btn btn-success">Anlegen</button>-->
-    <input type="hidden" name="back" value="Zurück" class="w3-btn w3-black" href = "benutzerverwaltungma.php">
+    
     <!--<button type="button" class="btn btn-primary">Zurück</button>-->
+
+
+
 </form>

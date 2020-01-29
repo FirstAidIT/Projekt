@@ -15,7 +15,10 @@
 
 
 
-require 'inc/db.php';
+//require 'inc/db.php';
+
+include 'check_login.php';
+include 'database.php';
 
 $erfolg = false;
 

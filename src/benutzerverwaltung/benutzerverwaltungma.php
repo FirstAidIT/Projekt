@@ -14,7 +14,12 @@
 <?php
 SESSION_START();
 
-require 'inc/db.php';
+//require 'inc/db.php';
+
+
+include 'check_login.php';
+include 'database.php';
+
 
 
 /* Updates nach Termin mit Auftraggeber
@@ -295,7 +300,7 @@ if (!count($daten)) {
 $modus_aendern = false;
  if ($modus_aendern == false ) {
 
-    $limit = 5;
+    $limit = 6;
     $query = "SELECT count(*) FROM person";
 
 
