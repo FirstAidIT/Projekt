@@ -47,7 +47,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
     $hashed_password = password_hash($passwort, PASSWORD_DEFAULT);
     
 
-    $statement = $db->prepare("SELECT* FROM person WHERE email = '$email'");
+    $statement = $conn->prepare("SELECT* FROM person WHERE email = '$email'");
     $statement->execute(array('Max')); 
     $anzahl_user = $statement->rowCount();
 
@@ -67,7 +67,7 @@ else{
         if ( $email != '' AND $passwort != '' AND $name != '' )
         {
         // speichern
-            $einfuegen = $db->prepare("INSERT INTO person(email, passwort, name, rolle) VALUES (?,?,?,?)");
+            $einfuegen = $conn->prepare("INSERT INTO person(email, passwort, name, rolle) VALUES (?,?,?,?)");
             $einfuegen->bindParam(1, $email, PDO::PARAM_STR);
             $einfuegen->bindParam(2, $hashed_password, PDO::PARAM_STR);
             $einfuegen->bindParam(3, $name, PDO::PARAM_STR);

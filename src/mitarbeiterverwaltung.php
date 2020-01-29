@@ -81,7 +81,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
                 if ($upd_email != '' or $upd_passwort != '' or $upd_name != '' or $upd_rolle != '' && passCheck($upd_passwort, $passwortalt))
                 {
                     // speichern
-                    $update = $db->prepare("UPDATE person SET email =?, passwort=?, name=?, rolle=? WHERE mitarbeiterID=?");
+                    $update = $conn->prepare("UPDATE person SET email =?, passwort=?, name=?, rolle=? WHERE mitarbeiterID=?");
                     $update->execute([$upd_email, $hashed_password, $upd_name, $upd_rolle, $upd_id]);
                     if ($update->execute()) {
                         //header("Location: mitarbeiterverwaltung.php");
@@ -95,7 +95,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
         if ($upd_email != ''or $upd_name != '' or $upd_rolle != '')
         {
             // speichern
-            $update = $db->prepare("UPDATE person SET email =?, name=?, rolle=? WHERE mitarbeiterID=?");
+            $update = $conn->prepare("UPDATE person SET email =?, name=?, rolle=? WHERE mitarbeiterID=?");
             $update->execute([$upd_email, $upd_name, $upd_rolle, $upd_id]);
             if ($update->execute()) {
                
@@ -106,7 +106,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
     }
 }
 
-$dseinlesen = $db->prepare("SELECT mitarbeiterID, email, passwort, name, rolle FROM person WHERE email = 'andreas@kerscher.de' ");
+$dseinlesen = $conn->prepare("SELECT mitarbeiterID, email, passwort, name, rolle FROM person WHERE email = 'andreas@kerscher.de' ");
         $dseinlesen->execute();
         while ($row = $dseinlesen->fetch()) {
             $mitarbeiterID = $row['mitarbeiterID'];
