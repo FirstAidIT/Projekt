@@ -12,7 +12,10 @@
 <?php
 
 
-require 'inc/db.php';
+//require 'inc/db.php';
+
+include 'check_login.php';
+include 'database.php';
 
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
