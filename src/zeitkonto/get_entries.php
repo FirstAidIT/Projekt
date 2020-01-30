@@ -1,20 +1,22 @@
 <?php
 include 'datenbank/db_connection.php'; 
-//include 'check_login.php';
-//include 'database.php';
 
+$mitarbeiterID = 1;
 
 $sql= "SELECT 
-zeitkontoID,
-zuordnung, 
-Kunde,
-erfassungs_tag, 
-startzeit, 
-DATE_FORMAT(endzeit,\"%d.%m.%Y\") as endzeit,
-stunden_anzahl,
-stunden_gesamt
-FROM zeitkonto
-WHERE Kunde is not null";
+projekt.projektID, 
+projekt.projektname , 
+projekt.kunde, 
+projekt.endzeit, 
+Arbeiten_an.mitarbeiterID, 
+SEC_TO_TIME(SUM(TIME_TO_SEC(zeitkonto.stunden_anzahl))) as gesamt 
+FROM projekt 
+RIGHT JOIN Arbeiten_an ON projekt.projektID = Arbeiten_an.projektID
+RIGHT JOIN zeitkonto ON Arbeiten_an.mitarbeiterID = zeitkonto.mitarbeiterID
+WHERE projekt.ist_archiviert is null 
+AND zeitkonto.erfassungs_tag BETWEEN curdate()- INTERVAL 30 DAY and curdate()
+GROUP BY projekt.projektID, Arbeiten_an.mitarbeiterID, zeitkonto.mitarbeiterID, zeitkonto.zuordnung
+";
 $result = $db->query($sql);
 $e = function($value) {
     return htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
@@ -27,15 +29,11 @@ $e = function($value) {
 $sql2= "SELECT  
 zeitkontoID,
 zuordnung, 
-DATE_FORMAT(erfassungs_tag,\"%d.%m.%Y\") as erfassungs_tag, 
-startzeit, 
-endzeit, 
+erfassungs_tag, 
 stunden_anzahl,
-kommentar,
-kunde 
-FROM zeitkonto 
-WHERE erfassungs_tag between date_sub(now(),INTERVAL 1 WEEK) and now()";
-
+kommentar 
+FROM zeitkonto
+WHERE erfassungs_tag between curdate() - interval 7 day and curdate()" ;
 $result2= $db->query($sql2);
 $e = function($value) {
     return htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
@@ -44,10 +42,9 @@ $e = function($value) {
 
 $mitarbeiterID = 1;
 
-$projekt = "SELECT projektID, projektname, kunde, dauer 
+$projekt = "SELECT projektID, projektname , kunde, startzeit, endzeit
 FROM projekt 
-WHERE EXISTS ( SELECT * FROM Arbeiten_an WHERE mitarbeiterID=?)
-";
+WHERE EXISTS ( SELECT * FROM Arbeiten_an WHERE mitarbeiterID=?)";
 
 $stmt = $db->prepare($projekt);
 $stmt-> execute([$mitarbeiterID]);
@@ -59,6 +56,12 @@ $month = date('m');
 $day = date('d');
 $year = date('Y');
 $today = $year . '-' . $month . '-' . $day;
+
+
+
+
+
+
 
 
 

@@ -6,6 +6,7 @@ $(document).ready(() => {
   let time;
   let interval = 0;
 
+//Timer auslöser 
   $(".clicker").click(() => {
     if (!isStarted && !isPaused && !isResumed) {
       isStarted = true;
@@ -22,39 +23,38 @@ $(document).ready(() => {
     }
   });
 
-  let active = false;
-  $(".editable").click(() => {
-    if (active == false){
-      insertTime();
-
-    } else {
-
-    }
-  });
-
+  //Tabelle bearbeiten 
   $('#table-editable').on('click', 'button.btn-edit-modal',function (ele) {
     //the <tr> variable is use to set the parentNode from "ele
     const tr = ele.target.parentNode.parentNode;
 
-    //I get the value from the cells (td) using the parentNode (var tr)
+    // Zelleninhalt holen
     const id = tr.cells[0].textContent;
+    const projekt = tr.cells[1].textContent;
+    const dateformat = tr.cells[2].textContent;
+    console.log(dateformat)
     const date = new Date(tr.cells[2].textContent);
+    console.log(date)
     const day =  date.getDate() < 10 ? ("0" + date.getDate()).slice(-2) : date.getDate().toString().slice(-2);
     console.log(day)
     const month =  (date.getMonth() + 1) < 10 ?  ("0" + (date.getMonth() + 1)).slice(-2) : (date.getMonth() + 1).toString().slice(-2);
     console.log(month)
-    const formattedDate = date.getFullYear()+"-"+(month)+"-"+(day) ;
+    const year = (date.getFullYear());
+    const formattedDate = (day)+"-"+(month)+"-"+(year) ;
     console.log(formattedDate)
     const hours = tr.cells[3].textContent;
     const comment = tr.cells[4].textContent;
     console.log(id);
 
-    //Prefill the fields with the gathered information
+    //Modal mit Inhalt füllen
     $('#zeit-id').val(id);
-    $('#zeit-hours').val(hours);
-    $('#zeit-comment').val(comment);
+    $('#editProjekt').val(projekt);
     $('#zeit-date').val(formattedDate);
-  });
+    $('#zeit-hours').val(hours);
+    $('#comment2').val(comment);
+    
+  }); 
+
 
   $('.container-timer').on('click', 'button.save-time-btn',function (ele) {
     //the <tr> variable is use to set the parentNode from "ele
@@ -69,10 +69,37 @@ $(document).ready(() => {
   });
 
 
+  /* function save(){ 
+    var par = $(this).parent().parent(); //tr 
+    var tdProjekt = par.children("td:nth-child(1)"); 
+    var tdDatum = par.children("td:nth-child(2)"); 
+    var tdstunden_anzahl = par.children("td:nth-child(3)"); 
+    var tdKommentar = par.children("td:nth-child(4)");
+     
+     tdProjekt.html(tdProjekt.children("input[type=text]").val()); 
+     tdstunden_anzahl.html(tdstunden_anzahl.children("input[type=text]").val()); 
+     tdDatum.html(tdDatum.children("input[type=text]").val());
+
+
+
+     $(".btnEdit").bind("click", Edit); 
+    }; */ 
+
+
+
+
+
+  /*$(function(){ 
+    //A Edit and Save  functions code 
+    $(".btnEdit").bind("click", edit); 
+    $(".btnSave").bind("click", save); 
+    }); */
+
+
 
   
 });
-
+//Timerfunktionen 
     function startTimer() {
       const start = new Date();
       let time = start;
@@ -143,50 +170,11 @@ $(document).ready(() => {
         $('.editbtn').text('Speichern');
       }
 
-      function saveTime () {
-        active = false;
-        document.getElementById("edit").contentEditable = false;
-        $('.editbtn').removeClass('btn-outline-warning');
-        $('.editbtn').addClass('btn-outline-success');
-        $('.editbtn').text('Bearbeiten');
-      }
 
-      function edit(){ 
-        var par = $(this).parent().parent(); //tr 
-        var tdProjekt = par.children("td:nth-child(1)"); 
-        var tdstunden_anzahl = par.children("td:nth-child(3)"); 
+
+
+
         
-        tdProjekt.html("<input type='text' id='txProjekt' value='"+tdProjekt.html()+"'/>"); 
-        tdstunden_anzahl.html("<input type='text' id='txtstunden_anzahl' value='"+tdstunden_anzahl.html()+"'/>"); 
-        
- 
-        $(".btnEdit").bind("click", Edit); 
-        $(".btnSave").bind("click", Save); 
-
-      };
-
-      function save(){ 
-        var par = $(this).parent().parent(); //tr 
-        var tdProjekt = par.children("td:nth-child(1)"); 
-        var tdstunden_anzahl = par.children("td:nth-child(3)"); 
-         
-         tdProjekt.html(tdProjekt.children("input[type=text]").val()); 
-         tdstunden_anzahl.html(tdstunden_anzahl.children("input[type=text]").val()); 
-
-
-
-         $(".btnEdit").bind("click", Edit); 
-        };
-
-
-
-
-
-      $(function(){ 
-        //A Edit and Save  functions code 
-        $(".btnEdit").bind("click", edit); 
-        $(".btnSave").bind("click", save); 
-        });
 
 
 

@@ -22,7 +22,7 @@ include 'get_entries.php';
 
    </div>
 
-   <!-- Gesamtübersicht --> 
+   <!-- Monatsübersicht --> 
 
    <div class="row">
       <div class="col-12 pb-3">
@@ -34,18 +34,18 @@ include 'get_entries.php';
                      <tr>
                         <th>Kunde</th>
                         <th>Projekt</th>
-                        <th>Dauer</th>
-                        <!-- <th>Gebuchte Stunden insgesamt</th> -->
+                        <th>Projektende</th>
+                        <th>Gebuchte Stunden insgesamt</th>
                      </tr>
                   </thead>
                   <?php
-                  if (!empty($projects)) {
-                     foreach ($projects as $row) {
+                  if (!empty($result)) {
+                     foreach ($result as $row) {
                         echo '<tr>';
                         echo '<td contenteditable="false">' . $row["kunde"] . '</td>';
                         echo '<td contenteditable="false">' . $row["projektname"] . '</td>';
-                        echo '<td contenteditable="false">' . $row["dauer"] . '</td>';
-                        //echo '<td contenteditable="false">' . $row["stunden_gesamt"] . '</td>';
+                        echo '<td contenteditable="false">' . $row["endzeit"] . '</td>';
+                        echo '<td contenteditable="false">' . $row["gesamt"] . '</td>';
                         echo '</tr> ';
                      }
                   }
@@ -76,13 +76,14 @@ include 'get_entries.php';
                   <?php
                   if (!empty($result2)) {
                      foreach ($result2 as $row => $value) {
-                        echo '<tr>';
+                        echo '<tr id ="table-editable">';
                         echo '<td style="display:none" contenteditable="false">' . $value["zeitkontoID"] . '</td>';
-                        echo '<td class = "select" contenteditable="false">' . $value["zuordnung"] . '</td>';
-                        echo '<td contenteditable="false">' . $value["erfassungs_tag"] . '</td>';
+                        echo '<td class = "select" contenteditable="false" id="projekt_row">' . $value["zuordnung"] . '</td>';
+                        echo '<td input type ="date" contenteditable="false" id= "zeit-projekt">' . $value["erfassungs_tag"] . '</td>';
                         echo '<td contenteditable="false"" id="hours-' . $row . '">' . $value["stunden_anzahl"] . '</td>';
-                        echo '<td contenteditable="false">' . $value["kommentar"] . '</td>';
+                        echo '<td contenteditable="false" id="zeit-comment">' . $value["kommentar"] . '</td>';
                         echo '<td ><button type="button" class="btn btn-outline-success btn-edit-modal"  data-toggle="modal" data-target="#myEditModal">Bearbeiten</button></td>';
+                        echo '<td ><button type="button" class="btn btn-outline-success" id="btnSave">Speichern</button></td>';
                         echo '</tr> ';
                      }
                   }
@@ -158,6 +159,9 @@ include 'get_entries.php';
                      <label for="Date">Stunden:</label>
                      <input  name="stunden_anzahl_zuordenbar" class="form-control"  id="booking-allocatable-hours">                   
                   </div>
+                  <div>
+                  <button type="submit" class="btn btn-success" name="erfassen">Erfassen</button>
+                  </div>
                </div>
 
                <!-- Start nicht zuordenbar-->
@@ -178,6 +182,9 @@ include 'get_entries.php';
                      <label for="comment">Kommentar:</label>
                      <textarea class="form-control" name="kommentar" rows="5" id="comment" ></textarea>
                   </div>
+               <div>
+               <button type="submit" class="btn btn-success" name="erfassen2">Erfassen</button>
+               </div>
 
                </div>
 
@@ -186,7 +193,6 @@ include 'get_entries.php';
 
          <!-- Modal Footer -->
          <div class="modal-footer">
-            <button type="submit" class="btn btn-success" name="erfassen">Erfassen</button>
          </div>
        </form>
 
@@ -196,18 +202,18 @@ include 'get_entries.php';
 
          <!-- The Editing Modal -->
 
-<div class="modal" id="myEditModal">
-   <div class="modal-dialog">
+<div class="modal" name ="table-editable" id="myEditModal">
+   <div class="modal-dialog" role="document">
       <div class="modal-content">
 
-            <!-- Modal Header -->
+          <!-- Modal Header -->
          <div class="modal-header">
             <h5 class="modal-title">Zeit bearbeiten</h5>
             <button type="button" class="close" data-dismiss="modal">&times;</span>
             </button>
          </div>
 
-         <!-- Modal Body -->
+       <!-- Modal Body -->
 
          <div class="modal-body">
             
@@ -230,8 +236,10 @@ include 'get_entries.php';
             </div>
 
             <div class = "form-group mt 3 mb-3">
-               <label for="editDate">Datum</label>
-               <input type="date" name="erfassungs_tag" class="form-control"  id="zeit-date" value="<?php echo $today; ?>">
+               <label for="zeit-date">Datum</label>
+               <input type="text" placeholder="MM/DD/YYYY" name="erfassungs_tag"  class="form-control"  id="zeit-date"
+        onfocus="(this.type='date')"
+        onblur="(this.type='text')"> 
             </div>
 
             <div class="form-group mb-3">
@@ -241,7 +249,7 @@ include 'get_entries.php';
 
          <div class="form-group">
             <label for="comment">Kommentar:</label>
-            <textarea name="kommentar" class="form-control" rows="5" id="kommentar" ></textarea>
+            <input type="text" name="kommentar" class="form-control" rows="5" id="comment2" ></input>
          </div>
          </div>
 
@@ -255,3 +263,4 @@ include 'get_entries.php';
       </div>
    </div>
 </div>
+ 
