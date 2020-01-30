@@ -1,8 +1,3 @@
-<?php
-include 'check_login.php';
-include 'database.php';
-?>
-
 <html>
 <head>
 <meta charset="utf-8">
@@ -17,7 +12,9 @@ include 'database.php';
 
 
 <?php
-require 'inc/db.php';
+include 'check_login.php';
+include 'database.php';
+
 
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {

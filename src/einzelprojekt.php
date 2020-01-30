@@ -16,16 +16,20 @@
 //Kommentar
 
 //require 'inc/db.php';
-
 include 'check_login.php';
 include 'database.php';
+
+SESSION_START();
+
+
+
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt loeschen') {
     if (isset($_POST['projektID'])) {
         $projektID =$_POST['projektID'];
         if ($projektID > 0)
         {
-            $loeschen = $db->prepare("DELETE FROM projekt WHERE projektID=(?) LIMIT 1");
+            $loeschen = $conn->prepare("DELETE FROM projekt WHERE projektID=(?) LIMIT 1");
             $loeschen->bindParam(1, $projektID, PDO::PARAM_STR);
             if ($loeschen->execute()) {
                 ?>
@@ -38,10 +42,15 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt loeschen') {
 }
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='Änderungen übernehmen') {
+
+    echo "Hallo";
+
     $upd_erstellungsdatum = "";
     if (isset($_POST['erstellungsdatum'])) {
         $upd_erstellungsdatum = trim($_POST['erstellungsdatum']);
     }
+    //zum Vergleichen
+    $projektnamealt = $_POST['projektnamealt'];
     $upd_aufwand = "";
     if (isset($_POST['aufwand'])) {
         $upd_aufwand = trim($_POST['aufwand']);
@@ -78,15 +87,22 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Änderungen übernehmen') {
     if (isset($_POST['potenzial'])) {
         $upd_potenzial = trim($_POST['potenzial']);
     }
+    $upd_startdatum = "";
+    if (isset($_POST['startdatum'])) {
+        $upd_startdatum = trim($_POST['startdatum']);
+    }
+    $upd_enddatum = "";
+    if (isset($_POST['enddatum'])) {
+        $upd_enddatum = trim($_POST['enddatum']);
+    }
 
-    $statement = $db->prepare("SELECT* FROM projekt WHERE projektname = '$upd_projektname'");
+    $statement = $conn->prepare("SELECT* FROM projekt WHERE projektname = '$upd_projektname'");
     $statement->execute(array('Max')); 
     $anzahl_projekte = $statement->rowCount();
 
-    if ($anzahl_projekte > 0){
-        ?>
-        <meta http-equiv="refresh" content="5; URL=einzelprojekt.php"> 
-        <?php
+    if ($anzahl_projekte > 0 && $upd_projektname != $projektnamealt ){
+        header ("Location: ?aktion=bearbeiten&projektID=$upd_projektID");
+        //echo "Bitte eine gültige E-Mail angeben";
         echo "Dieser Projektname ist bereits vorhanden";
     }
 
@@ -94,12 +110,10 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Änderungen übernehmen') {
         if ($upd_erstellungsdatum != '' or $upd_aufwand != '')
         {
             // speichern
-            $update = $db->prepare("UPDATE projekt SET erstellungsdatum =?, aufwand=?, projektname=?, wahrscheinlichkeit=? , kunde=?, budget=?, dauer=?, archivierungsdatum=?, potenzial=? WHERE projektID=?");
-            $update->execute([$upd_erstellungsdatum, $upd_aufwand, $upd_projektname, $upd_wahrscheinlichkeit, $upd_kunde, $upd_budget, $upd_dauer, $upd_archivierungsdatum, $upd_potenzial, $upd_projektID]);
+            $update = $conn->prepare("UPDATE projekt SET erstellungsdatum =?, aufwand=?, projektname=?, wahrscheinlichkeit=? , kunde=?, budget=?, dauer=?, archivierungsdatum=?, potenzial=?, startzeit=?, endzeit=? WHERE projektID=?");
+            $update->execute([$upd_erstellungsdatum, $upd_aufwand, $upd_projektname, $upd_wahrscheinlichkeit, $upd_kunde, $upd_budget, $upd_dauer, $upd_archivierungsdatum, $upd_potenzial,  $upd_startdatum, $upd_enddatum, $upd_projektID]);
             if ($update->execute()) {
-                ?>
-                <meta http-equiv="refresh" content="5; URL=einzelprojekt.php"> 
-                <?php
+                header ("Location: ?aktion=bearbeiten&projektID=$upd_projektID");
                 echo '<p class="feedbackerfolg">Datensatz wurde geändert</p>';
                 $modus_aendern = false;
             }
@@ -114,7 +128,7 @@ if (isset($_GET['aktion']) and $_GET['aktion']=='bearbeiten') {
 }
 
 $daten = array();
-if ($erg = $db->query("SELECT * FROM projekt order by erstellungsdatum asc")) {
+if ($erg = $conn->query("SELECT * FROM projekt order by erstellungsdatum asc")) {
 	if ($erg->rowCount()) {
 		while($datensatz = $erg->fetchObject()) {
 			$daten[] = $datensatz;
@@ -156,11 +170,13 @@ if ($modus_aendern==false){?>
             <th scope="col">Projektname</th>
             <th scope="col">Aufwand (h)</th>
             <th scope="col">Erstellung</th>
+            <th scope="col">Startdatum</th>
             <th scope="col">Wahrscheinlichkeit (%)</th>
             <th scope="col">Kunde</th>
             <th scope="col">Budget (€)</th>
             <!--<th scope="col">ProjektID</th>-->
             <th scope="col">Dauer</th>
+            <th scope="col">Enddatum</th>
             <th scope="col">Archivierung</th>
             <th scope="col">Bearbeiten</th>
             </tr>
@@ -173,11 +189,13 @@ if ($modus_aendern==false){?>
                     <td><?php echo sicherheit($inhalt->projektname); ?> <br> <?php echo sicherheit($inhalt->potenzial); ?></td>
                     <td><?php echo sicherheit($inhalt->aufwand); ?></td>
                     <td><?php echo sicherheit($inhalt->erstellungsdatum); ?></td>
+                    <td><?php echo sicherheit($inhalt->startzeit); ?></td>
                     <td><?php echo sicherheit($inhalt->wahrscheinlichkeit); ?></td>
                     <td><?php echo sicherheit($inhalt->kunde); ?></td>
                     <td><?php echo sicherheit($inhalt->budget); ?></td>
                     <!--<td><?php echo sicherheit($inhalt->projektID); ?></td>-->
                     <td><?php echo sicherheit($inhalt->dauer); ?></td>
+                    <td><?php echo sicherheit($inhalt->endzeit); ?></td>
                     <td><?php echo sicherheit($inhalt->archivierungsdatum); ?></td>
                     <!--<td><a href = "?aktion=anzeigen&mitarbeiterID=<?php echo $inhalt->projektID; ?>" class="w3-btn w3-black">Anzeigen</a></td>-->
                     <td><a href = "?aktion=bearbeiten&projektID=<?php echo $inhalt->projektID; ?>" class="btn btn-secondary">Bearbeiten</a></td>
@@ -192,7 +210,7 @@ if ( $modus_aendern == true and isset($_GET['projektID']) ) {
     $id_einlesen = (INT) $_GET['projektID'];
     if ($id_einlesen > 0)
     {   
-        $dseinlesen = $db->prepare("SELECT * FROM projekt WHERE projektID=? order by erstellungsdatum asc ");
+        $dseinlesen = $conn->prepare("SELECT * FROM projekt WHERE projektID=? order by erstellungsdatum asc ");
         $dseinlesen->execute([$id_einlesen]);
         $dseinlesen->execute();
         while ($row = $dseinlesen->fetch()) {
@@ -206,6 +224,8 @@ if ( $modus_aendern == true and isset($_GET['projektID']) ) {
             $dauer = $row['dauer'];
             $archivierungsdatum = $row['archivierungsdatum'];
             $potenzial = $row['potenzial'];
+            $startdatum = $row['startzeit'];
+            $enddatum = $row ['endzeit'];
         }
     }
 }
@@ -218,8 +238,8 @@ function sicherheit($inhalt='') {
 if ($modus_aendern == true){
     ?>
     <div style = "width:400; margin:auto">
-    <form class = "form-horizontal" action="einzelprojekt.php" method="post">
-    
+    <form class = "form-horizontal" action="einzelprojekt.php?aktion=bearbeiten&projektID=$projektID" method="post">
+
         <br>
         <h3>Projekt  bearbeiten</h3>
         
@@ -229,11 +249,17 @@ if ($modus_aendern == true){
         <label>Projektame: <br>
             <input type="text" name="projektname" id="projektname" value="<?php echo $projektname; ?>">       
         </label><br>
+
+        <input type="hidden" name="projektnamealt" id="projektnamealt" value="<?php echo $projektname; ?>">       
+
         <label>Aufwand:<br>
             <input type="text" name="aufwand" id="aufwand" value="<?php echo $aufwand; ?>">
         </label><br>
         <label>Erstellungsdatum: <br>
             <input type="date" name="erstellungsdatum" id="erstellungsdatum" value="<?php echo $erstellungsdatum; ?>">
+        </label><br>
+        <label>Startdatum: <br>
+            <input type="date" name="startdatum" id="startdatum" value="<?php echo $startdatum; ?>">
         </label><br>
         <label>Wahrscheinlichkeit: <br>
             <input type="text" name="wahrscheinlichkeit" id="wahrscheinlichkeit" value="<?php echo $wahrscheinlichkeit; ?>">       
@@ -246,6 +272,9 @@ if ($modus_aendern == true){
         </label><br>
         <label>Dauer: <br>
             <input type="text" name="dauer" id="dauer" value="<?php echo $dauer; ?>">       
+        </label><br>
+        <label>Enddatum: <br>
+            <input type="date" name="enddatum" id="enddatum" value="<?php echo $enddatum; ?>">
         </label><br>
         <label>Archivierung: <br>
             <input type="date" name="archivierungsdatum" id="archivierungsdatum" value="<?php echo $archivierungsdatum; ?>">       
@@ -262,7 +291,7 @@ if ($modus_aendern == true){
         <input type="submit" onclick="return confirm('Änderungen übernehmen?')" name="aktion" value="Änderungen übernehmen" class="btn btn-success">
         <input type ="submit" onclick="return confirm('Soll das Projekt wirklich gelöscht werden?')" name ="aktion" value ="Projekt loeschen" class="btn btn-danger">
         <!--<input type="hidden" name="aktion" value="speichern">-->
-    
+  </form>  
     <?php
 } 
 

@@ -6,23 +6,33 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <title>Mitarbeiterverwaltung</title>
 <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+
 </head>
 <body>
 <?php
 
-
+session_start();
+$erfolg = false;
 
 //require 'inc/db.php';
 
 include 'check_login.php';
 include 'database.php';
 
-$erfolg = false;
+$mitarbeiterid = $_SESSION['mitarbeiterID'];
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
+
+
+
     $upd_id = "";
     if (isset($_POST['mitarbeiterID'])) {
         $upd_id = (INT) trim($_POST['mitarbeiterID']);
@@ -50,7 +60,6 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
 
 
 
-
     // Passwörter nur vergleichen und schreiben, wenn ein neues eingegeben wird
 
 
@@ -71,18 +80,13 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
                 $hashed_password = password_hash($upd_passwort, PASSWORD_DEFAULT);
 
                 
-                if ($upd_email != '' or $upd_passwort != '' or $upd_name != '' or $upd_rolle != '')
+                if ($upd_email != '' or $upd_passwort != '' or $upd_name != '' or $upd_rolle != '' && passCheck($upd_passwort, $passwortalt))
                 {
                     // speichern
-                    $update = $db->prepare("UPDATE person SET email =?, passwort=?, name=?, rolle=? WHERE mitarbeiterID=?");
+                    $update = $conn->prepare("UPDATE person SET email =?, passwort=?, name=?, rolle=? WHERE mitarbeiterID=$mitarbeiterid");
                     $update->execute([$upd_email, $hashed_password, $upd_name, $upd_rolle, $upd_id]);
                     if ($update->execute()) {
-                        /*
-                        ?>
-                        <meta http-equiv="refresh" content="5; URL=mitarbeiterverwaltung.php"> 
-                        <?php
-                        */
-                        echo '<p class="feedbackerfolg">Datensatz wurde geändert</p>';
+                        //header("Location: mitarbeiterverwaltung.php");
                         $erfolg = true;
                     }
                 }
@@ -93,17 +97,19 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
         if ($upd_email != ''or $upd_name != '' or $upd_rolle != '')
         {
             // speichern
-            $update = $db->prepare("UPDATE person SET email =?, name=?, rolle=? WHERE mitarbeiterID=?");
+            $update = $conn->prepare("UPDATE person SET email =?, name=?, rolle=? WHERE mitarbeiterID=?");
             $update->execute([$upd_email, $upd_name, $upd_rolle, $upd_id]);
             if ($update->execute()) {
-                echo '<p class="feedbackerfolg">Datensatz wurde geändert</p>';
+               
+                //header("Location: mitarbeiterverwaltung.php");
                 $erfolg = true;
             }
         }
     }
 }
 
-$dseinlesen = $db->prepare("SELECT mitarbeiterID, email, passwort, name, rolle FROM person WHERE email = 'andreas@kerscher.de' ");
+
+$dseinlesen = $conn->prepare("SELECT mitarbeiterID, email, passwort, name, rolle FROM person WHERE mitarbeiterID = $mitarbeiterid");
         $dseinlesen->execute();
         while ($row = $dseinlesen->fetch()) {
             $mitarbeiterID = $row['mitarbeiterID'];
@@ -170,6 +176,7 @@ function PassStrength($Password) {
     return round($W);
 }
 
+
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -194,39 +201,65 @@ function PassStrength($Password) {
 </nav>
 
 <form class = "form-horizontal" style= "width:400;  margin:auto;" action="mitarbeiterverwaltung.php" method="post">
-
+    
 
     <h3>Eigene Informationen bearbeiten</h3>
     
     <label>
         <input type="hidden" name="mitarbeiterID" id="mitarbeiterID" value="<?php echo $mitarbeiterID;?>">
-    </label>
+    </label> <br>
     <label>
         <input type="hidden" name="email" id="email" value="<?php echo $email;?>">
     </label><br>
     <label>Name:<br>
         <input type="text" name="name" class= "form-control" id="name" value="<?php echo $name; ?>">        
     </label><br>
-    <label>Altes Passwort:<br>
-        <input type="password" name="passwort" class= "form-control" id="passwort" value="">
-    </label><br>
     <label>Neues Passwort:<br>
         <input type="password" name="passwortneu1" class= "form-control" id="passwortneu1" value="">
-    </label><?php if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen'){ if (!empty($passwortneu1)){ if (PassStrength($passwortneu1)<30){ echo '<span style="color:#FF0000">Bitte ein sicheres Passwort angeben!</span>';}}}?><br>
+    </label><br>
     <label>Neues Passwort wiederholen:<br>
         <input type="password" name="passwortneu2" class= "form-control" id="passwortneu2" value="">    
-    </label><?php if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {  if (!empty($passwortneu1)){if ($passwortneu1 != $passwortneu2 ){ if (PassStrength($passwortneu1)>=30){ echo '<span style="color:#FF0000">Die angegebenen Passwörter stimmen nicht überein!</span>';}}}}?><br>
+    </label><br>
     Rolle:<br>
     <select name = "rolle">
         <option value ="Mitarbeiter">Mitarbeiter</option>
         <option value ="Vertrieb">Vertrieb</option>
         <option value ="Management">Management</option>
         value="<?php echo $rolle; ?>"
-    </select><br> <br>
-    <input type="submit" onclick="return confirm('Änderungen wirklich übernehmen?')" class="btn btn-success" name = "aktion" value="Übernehmen">
+    </select><br><br>
+    <?php $check = "";?>
+    <?php   if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen'){ 
+                if (!empty($passwortneu1)){ 
+                    if (PassStrength($passwortneu1)<30){
+                        $check = "Bitte geben Sie ein sicheres Passwort an.";
+                        $erfolg = false;
+                    }
+                }
+            }
 
+       if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {  
+                if (!empty($passwortneu1)){
+                    if ($passwortneu1 != $passwortneu2 ){ 
+                        if (PassStrength($passwortneu1)>=30){
+                             $check = "Die angegebenen Passwörter stimmen nicht überein.";
+                             $erfolg = false;
+                            }
+                    }
+                }
+            }
+
+            if ($erfolg == true){
+                echo "Die Daten wurden geändert.";
+            }
+    ?><br>
+
+    <?php echo "<font color='#FF0000'> $check</font>"; ?><br><br>
+            
+    <input type="submit"  class="btn btn-success" name = "aktion" value="Übernehmen">
+      
 
 </form>
+
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>

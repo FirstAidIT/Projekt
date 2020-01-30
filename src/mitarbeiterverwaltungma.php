@@ -17,8 +17,13 @@
 include 'check_login.php';
 include 'database.php';
 
+SESSION_START();
+
+
+
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
+
     $email = "";
     if (isset($_POST['email'])) {
         $email = trim($_POST['email']);
@@ -42,12 +47,13 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
     $hashed_password = password_hash($passwort, PASSWORD_DEFAULT);
     
 
-    $statement = $db->prepare("SELECT* FROM person WHERE email = '$email'");
+    $statement = $conn->prepare("SELECT* FROM person WHERE email = '$email'");
     $statement->execute(array('Max')); 
     $anzahl_user = $statement->rowCount();
 
     if(check_email($email) == false){
         echo "Bitte eine gültige E-Mail angeben";
+        header("Location: mitarbeiterverwaltungma.php");
     }
 
 else{
@@ -61,7 +67,7 @@ else{
         if ( $email != '' AND $passwort != '' AND $name != '' )
         {
         // speichern
-            $einfuegen = $db->prepare("INSERT INTO person(email, passwort, name, rolle) VALUES (?,?,?,?)");
+            $einfuegen = $conn->prepare("INSERT INTO person(email, passwort, name, rolle) VALUES (?,?,?,?)");
             $einfuegen->bindParam(1, $email, PDO::PARAM_STR);
             $einfuegen->bindParam(2, $hashed_password, PDO::PARAM_STR);
             $einfuegen->bindParam(3, $name, PDO::PARAM_STR);
@@ -139,8 +145,22 @@ function check_email($email) {
         <option value ="Management">Management</option>
         value=""
     </select><br> <br>
-    <input type="submit" name="aktion" onclick="return confirm('Soll der Mitarbeiter wirklich angelegt werden?')" value="speichern" class="btn btn-success">
+    <?php $check = $_SESSION['check'];
+    $angelegt = $_SESSION['angelegt'];
+    
+    if ($angelegt == true){
+        echo "Benutzer angelegt.";
+        ?><br><br><input type="submit" name="back" value="Zurück" class="btn btn-dark" href = "benutzerverwaltungma.php"><?php
+    }
+    echo "<font color='#FF0000'> $check</font>"?><br>
+    <br><br>
+    <?php if ($angelegt == false){?>
+    <input type="submit" name="aktion" value="speichern" class="btn btn-success"><?php
+    }?>
     <!--<button type="button" class="btn btn-success">Anlegen</button>-->
-    <input type="hidden" name="back" value="Zurück" class="w3-btn w3-black" href = "benutzerverwaltungma.php">
+    
     <!--<button type="button" class="btn btn-primary">Zurück</button>-->
+
+
+
 </form>

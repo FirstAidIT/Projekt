@@ -14,6 +14,12 @@
 <?php
 SESSION_START();
 
+$_SESSION['check'] = "";
+
+$_SESSION['angelegt'] = false;
+
+$_SESSION['checkchange'] = "";
+
 //require 'inc/db.php';
 
 
@@ -37,12 +43,10 @@ if (isset($_GET['aktion']) and $_GET['aktion']=='loeschen') {
         $mitarbeiterID =$_GET['mitarbeiterID'];
         if ($mitarbeiterID > 0)
         {
-            $loeschen = $db->prepare("DELETE FROM person WHERE mitarbeiterID=(?) LIMIT 1");
+            $loeschen = $conn->prepare("DELETE FROM person WHERE mitarbeiterID=(?) LIMIT 1");
             $loeschen->bindParam(1, $mitarbeiterID, PDO::PARAM_STR);
             if ($loeschen->execute()) {
-                ?>
-                <meta http-equiv="refresh" content="5; URL=benutzerverwaltungma.php"> 
-                <?php
+                header("Location: benutzerverwaltungma.php");
                 echo "<p>Datensatz wurde gelöscht</p>";
             }
         }       
@@ -55,7 +59,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Benutzer deaktivieren') {
 
     $mitarbeiterdeaktivieren = $_POST['mitarbeiterID'];
 
-    $update = $db->prepare("UPDATE person SET active = 0 WHERE mitarbeiterID=?");
+    $update = $conn->prepare("UPDATE person SET active = 0 WHERE mitarbeiterID=?");
     $update->execute([$mitarbeiterdeaktivieren]); 
 }
 
@@ -65,7 +69,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Benutzer reaktivieren') {
 
     $mitarbeiterreaktivieren = $_POST['mitarbeiterID'];
 
-    $update = $db->prepare("UPDATE person SET active = 1 WHERE mitarbeiterID=?");
+    $update = $conn->prepare("UPDATE person SET active = 1 WHERE mitarbeiterID=?");
     $update->execute([$mitarbeiterreaktivieren]);
  
 }
@@ -103,7 +107,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
     }
 
 
-    $statement = $db->prepare("SELECT* FROM person WHERE email = '$upd_email'");
+    $statement = $conn->prepare("SELECT* FROM person WHERE email = '$upd_email'");
     $statement->execute(array('Max')); 
     $anzahl_user = $statement->rowCount();
 
@@ -111,12 +115,17 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
 
 
     if(check_email($upd_email) == false){
+
+        $_SESSION['checkchange'] = "Bitte eine gültige E-Mail angeben";
+        header("Location: ?aktion=bearbeiten&mitarbeiterID=$upd_id");
         echo "Bitte eine gültige E-Mail angeben";
     }
 
     else {
         if ($anzahl_user > 0 && $upd_email != $emailalt){
             $modus_mail == true;
+            $_SESSION['checkchange'] = "E-Mail bereits vergeben";
+            header("Location: ?aktion=bearbeiten&mitarbeiterID=$upd_id");
             echo ("E-Mail bereits vergeben");
         }
 
@@ -127,12 +136,10 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
     if ($upd_email != '' or $upd_passwort != '' or $upd_name != '' or $upd_rolle != '')
     {
         // speichern
-        $update = $db->prepare("UPDATE person SET email =?, passwort=?, name=?, rolle=? WHERE mitarbeiterID=?");
+        $update = $conn->prepare("UPDATE person SET email =?, passwort=?, name=?, rolle=? WHERE mitarbeiterID=?");
         $update->execute([$upd_email, $hashed_password, $upd_name, $upd_rolle, $upd_id]);
         if ($update->execute()) {   
-            ?>
-            <meta http-equiv="refresh" content="5; URL=benutzerverwaltungma.php"> 
-            <?php
+            header("Location: benutzerverwaltungma.php");
             echo '<p class="feedbackerfolg">Datensatz wurde geändert</p>';
             $modus_aendern = false;
             $nochfalsch=false;
@@ -146,13 +153,17 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
 //Anlegen eines neuen Users
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
+
+
+
+
     $email = "";
     if (isset($_POST['email'])) {
         $email = trim($_POST['email']);
     }
     $passwort = "";
     if (isset($_POST['passwort'])) {
-        $passwort = trim($_POST['passwort']);
+        $passwort = $_POST['passwort'];
     }
     $name = "";
     if (isset($_POST['name'])) {
@@ -171,60 +182,59 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
     $hashed_password = password_hash($passwort, PASSWORD_DEFAULT);
     
 
-    $statement = $db->prepare("SELECT* FROM person WHERE email = '$email'");
+    $statement = $conn->prepare("SELECT* FROM person WHERE email = '$email'");
     $statement->execute(array('Max')); 
     $anzahl_user = $statement->rowCount();
 
     if ( $email == '' OR $passwort == '' OR $name == '' )
         {
-        ?>
-        <meta http-equiv="refresh" content="5; URL=mitarbeiterverwaltungma.php"> 
-        <?php
+        $_SESSION['check'] = "Bitte alle nötigen Infos angeben";
+        header("Location: mitarbeiterverwaltungma.php");
         echo "Bitte alle nötigen Informationen angeben";
+
         }
     else{
         if(check_email($email) == false){
-            ?>
-            <meta http-equiv="refresh" content="5; URL=mitarbeiterverwaltungma.php"> 
-            <?php
+            $_SESSION['check'] = "Bitte eine gültige Email angeben";
+            $_SESSION['checkpw'] = $passwort;
+            header("Location: mitarbeiterverwaltungma.php");
             echo "Bitte eine gültige E-Mail angeben";
         }
     
         else {
             if ($anzahl_user > 0){
-                ?>
-                <meta http-equiv="refresh" content="5; URL=mitarbeiterverwaltungma.php"> 
-                <?php
+                $_SESSION['check'] = "Email bereits vergeben";
+                header("Location: mitarbeiterverwaltungma.php");
                 echo ("E-Mail bereits vergeben");
             }
             
             else {
                 
                 if (PassStrength($passwort) < 30){
-                    ?>
-                    <meta http-equiv="refresh" content="5; URL=mitarbeiterverwaltungma.php"> 
-                    <?php
-                    echo "Bitte ein sicheres Passwort angeben";  
+                    $_SESSION['check'] = "Bitte ein sicheres Passwort angeben";
+                    header("Location: mitarbeiterverwaltungma.php");
+                    echo "Bitte ein sicheres Passwort angeben"; 
                 }
                 else {
                     if ($passwort!=$passwortwdh){
-                        ?>
-                        <meta http-equiv="refresh" content="5; URL=mitarbeiterverwaltungma.php"> 
-                        <?php
+                        $_SESSION['check'] = "Passwörter stimmen nicht überein";
+                        header("Location: mitarbeiterverwaltungma.php");                 
                         echo "Passwörter stimmen nicht überein";
                     }
                     else{
                 
                         // speichern
-                        $einfuegen = $db->prepare("INSERT INTO person(email, passwort, name, rolle) VALUES (?,?,?,?)");
+                        $einfuegen = $conn->prepare("INSERT INTO person(email, passwort, name, rolle) VALUES (?,?,?,?)");
                         $einfuegen->bindParam(1, $email, PDO::PARAM_STR);
                         $einfuegen->bindParam(2, $hashed_password, PDO::PARAM_STR);
                         $einfuegen->bindParam(3, $name, PDO::PARAM_STR);
                         $einfuegen->bindParam(4, $rolle, PDO::PARAM_STR);
                 
                         if ($einfuegen->execute()) {
-                        header('Location: benutzerverwaltungma.php?aktion=feedbackgespeichert');
-                        die();
+                        //header('Location: benutzerverwaltungma.php?aktion=feedbackgespeichert');
+                        $_SESSION['angelegt'] = true;
+                        header("Location: mitarbeiterverwaltungma.php");  
+                        //die();
                         }
                     }
 
@@ -233,10 +243,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
         }
     }
 if (isset($_POST['aktion']) and $_POST['aktion']=='feedbackgespeichert') {
-    ?>
-    <meta http-equiv="refresh" content="5; URL=benutzerverwaltungma.php"> 
-    <?php
-    echo '<p class="feedbackerfolg">Datensatz wurde gespeichert</p>';
+    header("Location: benutzerverwaltungma.php");
 }
 }
 $modus_aendern = false;
@@ -250,7 +257,7 @@ if ($modus_aendern != true)
 {
 
 $daten = array();
-if ($erg = $db->query("SELECT * FROM person")) {
+if ($erg = $conn->query("SELECT * FROM person")) {
 	if ($erg->rowCount()) {
 		while($datensatz = $erg->fetchObject()) {
 			$daten[] = $datensatz;
@@ -298,7 +305,8 @@ if (!count($daten)) {
  <?php
 
 $modus_aendern = false;
- if ($modus_aendern == false ) {
+$modus_suchen = false;
+ if ($modus_aendern == false && $modus_aendern == false) {
 
     $limit = 6;
     $query = "SELECT count(*) FROM person";
@@ -336,30 +344,29 @@ $modus_aendern = false;
         $rolle = ''; 
         $active = '';    
     }*/
+    $total_pages = 0;
+
+    $paginierung = 0;
 
     if ( isset($_GET['suchbegriff']) and trim ($_GET['suchbegriff']) != '' )
     {
         $suchbegriff = trim ($_GET['suchbegriff']);
         //echo "<p>Gesucht wird nach: <b>$suchbegriff</b></p>"; 
         $suche_nach = "%{$suchbegriff}%";
-        $abc = $db->prepare("SELECT mitarbeiterID, email, passwort, name, rolle, active 
-        FROM person
-        WHERE name LIKE ?");
+        $abc = $conn->prepare("SELECT * FROM person WHERE name LIKE ? ORDER BY name ASC");
         $abc->bindParam(1, $suche_nach, PDO::PARAM_STR);
         $abc->execute();
-        $anzahl_ergebnisse = $abc->rowCount();
-        echo $anzahl_ergebnisse;
-        $total_pages = ceil($anzahl_ergebnisse/$limit);
     }
     else
 
     {
-        $s = $db->query($query);
+        $paginierung = 1;
+
+        $s = $conn->query($query);
         $total_results = $s->fetchColumn();
         $total_pages = ceil($total_results/$limit);
-        $abc = $db->prepare("SELECT *  FROM person ORDER BY name ASC LIMIT $starting_limit, $limit");
+        $abc = $conn->prepare("SELECT *  FROM person ORDER BY name ASC LIMIT $starting_limit, $limit");
         $abc->execute();
-        $ergebnisse = $abc->fetchColumn();
     }
 
         ?>
@@ -391,20 +398,20 @@ $modus_aendern = false;
                                 <!--<td><a href = "aenderungma.php" name = "aktion" value = "wirdgeaendert" method ="post" class="btn btn-secondary">Aenderung</a></td>-->
                                 <!--<td><input type = "submit" name = "aktion" value = "bearbeiten" class ="btn btn-primary">-->
 
-                            </tr><br>		
+                            </tr>		
                         <?php  endwhile;?>	
                     </tbody>
                 </table>
-
                 <form>
+                <?php if ($paginierung == 1){ ?>
                 Seite: 
                     <?php
                     for ($page=1; $page <= $total_pages ; $page++):?>
-
+                    
                     <a href='<?php echo "?page=$page"; ?>' class="links"><?php  echo  $page; ?>
                     </a>
 
-                    <?php endfor;?>
+                    <?php endfor;}?>
 
                 <br><br>
 
@@ -465,15 +472,12 @@ $modus_aendern = false;
 
     <br><br>
 
-    <form method="get" action="mitarbeiterverwaltungma.php"> 
-         <input type="submit" value="Neuen Benutzer anlegen" class="btn btn-primary">
-    </form>
+
 <?php
    */     	
 
 }
 }
-
 
 //Einlesen der Daten 
 
@@ -482,7 +486,7 @@ if ( $modus_aendern == true and isset($_GET['mitarbeiterID']) ) {
     $id_einlesen = (INT) $_GET['mitarbeiterID'];
     if ($id_einlesen > 0)
     {   
-        $dseinlesen = $db->prepare("SELECT mitarbeiterID, email, passwort, name, rolle, active FROM person WHERE mitarbeiterID=? ORDER BY name ASC");
+        $dseinlesen = $conn->prepare("SELECT mitarbeiterID, email, passwort, name, rolle, active FROM person WHERE mitarbeiterID=? ORDER BY name ASC");
         $dseinlesen->execute([$id_einlesen]);
         $dseinlesen->execute();
         while ($row = $dseinlesen->fetch()) {
@@ -494,6 +498,10 @@ if ( $modus_aendern == true and isset($_GET['mitarbeiterID']) ) {
             $active =$row['active'];
         }
     }
+}
+
+function bearbeitungsPruefung($pruefung){
+
 }
 
 function sicherheit($inhalt='') {
@@ -590,7 +598,7 @@ if ($modus_aendern == true){
 </nav>
 
 <div style = "width:400; margin:auto">
-<form style= "width:400;  margin:auto;" class = "form-horizontal" action="benutzerverwaltungma.php" method="post">
+<form style= "width:400;  margin:auto;" class = "form-horizontal"  method="post">
 
 
     <h3>Benutzer <?php echo $name ?> bearbeiten</h3>
@@ -623,6 +631,8 @@ if ($modus_aendern == true){
         <option value ="Management">Management</option>
         value="<?php echo $rolle; ?>"
     </select><br> <br>
+    <?php $checkchange = $_SESSION['checkchange'];?>
+    <?php echo "<font color='#FF0000'> $checkchange</font>"?>
     <input type="hidden" name="aktion" value="speichern">
 
 
@@ -650,18 +660,25 @@ if ($modus_aendern == true)
         <input type="submit" onclick="return confirm('Mitarbeiter wirklich reaktivieren?')" name = "aktion" class="btn btn-warning" value="Benutzer reaktivieren">
         <?php
     }
-    echo '</form>';
+    ?>
+    <br><br>
+    <a href = "benutzerverwaltungma.php" class="btn btn-dark">Zurück zur Benutzerverwaltung</a></td>
+    </form>
+    <?php
 }
 ?>
 
-
- 
 </form>
 </div>
+
+<?php if ($modus_aendern == false){
+?>
 
 <form method="get" action="mitarbeiterverwaltungma.php"> 
     <a href = "mitarbeiterverwaltungma.php"><input type="submit" value="Neuen Benutzer anlegen" class="btn btn-primary"></a>
 </form>
+
+<?php } ?>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
