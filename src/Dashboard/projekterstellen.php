@@ -61,8 +61,9 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
         // speichern
         $einfuegen = $db->prepare("
                 INSERT INTO tester (projektname, kunde, budget, aufwand, dauer, wahrscheinlichkeit, potenzial, erstellungsdatum) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, date)
-                ");
+                VALUES (?, ?, ?, ?, ?, ?, ?, CAST('". $date ."' AS DATE))");
+
+                
         $einfuegen->bind_param('ssiiiiss', $projektname, $kunde, $budget, $aufwand, $dauer, $wahrscheinlichkeit, $potenzial, erstellungsdatum);
         if ($einfuegen->execute()) {
             header('Location: index.php?aktion=feedbackgespeichert');
@@ -167,3 +168,4 @@ if (!count($daten)) {
 
 // Wie speicher ich welches Projekt welche skills benötigt
 //wie speicher ich welche mitarbeiter an welchem projekt arbeiten
+//Speichern von ENUM $potenzial
