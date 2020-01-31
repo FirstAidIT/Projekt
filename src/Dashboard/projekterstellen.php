@@ -13,87 +13,86 @@
 
 <?php
 include 'check_login.php';
-include 'database.php';
-
-
-
+include 'database.php'; 
 if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
-    $projetname = "";
-    if (isset($_POST['projetname'])) {
-        $projetname = trim($_POST['projetname']);
-    }
-    $aufwand = "";
-    if (isset($_POST['aufwand'])) {
-        $aufwand = trim($_POST['aufwand']);
-    } 
-    $wahrscheinlichkeit = "";
-    if (isset($_POST['wahrscheinlichkeit'])) {
-        $wahrscheinlichkeit = trim($_POST['wahrscheinlichkeit']);
+    $projektname = "";
+    if (isset($_POST['projektname'])) {
+        $projektname = trim($_POST['projektname']);
     }
     $kunde = "";
     if (isset($_POST['kunde'])) {
         $kunde = trim($_POST['kunde']);
-    } 
+    }
     $budget = "";
     if (isset($_POST['budget'])) {
         $budget = trim($_POST['budget']);
     }
-    $dauer = "";
+	$aufwand = "";
+    if (isset($_POST['aufwand'])) {
+        $aufwand = trim($_POST['aufwand']);
+    }
+	$dauer = "";
     if (isset($_POST['dauer'])) {
         $dauer = trim($_POST['dauer']);
     }
-    $potenzial = "";
+	$wahrscheinlichkeit = "";
+    if (isset($_POST['wahrscheinlichkeit'])) {
+        $wahrscheinlichkeit = trim($_POST['wahrscheinlichkeit']);
+    }
+	$potenzial = "";
     if (isset($_POST['potenzial'])) {
         $potenzial = trim($_POST['potenzial']);
     }
-// nicht sicher ob richtig
-//    $erstellungsdatum = "";
-//    if (isset($_POST['erstellungsdatum'])) {
-//        $erstellungsdatum = trim($_POST['erstellungsdatum']);
-//    } 
-
-//    $archivierungsdatum = "";
-//    if (isset($_POST['archivierungsdatum'])) {
-//        $archivierungsdatum = trim($_POST['archivierungsdatum']);
-//    } 
-    
-    if ( $projetname != '' AND $aufwand != '' AND $wahrscheinlichkeit != '' AND $kunde != ''  AND $budget != '' AND $dauer != '' AND $potenzial != '')
-        {
-        // nicht sicher, ob hier auch erstellungsdatum und archivierungsdatum  erstellt werden muss
-            $einfuegen = $db->prepare("INSERT INTO projekt(projetname, aufwand, wahrscheinlichkeit, kunde, budget, dauer, potenzial ) VALUES (?,?,?,?,?,?,?)");
-            $einfuegen->bindParam(1, $projetname, PDO::PARAM_STR);
-            $einfuegen->bindParam(2, $aufwand, PDO::PARAM_INT);
-            $einfuegen->bindParam(3, $wahrscheinlichkeit, PDO::PARAM_INT);
-            $einfuegen->bindParam(4, $kunde, PDO::PARAM_STR);
-            $einfuegen->bindParam(5, $budget, PDO::PARAM_INT);
-            $einfuegen->bindParam(6, $dauer, PDO::PARAM_INT);
-            $einfuegen->bindParam(7, $potenzial, PDO::PARAM_STR);
-//            $einfuegen->bindParam(8, $erstellungsdatum, PDO::PARAM_STR);
-//            $einfuegen->bindParam(9, $archivierungsdatum, PDO::PARAM_STR);
-    
-            if ($einfuegen->execute()) {
-               header('Location: index.php?aktion=feedbackgespeichert');
-            die();
-            }
-        }
-
-    else {
-        echo "Bitte geben sie alle nötigen Informationen an";
+	$skills = "";
+    if (isset($_POST['skills'])) {
+        $skills = trim($_POST['skills']);
     }
+	$mitarbeiter = "";
+    if (isset($_POST['mitarbeiter'])) {
+        $mitarbeiter = trim($_POST['mitarbeiter']);
+    }
+	$erstellungsdatum = "";
+    if (isset($_POST['erstellungsdatum'])) {
+        $restellungsdatum = trim($_POST['restellungsdatum']);
+    }
+   
+    if ( $projektname != '' or $kunde != '' or $budget != '' )
+    {
+        // speichern
+        $einfuegen = $db->prepare("
+                INSERT INTO tester (projektname, kunde, budget, aufwand, dauer, wahrscheinlichkeit, potenzial, erstellungsdatum) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, CAST('". $date ."' AS DATE))");
+
+                
+        $einfuegen->bind_param('ssiiiiss', $projektname, $kunde, $budget, $aufwand, $dauer, $wahrscheinlichkeit, $potenzial, erstellungsdatum);
+        if ($einfuegen->execute()) {
+            header('Location: index.php?aktion=feedbackgespeichert');
+            die();
+            echo "<h1>gespeichert</h1>";
+        }
+    }  
 }
-
-
-
-function sicherheit($inhalt='') {
-    $inhalt = trim($inhalt);
-    $inhalt = htmlentities($inhalt, ENT_QUOTES, "UTF-8");
-    return($inhalt);
+if (isset($_GET['aktion']) and $_GET['aktion']=='feedbackgespeichert') {
+    echo '<p class="feedbackerfolg">Datensatz wurde gespeichert</p>';
 }
-
-
+$daten = array();
+if ($erg = $db->query("SELECT * FROM tester")) {
+    if ($erg->num_rows) {
+        while($datensatz = $erg->fetch_object()) {
+            $daten[] = $datensatz;
+        }
+        $erg->free();
+    }   
+}
+if (!count($daten)) {
+    echo "<p>Es liegen keine Daten vor :(</p>";
+} else {
+?>
+    
+<?php   
+}
 
 ?>
-
 <body><nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
   <div class="collapse navbar-collapse" id="navbarText">
@@ -113,64 +112,60 @@ function sicherheit($inhalt='') {
   </div>
 </nav>
 
+
+
 <h3>Neues Projekt erstellen</h3>
 <form class = "form-horizontal" action="projekterstellen.php" method="post">
-    
-    <label>
-        <input type="hidden" name="projektID" id="projektID" value="">
+    <label>projektname:  <br>
+        <input type="text" name="projektname" id="projektname">
     </label><br>
-    <label>Projektname: <br>
-        <input type="text" name="projektname" id="projektname" value="">
+    <label>kunde: <br>
+        <input type="text" name="kunde" id="kunde">
+    </label>	<br>
+    <label>budget: <br>
+        <input type="number" name="budget" id="budget" value=""> 
     </label><br>
-    <label>Kunde:<br>
-        <input type="text" name="kunde" id="kunde" value="">
+	<label>aufwand: <br>
+        <input type="number" name="aufwand" id="aufwand" value=""> 
     </label><br>
-    <label>Projektdauer(in Wochen):<br>
-        <input type="number" name="dauer" id="dauer" value="">
-    </label><br> 
-    <label>Budget(in €): <br>
-        <input type="number" name="budget" id="budget" value="">       
+	<label>dauer: <br>
+        <input type="number" name="dauer" id="dauer" value=""> 
     </label><br>
-	 <label>Aufwand(in h): <br>
-        <input type="number" name="aufwand" id="aufwand" value="">       
+	 <label>wahrscheinlichkeit: <br>
+        <input type="number" name="wahrscheinlichkeit" id="wahrscheinlichkeit" value="">       
     </label><br>
-    Skills:<br> 
-    <select name = "skills">
-    <?php
-   // <option value ="Skills">Skills</option> eigentlich eins weiteroben
-   // vlt verbindung zur datenbank hier angebeben
-       
-        $sql = "SELECT * FROM skills ORDER BY skillname";
-        foreach ($pdo->query($sql) as $row) {
-            echo $row['skillname']." "."<br />";
-            }
-        ?>
-    </select><br> <br>
-    Mitarbeiter:<br>
-    <select name = "mitarbeiter">
+	 potenzial:<br>
+    <select name = "potenial">
+        <option value ="+">+</option>
+        <option value ="++">++</option>
+        <option value ="+++">+++</option>
+        value=""
+    </select><br> 	
+	Mitarbeiter:<br>	
+  <?php 
+	$sql = "SELECT name FROM person WHERE rolle = Mitarbeiter ORDER by name";
+	foreach ($db->query($sql) as $row) {
+		echo "<input type=\"checkbox\">" .$row['name']. " ";
+	}
+    ?><br>
+	Skills:<br>	
+  <?php 
+	$sql = "SELECT skillname FROM skills ORDER by skillID";
+	foreach ($db->query($sql) as $row) {
+		echo "<input type=\"checkbox\">" .$row['skillname']. " ";
+	}
+    ?>
 
-    <?php
-   // <option value ="Mitarbeiter">Mitarbeiter</option> eigentlich eins weiteroben
-   // vlt verbindung zur datenbank hier angebeben
-   // name könnte problem machen
-       
-        $sql = "SELECT * FROM person ORDER BY name";
-        foreach ($pdo->query($sql) as $row) {
-            echo $row['name']." "."<br />";
-            echo "Rolle: ".$row['rolle']."<br /><br />";
-            }
-        ?>
-    </select><br> <br>
 
-    <label>Erstellungsdatum: <br>
-        <?php
-		$datum = date("d.m.Y",$timestamp);
-		echo $datum;
-		?>    
-		</label><br>
-    
-    
+</br>
+
     <input type="submit" name="aktion" onclick="return confirm('Soll das Projekt erstellt werden?')" value="speichern" class="w3-btn w3-green">
-    <input type="submit" name="back" value="Zurück" class="w3-btn w3-black" href = "projekterstellen.php">
+    <input type="submit" name="back" value="Zurück" class="w3-btn w3-black" href = "managerdashboard.php">
+
 
 </form>
+
+
+// Wie speicher ich welches Projekt welche skills benötigt
+//wie speicher ich welche mitarbeiter an welchem projekt arbeiten
+//Speichern von ENUM $potenzial

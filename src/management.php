@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <title>Herzlich Willkommen</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="start.css">
+        <link rel="stylesheet" type="text/css" href="management.css">
     </head>
 
     <body>
@@ -27,7 +27,11 @@
                 <div class="col d-flex justify-content-center">
                     <div class="btn-group-vertical">
                         <button type="button" class="btn btn-dark custom-btn">Dashboard</button>
+                        <button type="button" class="btn btn-dark custom-btn">Neues Projekt</button>
                         <a class="btn btn-dark custom-btn" href="einstellungen.php">Einstellungen</a>
+                        <button type="button" class="btn btn-dark custom-btn">Mitarbeiterverwaltung</button>
+                        <button type="button" class="btn btn-dark custom-btn">Logfiles</button>
+                        <button type="button" class="btn btn-dark custom-btn">Archiv</button>
                     </div>
                 </div>
             </div>

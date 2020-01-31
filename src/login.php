@@ -14,12 +14,28 @@ if(isset($_POST['email'])) {
         
     if ($user !== false && password_verify($passwort, $user['passwort'])) {
         $_SESSION['userid'] = $user['id'];
-        die(header("location: start.php"));
+        $rolle = $conn->prepare(sprintf("SELECT Rolle FROM users where id = %d", $_SESSION['userid']));
+        $rolle->execute();
+        $dbRolle = $rolle->fetch()['Rolle'];
+        switch($dbRolle){
+            case "Manager": 
+                header("location: management.php");
+                die(); 
+                break;
+            case "Vertrieb":
+                header("location: vertrieb.php");
+                die(); 
+                break;
+            case "Mitarbeiter":
+                header("location: start.php");
+                die();
+                break;
+        }    
+    
     } else {
         $errorMessage = "E-Mail oder Passwort war ungültig";
     }
-    
-}
+}   
 ?>
 <!DOCTYPE html> 
 <html> 

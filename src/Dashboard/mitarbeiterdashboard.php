@@ -13,8 +13,6 @@
 <body>
 <?php
 
-//Kommentar
-
 //require 'inc/db.php';
 
 include 'check_login.php';
@@ -32,58 +30,36 @@ if ($erg = $db->query("SELECT * FROM projekt order by erstellungsdatum asc")) {
 }
 if (!count($daten)) {
     echo "<p>Es liegen keine Daten vor :(</p>";
-} else {
-?>
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-
-  <div class="collapse navbar-collapse" id="navbarText">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="start.php">Übersicht <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="einzelprojekt.php">Einzelprojektansicht</a>
-      </li>
-    </ul>
-
-    <ul class="navbar-nav ml-auto">
-    </li>
-    <li class="nav-item ">
-        <a class="fas fa-user fa-2x" href="managerdashboard.php" ></a>
-    </li>
-    </ul>
-  </div>
-</nav>
-
-<br>
-<?php
-if ($modus_aendern==false){?>
-    <table class = "table table-success">
-        <thead class="thead-dark">
-            <tr>
-            <th scope="col">Projektname</th>
-            <th scope="col">Kunde</th>
-            <th scope="col">Dauer</th>
-            <th scope="col">Gebuchte Stunden insgesamt</th>
-            <th scope="col">aktuelle Stunden</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            foreach ($daten as $inhalt) {
-            ?>			
-                <tr>
-                    <td><?php echo sicherheit($inhalt->projektname); ?> </td>
-                    <td><?php echo sicherheit($inhalt->kunde); ?></td>
-                    <td><?php echo sicherheit($inhalt->dauer); ?></td>
-                    <td><?php echo sicherheit($inhalt->stunden); ?></td>
-
-                </tr>
-                <?php
-            }
-        }
 }
+
+$sql = "SELECT projekt.projektname, projekt.kunde, projekt.dauer, zeitkonto.stunden_anzahl
+	    FROM projekt, zeitkonto, Arbeitet_an, person
+        WHERE Arbeitet_an.mitarbeiterID = person.mitarbeiterID
+        AND Arbeitet_an.projektID = projekt.projektID";
+
+	echo '<table class="table">'; 
+	echo 	"<thead>";
+	echo		"<tr>";
+	echo			"<th>Projektname</th>";
+	echo			"<th>Kunde</th>";
+	echo	  		"<th>Projektdauer</th>";		
+	echo	  		"<th>Gebuchte Stunden insgesamt</th>";
+ //   echo	  		"<th>aktuelle Stunden</th>";
+	echo		"</tr>";
+	echo	  "</thead>";
+
+	foreach ($db->query($sql) as $row) {
+	echo "<tr>";
+	echo "<td>".$row['projektname'] . "</td>";
+	echo "<td>".$row['kunde'] . "</td>";
+	echo "<td>". $row['dauer'] . "</td>";
+	echo "<td>".$row['stunden_anzahl']. "</td>";
+	echo "</tr>";}
+
+    echo "</table>";
+    
+// wo muss ich das hinlinken?  
+ // <input type="button" onclick="location.href='STUNDENLINK';" value="Stunden hinzufügen" />
 
 
 
@@ -93,6 +69,27 @@ function sicherheit($inhalt='') {
     return($inhalt);
 }
             ?>			
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="start.php">Übersicht <span class="sr-only">(current)</span></a>
+      </li>
+         </ul>
+
+    <ul class="navbar-nav ml-auto">
+    </li>
+    <li class="nav-item ">
+        <a class="fas fa-user fa-2x" href="mitarbeiterdashboard.php" ></a>
+    </li>
+    </ul>
+  </div>
+</nav>
+
+<br>
         </tbody>
     </table>
     </body>

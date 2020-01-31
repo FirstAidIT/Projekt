@@ -12,9 +12,6 @@
 </head>
 <body>
 <?php
-
-//Kommentar
-
 //require 'inc/db.php';
 
 include 'check_login.php';
@@ -32,7 +29,7 @@ if ($erg = $db->query("SELECT * FROM projekt order by erstellungsdatum asc")) {
 }
 if (!count($daten)) {
     echo "<p>Es liegen keine Daten vor :(</p>";
-} else {
+}
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -44,9 +41,6 @@ if (!count($daten)) {
       </li>
       <li class="nav-item">
         <a class="nav-link" href="projekterstellen.php">Projekt erstellen</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="einzelprojekt.php">Einzelprojektansicht</a>
       </li>
     </ul>
 
@@ -61,45 +55,48 @@ if (!count($daten)) {
 
 <br>
 <?php
-if ($modus_aendern==false){?>
-    <table class = "table table-success">
-        <thead class="thead-dark">
-            <tr>
-            <th scope="col">Projektname</th>
-            <th scope="col">Kunde</th>
-            <th scope="col">Dauer</th>
-            <th scope="col">Budget (€)</th>
-            <th scope="col">Budget/pro Monat (€)</th>
-            <th scope="col">Aufwand (h)</th>
-            <th scope="col">Skills</th> 
-            <th scope="col">Aufwand der Mitarbeiter(h)</th>      
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            foreach ($daten as $inhalt) {
-            ?>			
-                <tr>
-                    <td><?php echo sicherheit($inhalt->projektname); ?> <br> <?php echo sicherheit($inhalt->potenzial); ?></td>
-                    <td><?php echo sicherheit($inhalt->kunde); ?></td>
-                    <td><?php echo sicherheit($inhalt->dauer); ?></td>
-                    <td><?php echo sicherheit($inhalt->budget); ?></td>
-                    <td><?php echo sicherheit($inhalt->budget/30); ?></td>
-                    <td><?php echo sicherheit($inhalt->aufwand); ?></td>
-                   
-                    <td><a href = "?aktion=bearbeiten&projektID=<?php echo $inhalt->projektID; ?>" class="btn btn-secondary">Bearbeiten</a></td>
-                </tr>
-                <?php
-            }
-        }
-}
+$sql = "SELECT projekt.projektname, projekt.kunde, projekt.dauer, zeitkonto.stunden_anzahl, projekt.budget, projekt.aufwand, person.name, SKILLS????
+  FROM projekt, person";
+
+echo '<table class="table">'; 
+echo 	"<thead>";
+echo		"<tr>";
+echo			"<th>Projektname</th>";
+echo			"<th>Kunde</th>";
+echo	  		"<th>Projektdauer</th>";		
+echo	  		"<th>Budget insgesamt</th>";
+echo	  		"<th>Budget pro Monat</th>";
+echo	  		"<th>Aufwand</th>";
+echo	  		"<th>Skills</th>";
+echo	  		"<th>Aufwand Mitarbeiter</th>";
+echo	  		"<th>Bearbeiten</th>";
+
+
+echo		"</tr>";
+echo	  "</thead>";
+
+foreach ($db->query($sql) as $row) {
+echo "<tr>";
+echo "<td>".$row['projektname'] . "</td>";
+echo "<td>".$row['kunde'] . "</td>";
+echo "<td>". $row['dauer'] . "</td>";
+echo "<td>".$row['budget']. "</td>";
+echo "<td>".$row['budget/dauer']. "</td>";
+echo "<td>".$row['aufwand']. "</td>";
+echo "<td>".$row['SKILLS']. "</td>";
+echo "<td>".$row['person.name']. "</td>";
+echo "<td><a href='einzelprojekt.php'>bearbeiten</a></td>";
+echo "</tr>";}
+
+echo "</table>";
+
 
 function sicherheit($inhalt='') {
   $inhalt = trim($inhalt);
   $inhalt = htmlentities($inhalt, ENT_QUOTES, "UTF-8");
   return($inhalt);
 }
-          ?>			
+ ?>			
       </tbody>
   </table>
   </body>
