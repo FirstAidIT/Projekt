@@ -28,9 +28,6 @@
                     <div class="btn-group-vertical">
                         <button type="button" class="btn btn-dark custom-btn">Dashboard</button>
                         <a class="btn btn-dark custom-btn" href="einstellungen.php">Einstellungen</a>
-                        <button type="button" class="btn btn-warning custom-btn">Mitarbeiterverwaltung</button>
-                        <button type="button" class="btn btn-warning custom-btn">Logfiles</button>
-                        <button type="button" class="btn btn-warning custom-btn">Archiv</button>
                     </div>
                 </div>
             </div>
