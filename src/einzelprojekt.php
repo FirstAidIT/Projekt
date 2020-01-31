@@ -13,14 +13,14 @@
 <body>
 <?php
 
-//Kommentar
 
+require 'inc/db.php';
 
 SESSION_START();
 
 
-include 'check_login.php';
-include 'database.php';
+//include 'check_login.php';
+//include 'database.php';
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt loeschen') {
     if (isset($_POST['projektID'])) {
@@ -113,12 +113,11 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
 
     if ($anzahl_projekte > 0 && $upd_projektname != $projektnamealt ){
         header ("Location: ?aktion=bearbeiten&projektID=$upd_projektID");
-        //echo "Bitte eine gültige E-Mail angeben";
         echo "Dieser Projektname ist bereits vorhanden";
     }
 
     else{
-        if ($upd_erstellungsdatum != '' or $upd_aufwand != '')
+        if ($upd_erstellungsdatum != '' AND $upd_aufwand != '' AND  $upd_projektname != '' AND $upd_wahrscheinlichkeit != '' AND $upd_kunde != '' AND  $upd_budget != '')
         {
             // speichern
             $update = $conn->prepare("UPDATE projekt SET erstellungsdatum =?, aufwand=?, projektname=?, wahrscheinlichkeit=? , kunde=?, budget=?, dauer=?, archivierungsdatum=?, potenzial=?, startzeit=?, endzeit=? WHERE projektID=?");
