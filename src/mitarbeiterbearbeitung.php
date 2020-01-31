@@ -14,13 +14,15 @@
 
 session_start();
 
-require 'inc/db.php';
+//require 'inc/db.php';
 
+include 'check_login.php';
+include 'database.php';
 
 
 $id_einlesen = $_SESSION['id'];
 
-$dseinlesen = $conn->prepare("SELECT* FROM person where mitarbeiterID = ?");
+$dseinlesen = $db->prepare("SELECT* FROM person where mitarbeiterID = ?");
 $dseinlesen->execute([$id_einlesen]);
 $dseinlesen->execute();
 while ($row = $dseinlesen->fetch()) {
