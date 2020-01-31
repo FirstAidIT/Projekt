@@ -17,15 +17,6 @@
     background-color: #7CB53F;
 }
 
-.btn-warning.custom-btn{
-    background-color: #999999;
-    border-color: #fff;
-}
-
-.btn-warning.custom-btn:hover{
-    background-color: #888888;
-}
-
 .btn-light.custom-btn{
     background-color: #8DC640;
     border-color: #e9ecef;
