@@ -140,21 +140,19 @@ if (!count($daten)) {
         <option value ="+++">+++</option>
         value=""
     </select><br> 	
-	mitarbeiter:<br>	
+	Mitarbeiter:<br>	
   <?php 
 	$sql = "SELECT name FROM person WHERE rolle = Mitarbeiter ORDER by name";
 	foreach ($db->query($sql) as $row) {
-		
-	}		
-	echo "<select> <option>" .$row['name']. "</option> </select>";		
+		echo "<input type=\"checkbox\">" .$row['name']. " ";
+	}
     ?><br>
-	skills:<br>	
+	Skills:<br>	
   <?php 
 	$sql = "SELECT skillname FROM skills ORDER by skillID";
 	foreach ($db->query($sql) as $row) {
-		
-	}		
-	echo "<select> <option>" .$row['skillname']. "</option> </select>";		
+		echo "<input type=\"checkbox\">" .$row['skillname']. " ";
+	}
     ?>
 
 
@@ -166,6 +164,6 @@ if (!count($daten)) {
 
 </form>
 
-//Fragen wie gebe ich dynamisch die Mitarbeiter und Skills als Select an
+
 // Wie speicher ich welches Projekt welche skills benötigt
 //wie speicher ich welche mitarbeiter an welchem projekt arbeiten
