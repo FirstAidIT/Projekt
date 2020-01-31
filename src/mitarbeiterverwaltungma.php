@@ -12,14 +12,11 @@
 <?php
 
 
-//require 'inc/db.php';
-
-include 'check_login.php';
-include 'database.php';
 
 SESSION_START();
 
-
+include 'check_login.php';
+include 'database.php';
 
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
@@ -143,7 +140,6 @@ function check_email($email) {
         <option value ="Mitarbeiter">Mitarbeiter</option>
         <option value ="Vertrieb">Vertrieb</option>
         <option value ="Management">Management</option>
-        value=""
     </select><br> <br>
     <?php $check = $_SESSION['check'];
     $angelegt = $_SESSION['angelegt'];

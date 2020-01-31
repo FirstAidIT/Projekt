@@ -19,15 +19,12 @@
 <body>
 <?php
 
-session_start();
 $erfolg = false;
 
-//require 'inc/db.php';
-
+session_start ();
 include 'check_login.php';
 include 'database.php';
 
-$mitarbeiterid = $_SESSION['mitarbeiterID'];
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
 
@@ -83,7 +80,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
                 if ($upd_email != '' or $upd_passwort != '' or $upd_name != '' or $upd_rolle != '' && passCheck($upd_passwort, $passwortalt))
                 {
                     // speichern
-                    $update = $conn->prepare("UPDATE person SET email =?, passwort=?, name=?, rolle=? WHERE mitarbeiterID=$mitarbeiterid");
+                    $update = $conn->prepare("UPDATE person SET email =?, passwort=?, name=?, rolle=? WHERE mitarbeiterID=?");
                     $update->execute([$upd_email, $hashed_password, $upd_name, $upd_rolle, $upd_id]);
                     if ($update->execute()) {
                         //header("Location: mitarbeiterverwaltung.php");
@@ -108,8 +105,9 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
     }
 }
 
+$id = $_SESSION['mitarbeiterID']
 
-$dseinlesen = $conn->prepare("SELECT mitarbeiterID, email, passwort, name, rolle FROM person WHERE mitarbeiterID = $mitarbeiterid");
+$dseinlesen = $conn->prepare("SELECT mitarbeiterID, email, passwort, name, rolle FROM person WHERE mitarbeiterID = '$id' ");
         $dseinlesen->execute();
         while ($row = $dseinlesen->fetch()) {
             $mitarbeiterID = $row['mitarbeiterID'];
@@ -221,11 +219,11 @@ function PassStrength($Password) {
         <input type="password" name="passwortneu2" class= "form-control" id="passwortneu2" value="">    
     </label><br>
     Rolle:<br>
-    <select name = "rolle">
+    <select name = "rolle" value="<?php echo $rolle; ?>">
+        <option value='<?php echo $rolle?>' selected='selected'><?php echo $rolle?></option>
         <option value ="Mitarbeiter">Mitarbeiter</option>
         <option value ="Vertrieb">Vertrieb</option>
         <option value ="Management">Management</option>
-        value="<?php echo $rolle; ?>"
     </select><br><br>
     <?php $check = "";?>
     <?php   if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen'){ 

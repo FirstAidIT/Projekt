@@ -20,7 +20,11 @@ $_SESSION['angelegt'] = false;
 
 $_SESSION['checkchange'] = "";
 
-//require 'inc/db.php';
+$_SESSION['checkaendern']= "";
+
+$_SESSION['geaendert'] = false;
+
+
 
 
 include 'check_login.php';
@@ -61,6 +65,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Benutzer deaktivieren') {
 
     $update = $conn->prepare("UPDATE person SET active = 0 WHERE mitarbeiterID=?");
     $update->execute([$mitarbeiterdeaktivieren]); 
+    header("Location: mitarbeiterbearbeitung.php");
 }
 
 //Benutzer reaktivieren
@@ -71,6 +76,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Benutzer reaktivieren') {
 
     $update = $conn->prepare("UPDATE person SET active = 1 WHERE mitarbeiterID=?");
     $update->execute([$mitarbeiterreaktivieren]);
+    header("Location: mitarbeiterbearbeitung.php");
  
 }
 
@@ -116,17 +122,16 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
 
     if(check_email($upd_email) == false){
 
-        $_SESSION['checkchange'] = "Bitte eine gültige E-Mail angeben";
-        header("Location: ?aktion=bearbeiten&mitarbeiterID=$upd_id");
-        echo "Bitte eine gültige E-Mail angeben";
+        $_SESSION['checkaendern'] = "Bitte eine zulässige E-Mail angeben.";
+        //header("Location: ?aktion=bearbeiten&mitarbeiterID=$upd_id");
+        header("Location: mitarbeiterbearbeitung.php");
     }
 
     else {
         if ($anzahl_user > 0 && $upd_email != $emailalt){
-            $modus_mail == true;
-            $_SESSION['checkchange'] = "E-Mail bereits vergeben";
-            header("Location: ?aktion=bearbeiten&mitarbeiterID=$upd_id");
-            echo ("E-Mail bereits vergeben");
+            $_SESSION['checkaendern'] = "E-Mail bereits vergeben.";
+            header("Location: mitarbeiterbearbeitung.php");
+            //header("Location: ?aktion=bearbeiten&mitarbeiterID=$upd_id");
         }
 
         else{
@@ -138,11 +143,10 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
         // speichern
         $update = $conn->prepare("UPDATE person SET email =?, passwort=?, name=?, rolle=? WHERE mitarbeiterID=?");
         $update->execute([$upd_email, $hashed_password, $upd_name, $upd_rolle, $upd_id]);
-        if ($update->execute()) {   
-            header("Location: benutzerverwaltungma.php");
-            echo '<p class="feedbackerfolg">Datensatz wurde geändert</p>';
+        if ($update->execute()) {
+            $_SESSION['geaendert'] = true;
+            header("Location: mitarbeiterbearbeitung.php");
             $modus_aendern = false;
-            $nochfalsch=false;
         }
     }
     }
@@ -198,14 +202,14 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
             $_SESSION['check'] = "Bitte eine gültige Email angeben";
             $_SESSION['checkpw'] = $passwort;
             header("Location: mitarbeiterverwaltungma.php");
-            echo "Bitte eine gültige E-Mail angeben";
+            echo "Bitte eine zulässige. E-Mail angeben";
         }
     
         else {
             if ($anzahl_user > 0){
                 $_SESSION['check'] = "Email bereits vergeben";
                 header("Location: mitarbeiterverwaltungma.php");
-                echo ("E-Mail bereits vergeben");
+                echo ("E-Mail bereits vergeben.");
             }
             
             else {
@@ -213,13 +217,13 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
                 if (PassStrength($passwort) < 30){
                     $_SESSION['check'] = "Bitte ein sicheres Passwort angeben";
                     header("Location: mitarbeiterverwaltungma.php");
-                    echo "Bitte ein sicheres Passwort angeben"; 
+                    echo "Bitte ein sicheres Passwort angeben."; 
                 }
                 else {
                     if ($passwort!=$passwortwdh){
                         $_SESSION['check'] = "Passwörter stimmen nicht überein";
                         header("Location: mitarbeiterverwaltungma.php");                 
-                        echo "Passwörter stimmen nicht überein";
+                        echo "Passwörter stimmen nicht überein.";
                     }
                     else{
                 
@@ -231,7 +235,6 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
                         $einfuegen->bindParam(4, $rolle, PDO::PARAM_STR);
                 
                         if ($einfuegen->execute()) {
-                        //header('Location: benutzerverwaltungma.php?aktion=feedbackgespeichert');
                         $_SESSION['angelegt'] = true;
                         header("Location: mitarbeiterverwaltungma.php");  
                         //die();
@@ -249,6 +252,8 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='feedbackgespeichert') {
 $modus_aendern = false;
 
 if (isset($_GET['aktion']) and $_GET['aktion']=='bearbeiten') {
+    $_SESSION['bearbeitungsID'] = $_GET['mitarbeiterID'];
+    header("Location: mitarbeiterbearbeitung.php");
     $modus_aendern = true;
     $modus_aenderung = true;
 }
@@ -322,28 +327,7 @@ $modus_suchen = false;
 
 
     $daten = array();
-    /*if ( isset($_GET['suchbegriff']) and trim ($_GET['suchbegriff']) != '' )
-    {
-        $suchbegriff = trim ($_GET['suchbegriff']);
-        //echo "<p>Gesucht wird nach: <b>$suchbegriff</b></p>"; 
-        $suche_nach = "%{$suchbegriff}%";
-        $suche = $db->prepare("SELECT mitarbeiterID, email, passwort, name, rolle, active 
-                     FROM person
-                     WHERE name LIKE ?");
-        $suche->bindParam(1, $suche_nach, PDO::PARAM_STR);
-        //$suche->bindParam(2, $suche_nach, PDO::PARAM_STR);
-        $suche->execute();
 
-        while ($datensatzsuche = $suche->fetchObject()) {
-            $daten[] = $datensatzsuche;
-        }
-        $suche = null;
-        //$mitarbeiterID       = '';
-        $email   = '';
-        $name  = '';
-        $rolle = ''; 
-        $active = '';    
-    }*/
     $total_pages = 0;
 
     $paginierung = 0;
@@ -351,7 +335,6 @@ $modus_suchen = false;
     if ( isset($_GET['suchbegriff']) and trim ($_GET['suchbegriff']) != '' )
     {
         $suchbegriff = trim ($_GET['suchbegriff']);
-        //echo "<p>Gesucht wird nach: <b>$suchbegriff</b></p>"; 
         $suche_nach = "%{$suchbegriff}%";
         $abc = $conn->prepare("SELECT * FROM person WHERE name LIKE ? ORDER BY name ASC");
         $abc->bindParam(1, $suche_nach, PDO::PARAM_STR);
@@ -417,64 +400,7 @@ $modus_suchen = false;
 
             <?php
         
-    }
-    /*{
-        if ($erg = $db->query("SELECT *  FROM person ORDER BY name ASC LIMIT ?,?")) {
-            if ($erg->rowCount()) {
-                while ($datensatz = $erg->fetchObject()) {
-                    $daten[] = $datensatz;
-                }
-            }
-        }
-    }
-
-
-
-?>
-
-    <br>
-    <table class = "table table-striped">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">TEST</th>
-                <th scope="col">Name</th>
-                <!--<th scope="col">ID</th>-->
-                <th scope="col">E-Mail</th>
-                <th scope="col">Rolle</th>
-                <th scope="col">Status</th>
-                <th scope="col">Bearbeiten</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            foreach ($daten as $inhalt) {
-                $_SESSION["mitarbeiterID2"] = $inhalt->mitarbeiterID;
-            ?>			
-                <tr>
-                    <td><?php echo $_SESSION["mitarbeiterID"] = $inhalt->name; ?></td>
-                    <td><?php echo sicherheit($inhalt->name); ?></td>
-                    <!--<td><?php echo $inhalt->mitarbeiterID; ?></td>-->
-                    <td><?php echo sicherheit($inhalt->email); ?></td>
-                    <td><?php echo sicherheit($inhalt->rolle); ?></td>
-                    <?php if ($inhalt->active ==true){?><td><?php echo "aktiv"; ?></td><?php }?>
-                    <?php if ($inhalt->active ==false){?><td><?php echo "inaktiv"; ?></td><?php }?>
-                    <!--<td><a href = "?aktion=anzeigen&mitarbeiterID=<?php echo $inhalt->mitarbeiterID; ?>" class="w3-btn w3-black">Anzeigen</a></td>-->
-                    <!--<td><a href = "?aktion=loeschen&mitarbeiterID=<?php echo $inhalt->mitarbeiterID; ?>" onclick="return confirm('Soll der Mitarbeiter wirklich gelöscht werden?')"  class="w3-btn w3-red">Löschen</a></td>-->
-                    <td><a href = "?aktion=bearbeiten&mitarbeiterID=<?php echo $inhalt->mitarbeiterID; ?>" class="btn btn-secondary">Bearbeiten</a></td>
-                    <td><a href = "aenderungma.php" name = "aktion" value = "wirdgeaendert" method ="post" class="btn btn-secondary">Aenderung</a></td>
-                    <!--<td><input type = "submit" name = "aktion" value = "bearbeiten" class ="btn btn-primary">-->
-                </tr>
-            <?php
-            }
-            ?>			
-        </tbody>
-    </table>
-
-    <br><br>
-
-
-<?php
-   */     	
+    }	
 
 }
 }
@@ -600,6 +526,12 @@ if ($modus_aendern == true){
 <div style = "width:400; margin:auto">
 <form style= "width:400;  margin:auto;" class = "form-horizontal"  method="post">
 
+    <?php $_SESSION['bearbeitenName'] = $name; ?>
+    <?php $_SESSION['id'] = $mitarbeiterID; ?>
+
+    <?php echo $_SESSION['bearbeitungsname']; ?>
+
+    <td><a href = "mitarbeiterbearbeitung.php" class="btn btn-secondary">Abändern</a></td>
 
     <h3>Benutzer <?php echo $name ?> bearbeiten</h3>
     <!--MitarbeiterID-->
@@ -626,14 +558,17 @@ if ($modus_aendern == true){
     </label><br>--> 
     Rolle:<br>
     <select name = "rolle">
+        <option value='<?php echo $rolle?>' selected='selected'><?php echo $rolle?></option>
         <option value ="Mitarbeiter">Mitarbeiter</option>
         <option value ="Vertrieb">Vertrieb</option>
         <option value ="Management">Management</option>
-        value="<?php echo $rolle; ?>"
     </select><br> <br>
     <?php $checkchange = $_SESSION['checkchange'];?>
     <?php echo "<font color='#FF0000'> $checkchange</font>"?>
     <input type="hidden" name="aktion" value="speichern">
+
+
+    
 
 
 <?php
