@@ -73,6 +73,7 @@ if ($modus_aendern==false){?>
             <th scope="col">Aufwand (h)</th>
             <th scope="col">Skills</th> 
             <th scope="col">Aufwand der Mitarbeiter(h)</th>      
+            <th scope="col"></th> 
             </tr>
         </thead>
         <tbody>
@@ -86,8 +87,11 @@ if ($modus_aendern==false){?>
                     <td><?php echo sicherheit($inhalt->budget); ?></td>
                     <td><?php echo sicherheit($inhalt->budget/30); ?></td>
                     <td><?php echo sicherheit($inhalt->aufwand); ?></td>
+                    <td><a href="einzelprojekt.php">
+                         <button type="button">Bearbeiten</button>
+                         </a>
+                    </td>
                    
-                    <td><a href = "?aktion=bearbeiten&projektID=<?php echo $inhalt->projektID; ?>" class="btn btn-secondary">Bearbeiten</a></td>
                 </tr>
                 <?php
             }
