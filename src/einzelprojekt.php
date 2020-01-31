@@ -13,8 +13,8 @@
 <body>
 <?php
 
-//Kommentar
 
+//require 'inc/db.php';
 
 SESSION_START();
 
@@ -27,7 +27,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt loeschen') {
         $projektID =$_POST['projektID'];
         if ($projektID > 0)
         {
-            $loeschen = $conn->prepare("DELETE FROM projekt WHERE projektID=(?) LIMIT 1");
+            $loeschen = $db->prepare("DELETE FROM projekt WHERE projektID=(?) LIMIT 1");
             $loeschen->bindParam(1, $projektID, PDO::PARAM_STR);
             if ($loeschen->execute()) {
                 ?>
@@ -41,14 +41,14 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt loeschen') {
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='Archivieren') {
     $projektIDarchivieren = $_POST['projektID'];
-    $update = $conn->prepare("UPDATE projekt SET ist_archiviert = 1 WHERE projektID=?");
+    $update = $db->prepare("UPDATE projekt SET ist_archiviert = 1 WHERE projektID=?");
     $update -> execute([$projektIDarchivieren]);
     header ("Location: ?aktion=bearbeiten&projektID=$projektIDarchivieren");
 }
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='Aktivieren') {
     $projektIDaktivieren = $_POST['projektID'];
-    $update = $conn->prepare("UPDATE projekt SET ist_archiviert = 0 WHERE projektID=?");
+    $update = $db->prepare("UPDATE projekt SET ist_archiviert = 0 WHERE projektID=?");
     $update -> execute([$projektIDaktivieren]);
     header ("Location: ?aktion=bearbeiten&projektID=$projektIDaktivieren");
 }
@@ -107,21 +107,20 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
         $upd_enddatum = trim($_POST['enddatum']);
     }
 
-    $statement = $conn->prepare("SELECT* FROM projekt WHERE projektname = '$upd_projektname'");
+    $statement = $db->prepare("SELECT* FROM projekt WHERE projektname = '$upd_projektname'");
     $statement->execute(array('Max')); 
     $anzahl_projekte = $statement->rowCount();
 
     if ($anzahl_projekte > 0 && $upd_projektname != $projektnamealt ){
         header ("Location: ?aktion=bearbeiten&projektID=$upd_projektID");
-        //echo "Bitte eine gültige E-Mail angeben";
         echo "Dieser Projektname ist bereits vorhanden";
     }
 
     else{
-        if ($upd_erstellungsdatum != '' or $upd_aufwand != '')
+        if ($upd_erstellungsdatum != '' AND $upd_aufwand != '' AND  $upd_projektname != '' AND $upd_wahrscheinlichkeit != '' AND $upd_kunde != '' AND  $upd_budget != '')
         {
             // speichern
-            $update = $conn->prepare("UPDATE projekt SET erstellungsdatum =?, aufwand=?, projektname=?, wahrscheinlichkeit=? , kunde=?, budget=?, dauer=?, archivierungsdatum=?, potenzial=?, startzeit=?, endzeit=? WHERE projektID=?");
+            $update = $db->prepare("UPDATE projekt SET erstellungsdatum =?, aufwand=?, projektname=?, wahrscheinlichkeit=? , kunde=?, budget=?, dauer=?, archivierungsdatum=?, potenzial=?, startzeit=?, endzeit=? WHERE projektID=?");
             $update->execute([$upd_erstellungsdatum, $upd_aufwand, $upd_projektname, $upd_wahrscheinlichkeit, $upd_kunde, $upd_budget, $upd_dauer, $upd_archivierungsdatum, $upd_potenzial,  $upd_startdatum, $upd_enddatum, $upd_projektID]);
             if ($update->execute()) {
                 header ("Location: einzelprojekt.php");
@@ -140,7 +139,7 @@ if (isset($_GET['aktion']) and $_GET['aktion']=='bearbeiten') {
 }
 
 $daten = array();
-if ($erg = $conn->query("SELECT * FROM projekt order by erstellungsdatum asc")) {
+if ($erg = $db->query("SELECT * FROM projekt order by erstellungsdatum asc")) {
 	if ($erg->rowCount()) {
 		while($datensatz = $erg->fetchObject()) {
 			$daten[] = $datensatz;
@@ -225,7 +224,7 @@ if ( $modus_aendern == true and isset($_GET['projektID']) ) {
     $id_einlesen = (INT) $_GET['projektID'];
     if ($id_einlesen > 0)
     {   
-        $dseinlesen = $conn->prepare("SELECT * FROM projekt WHERE projektID=? order by erstellungsdatum asc ");
+        $dseinlesen = $db->prepare("SELECT * FROM projekt WHERE projektID=? order by erstellungsdatum asc ");
         $dseinlesen->execute([$id_einlesen]);
         $dseinlesen->execute();
         while ($row = $dseinlesen->fetch()) {
