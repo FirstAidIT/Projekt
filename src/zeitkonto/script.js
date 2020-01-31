@@ -28,7 +28,6 @@ $(document).ready(() => {
 
   //Tabelle bearbeiten 
   $('#table-editable').on('click', 'button.btn-edit-modal',function (ele) {
-    //the <tr> variable is use to set the parentNode from "ele
     const tr = ele.target.parentNode.parentNode;
 
     // Zelleninhalt holen
@@ -132,7 +131,6 @@ $(document).ready(() => {
         isStarted = true;
         haveTime = true;
         $("#timer-text").text(time);
-        
         return [interval, newDate];
       }, 1000);
       return [interval, start];
