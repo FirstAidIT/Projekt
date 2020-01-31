@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="stylesheet" href="/main.css">
 <title>Benutzerverwaltung Manager</title>
-<!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
@@ -15,99 +14,9 @@
 
 session_start();
 
-
-include 'check_login.php';
-include 'database.php';
-
-if (isset($_GET['aktion']) and $_GET['aktion']=='loeschen') {
-    if (isset($_GET['mitarbeiterID'])) {
-        $mitarbeiterID =$_GET['mitarbeiterID'];
-        if ($mitarbeiterID > 0)
-        {
-            $loeschen = $conn->prepare("DELETE FROM person WHERE mitarbeiterID=(?) LIMIT 1");
-            $loeschen->bindParam(1, $mitarbeiterID, PDO::PARAM_STR);
-            if ($loeschen->execute()) {
-                header("Location: benutzerverwaltungma.php");
-                echo "<p>Datensatz wurde gelöscht</p>";
-            }
-        }       
-    }
-}
-
-if (isset($_POST['aktion']) and $_POST['aktion']=='Benutzer deaktivieren') {
-    $modus_aendern = true;
-    $mitarbeiterdeaktivieren = $_POST['mitarbeiterID'];
-
-    $update = $conn->prepare("UPDATE person SET active = 0 WHERE mitarbeiterID=?");
-    $update->execute([$mitarbeiterdeaktivieren]); 
-    header("Location: mitarbeiterbearbeitung.php");
-}
-
-if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
-    $nochfalsch=true;
-    $modus_aendern = true;
-
-    $emailalt = $_POST['emailalt'];
-    $upd_id = "";
-    if (isset($_POST['mitarbeiterID'])) {
-        $upd_id = (INT) trim($_POST['mitarbeiterID']);
-    }
-    $upd_email = "";
-    if (isset($_POST['email'])) {
-        $upd_email = trim($_POST['email']);
-    }
-    $upd_passwort = "";
-    if (isset($_POST['passwort'])) {
-        $upd_passwort = trim($_POST['passwort']);
-    }
-    $upd_name = "";
-    if (isset($_POST['name'])) {
-        $upd_name = trim($_POST['name']);
-    }
-    $upd_rolle = "";
-    if (isset($_POST['rolle'])) {
-        $upd_rolle = trim($_POST['rolle']);
-    }
-    $upd_status = "";
-    if (isset($_POST['active'])) {
-        $upd_status = trim($_POST['active']);
-    }
+require 'inc/db.php';
 
 
-    $statement = $conn->prepare("SELECT* FROM person WHERE email = '$upd_email'");
-    $statement->execute(array('Max')); 
-    $anzahl_user = $statement->rowCount();
-
-
-
-
-    if(check_email($upd_email) == false){
-        echo "Bitte eine gültige E-Mail angeben";
-
-    }
-
-    else {
-        if ($anzahl_user > 0 && $upd_email != $emailalt){
-            echo ("E-Mail bereits vergeben");
-        }
-
-        else{
-    $hashed_password = password_hash($upd_passwort, PASSWORD_DEFAULT);
-
-    
-    if ($upd_email != '' or $upd_passwort != '' or $upd_name != '' or $upd_rolle != '')
-    {
-        // speichern
-        $update = $conn->prepare("UPDATE person SET email =?, passwort=?, name=?, rolle=? WHERE mitarbeiterID=?");
-        $update->execute([$upd_email, $hashed_password, $upd_name, $upd_rolle, $upd_id]);
-        if ($update->execute()) {
-            header("Location: benutzerverwaltungma.php");
-            echo '<p class="feedbackerfolg">Datensatz wurde geändert</p>';
-        }
-    }
-    }
-    }
-}
 
 $id_einlesen = $_SESSION['id'];
 
@@ -170,12 +79,6 @@ E-Mail:
 <label>Name: <br>
     <input type="text" name="name" id="name" value="<?php echo $name; ?>">       
 </label><br>
-<!--<label>Passwort:<br>
-    <input type="password" name="passwort" id="passwort" value="">
-</label><br>
-<label>Passwort wiederholen:<br>
-    <input type="password" name="passwortwdh" id="passwortwdh" value="">
-</label><br>--> 
 Rolle:<br>
 <select name = "rolle">
     <option value='<?php echo $rolle?>' selected='selected'><?php echo $rolle?></option>
@@ -198,9 +101,8 @@ Rolle:<br>
 
 
     <input type="hidden" name="id" value="'. $id_einlesen .'"> 
-    <input type="submit" name="aktion" value="Übernehmen" class = "btn btn-success">'
-    <!--<input type="submit" onclick="return confirm('Änderungen wirklich übernehmen?')" class="btn btn-success" value="Änderungen speichern">-->
-    <a href = "?aktion=loeschen&mitarbeiterID=<?php echo $mitarbeiterID; ?>" onclick="return confirm('Soll der Mitarbeiter wirklich gelöscht werden?')"  class="btn btn-danger">Löschen</a></td>
+    <input type="submit" name="aktion" value="Übernehmen" class = "btn btn-success">
+    <input type="submit" name="aktion" value="Löschen" class = "btn btn-danger">
     <?php
     if ($active == 1){?>
     <input type="submit" name = "aktion" class="btn btn-warning" value="Benutzer deaktivieren">

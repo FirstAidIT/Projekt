@@ -12,87 +12,12 @@
 <?php
 
 
-
+require 'inc/db.php';
 SESSION_START();
 
-include 'check_login.php';
-include 'database.php';
+//include 'check_login.php';
+//include 'database.php';
 
-
-if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
-
-    $email = "";
-    if (isset($_POST['email'])) {
-        $email = trim($_POST['email']);
-    }
-    $passwort = "";
-    if (isset($_POST['passwort'])) {
-        $passwort = trim($_POST['passwort']);
-    }
-    $name = "";
-    if (isset($_POST['name'])) {
-        $name = trim($_POST['name']);
-    }
-    $rolle = "";
-    if (isset($_POST['rolle'])) {
-        $rolle = trim($_POST['rolle']);
-    }
-
-    $passwortwdh = $POST['passwortwdh'];
-    echo $passwortwdh;
-
-    $hashed_password = password_hash($passwort, PASSWORD_DEFAULT);
-    
-
-    $statement = $conn->prepare("SELECT* FROM person WHERE email = '$email'");
-    $statement->execute(array('Max')); 
-    $anzahl_user = $statement->rowCount();
-
-    if(check_email($email) == false){
-        echo "Bitte eine gültige E-Mail angeben";
-        header("Location: mitarbeiterverwaltungma.php");
-    }
-
-else{
-
-    if ($anzahl_user > 0){
-        echo ("E-Mail bereits vergeben");
-    }
-    
-    else {
-
-        if ( $email != '' AND $passwort != '' AND $name != '' )
-        {
-        // speichern
-            $einfuegen = $conn->prepare("INSERT INTO person(email, passwort, name, rolle) VALUES (?,?,?,?)");
-            $einfuegen->bindParam(1, $email, PDO::PARAM_STR);
-            $einfuegen->bindParam(2, $hashed_password, PDO::PARAM_STR);
-            $einfuegen->bindParam(3, $name, PDO::PARAM_STR);
-            $einfuegen->bindParam(4, $rolle, PDO::PARAM_STR);
-    
-            if ($einfuegen->execute()) {
-               header('Location: index.php?aktion=feedbackgespeichert');
-            die();
-            }
-        }
-
-    else {
-        echo "Bitte geben sie alle nötigen Informationen an";
-    }
-}
-}
-
-function sicherheit($inhalt='') {
-    $inhalt = trim($inhalt);
-    $inhalt = htmlentities($inhalt, ENT_QUOTES, "UTF-8");
-    return($inhalt);
-}
-
-function check_email($email) {
-    return (!preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $email)) ? FALSE : TRUE;
-}
-
-}
 
 ?>
 
@@ -153,9 +78,6 @@ function check_email($email) {
     <?php if ($angelegt == false){?>
     <input type="submit" name="aktion" value="speichern" class="btn btn-success"><?php
     }?>
-    <!--<button type="button" class="btn btn-success">Anlegen</button>-->
-    
-    <!--<button type="button" class="btn btn-primary">Zurück</button>-->
 
 
 

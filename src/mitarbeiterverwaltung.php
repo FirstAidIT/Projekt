@@ -21,9 +21,10 @@
 
 $erfolg = false;
 
-session_start ();
-include 'check_login.php';
-include 'database.php';
+require 'inc/db.php';
+
+//include 'check_login.php';
+//include 'database.php';
 
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
@@ -55,9 +56,6 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
     $passwortneu2 = $_POST ['passwortneu2'];
 
 
-
-
-    // Passwörter nur vergleichen und schreiben, wenn ein neues eingegeben wird
 
 
         if (!empty($passwortneu1)){
@@ -98,16 +96,14 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
             $update->execute([$upd_email, $upd_name, $upd_rolle, $upd_id]);
             if ($update->execute()) {
                
-                //header("Location: mitarbeiterverwaltung.php");
                 $erfolg = true;
             }
         }
     }
 }
 
-$id = $_SESSION['mitarbeiterID']
-
-$dseinlesen = $conn->prepare("SELECT mitarbeiterID, email, passwort, name, rolle FROM person WHERE mitarbeiterID = '$id' ");
+$id = $_SESSION['usid']
+$dseinlesen = $conn->prepare("SELECT mitarbeiterID, email, passwort, name, rolle FROM person WHERE email = '$id' ");
         $dseinlesen->execute();
         while ($row = $dseinlesen->fetch()) {
             $mitarbeiterID = $row['mitarbeiterID'];

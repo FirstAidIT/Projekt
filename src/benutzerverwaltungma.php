@@ -25,6 +25,7 @@ $_SESSION['checkaendern']= "";
 $_SESSION['geaendert'] = false;
 
 
+/require 'inc/db.php';
 
 
 include 'check_login.php';
@@ -32,30 +33,24 @@ include 'database.php';
 
 
 
-/* Updates nach Termin mit Auftraggeber
-
-- Fehlermeldungen auf der gleichen Seite
-- Alles auf Buttons!!
-
-User löschen*/
+//User löschen
 
 $nochfalsch = false;
 $modus_aenderung;
 $modus_mail = false;
-if (isset($_GET['aktion']) and $_GET['aktion']=='loeschen') {
-    if (isset($_GET['mitarbeiterID'])) {
-        $mitarbeiterID =$_GET['mitarbeiterID'];
-        if ($mitarbeiterID > 0)
+if (isset($_POST['aktion']) and $_POST['aktion']=='Löschen') {
+    if (isset($_POST['mitarbeiterID'])) {
+        $mitarbeiterloeschen = $_POST['mitarbeiterID'];
+        if ($mitarbeiterloeschen > 0)
         {
-            $loeschen = $conn->prepare("DELETE FROM person WHERE mitarbeiterID=(?) LIMIT 1");
-            $loeschen->bindParam(1, $mitarbeiterID, PDO::PARAM_STR);
-            if ($loeschen->execute()) {
+            $update = $conn->prepare("DELETE FROM person WHERE mitarbeiterID=?");
+            $update->execute([$mitarbeiterloeschen]); 
                 header("Location: benutzerverwaltungma.php");
                 echo "<p>Datensatz wurde gelöscht</p>";
             }
         }       
-    }
 }
+
 
 //Benutzer deaktivieren
 if (isset($_POST['aktion']) and $_POST['aktion']=='Benutzer deaktivieren') {
@@ -123,7 +118,6 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
     if(check_email($upd_email) == false){
 
         $_SESSION['checkaendern'] = "Bitte eine zulässige E-Mail angeben.";
-        //header("Location: ?aktion=bearbeiten&mitarbeiterID=$upd_id");
         header("Location: mitarbeiterbearbeitung.php");
     }
 
@@ -131,7 +125,6 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
         if ($anzahl_user > 0 && $upd_email != $emailalt){
             $_SESSION['checkaendern'] = "E-Mail bereits vergeben.";
             header("Location: mitarbeiterbearbeitung.php");
-            //header("Location: ?aktion=bearbeiten&mitarbeiterID=$upd_id");
         }
 
         else{
@@ -194,7 +187,6 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
         {
         $_SESSION['check'] = "Bitte alle nötigen Infos angeben";
         header("Location: mitarbeiterverwaltungma.php");
-        echo "Bitte alle nötigen Informationen angeben";
 
         }
     else{
@@ -202,14 +194,12 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
             $_SESSION['check'] = "Bitte eine gültige Email angeben";
             $_SESSION['checkpw'] = $passwort;
             header("Location: mitarbeiterverwaltungma.php");
-            echo "Bitte eine zulässige. E-Mail angeben";
         }
     
         else {
             if ($anzahl_user > 0){
                 $_SESSION['check'] = "Email bereits vergeben";
                 header("Location: mitarbeiterverwaltungma.php");
-                echo ("E-Mail bereits vergeben.");
             }
             
             else {
@@ -217,13 +207,11 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
                 if (PassStrength($passwort) < 30){
                     $_SESSION['check'] = "Bitte ein sicheres Passwort angeben";
                     header("Location: mitarbeiterverwaltungma.php");
-                    echo "Bitte ein sicheres Passwort angeben."; 
                 }
                 else {
                     if ($passwort!=$passwortwdh){
                         $_SESSION['check'] = "Passwörter stimmen nicht überein";
                         header("Location: mitarbeiterverwaltungma.php");                 
-                        echo "Passwörter stimmen nicht überein.";
                     }
                     else{
                 
@@ -235,6 +223,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
                         $einfuegen->bindParam(4, $rolle, PDO::PARAM_STR);
                 
                         if ($einfuegen->execute()) {
+                        //header('Location: benutzerverwaltungma.php?aktion=feedbackgespeichert');
                         $_SESSION['angelegt'] = true;
                         header("Location: mitarbeiterverwaltungma.php");  
                         //die();
@@ -335,6 +324,7 @@ $modus_suchen = false;
     if ( isset($_GET['suchbegriff']) and trim ($_GET['suchbegriff']) != '' )
     {
         $suchbegriff = trim ($_GET['suchbegriff']);
+        //echo "<p>Gesucht wird nach: <b>$suchbegriff</b></p>"; 
         $suche_nach = "%{$suchbegriff}%";
         $abc = $conn->prepare("SELECT * FROM person WHERE name LIKE ? ORDER BY name ASC");
         $abc->bindParam(1, $suche_nach, PDO::PARAM_STR);
@@ -400,7 +390,7 @@ $modus_suchen = false;
 
             <?php
         
-    }	
+    }   	
 
 }
 }
@@ -533,53 +523,11 @@ if ($modus_aendern == true){
 
     <td><a href = "mitarbeiterbearbeitung.php" class="btn btn-secondary">Abändern</a></td>
 
-    <h3>Benutzer <?php echo $name ?> bearbeiten</h3>
-    <!--MitarbeiterID-->
-    <label>
-        <input type="hidden" name="mitarbeiterID" id="mitarbeiterID" value="<?php echo $mitarbeiterID; ?>">
-    </label><br>
-    E-Mail:
-    <br>
-    <label>
-        <input type="text" name="email" id="email" value="<?php echo $email; ?>">
-    </label> 
-
-    <label>
-        <input type="hidden" name="emailalt" id="emailalt" value="<?php echo $email; ?>">
-    </label><br>
-    <label>Name: <br>
-        <input type="text" name="name" id="name" value="<?php echo $name; ?>">       
-    </label><br>
-    <!--<label>Passwort:<br>
-        <input type="password" name="passwort" id="passwort" value="">
-    </label><br>
-    <label>Passwort wiederholen:<br>
-        <input type="password" name="passwortwdh" id="passwortwdh" value="">
-    </label><br>--> 
-    Rolle:<br>
-    <select name = "rolle">
-        <option value='<?php echo $rolle?>' selected='selected'><?php echo $rolle?></option>
-        <option value ="Mitarbeiter">Mitarbeiter</option>
-        <option value ="Vertrieb">Vertrieb</option>
-        <option value ="Management">Management</option>
-    </select><br> <br>
-    <?php $checkchange = $_SESSION['checkchange'];?>
-    <?php echo "<font color='#FF0000'> $checkchange</font>"?>
-    <input type="hidden" name="aktion" value="speichern">
-
-
-    
 
 
 <?php
 
 }
-//Hier muss noch geupdated werden
-/*if ($modus_aendern != true) {
-    echo '<input type="hidden" name="aktion" value="speichern">';
-    echo '<input type="submit" value="Benutzer anlegen">';
-    echo '</form>';
-}*/
 if ($modus_aendern == true)
 {
     echo '<input type="hidden" name="id" value="'. $id_einlesen .'">';   
