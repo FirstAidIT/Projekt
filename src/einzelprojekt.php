@@ -15,14 +15,12 @@
 
 //Kommentar
 
-//require 'inc/db.php';
-include 'check_login.php';
-include 'database.php';
 
 SESSION_START();
 
 
-
+include 'check_login.php';
+include 'database.php';
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt loeschen') {
     if (isset($_POST['projektID'])) {
@@ -41,9 +39,22 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt loeschen') {
     }
 }
 
-if (isset($_POST['aktion']) and $_POST['aktion']=='Änderungen übernehmen') {
+if (isset($_POST['aktion']) and $_POST['aktion']=='Archivieren') {
+    $projektIDarchivieren = $_POST['projektID'];
+    $update = $conn->prepare("UPDATE projekt SET ist_archiviert = 1 WHERE projektID=?");
+    $update -> execute([$projektIDarchivieren]);
+    header ("Location: ?aktion=bearbeiten&projektID=$projektIDarchivieren");
+}
 
-    echo "Hallo";
+if (isset($_POST['aktion']) and $_POST['aktion']=='Aktivieren') {
+    $projektIDaktivieren = $_POST['projektID'];
+    $update = $conn->prepare("UPDATE projekt SET ist_archiviert = 0 WHERE projektID=?");
+    $update -> execute([$projektIDaktivieren]);
+    header ("Location: ?aktion=bearbeiten&projektID=$projektIDaktivieren");
+}
+
+if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
+
 
     $upd_erstellungsdatum = "";
     if (isset($_POST['erstellungsdatum'])) {
@@ -113,9 +124,10 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Änderungen übernehmen') {
             $update = $conn->prepare("UPDATE projekt SET erstellungsdatum =?, aufwand=?, projektname=?, wahrscheinlichkeit=? , kunde=?, budget=?, dauer=?, archivierungsdatum=?, potenzial=?, startzeit=?, endzeit=? WHERE projektID=?");
             $update->execute([$upd_erstellungsdatum, $upd_aufwand, $upd_projektname, $upd_wahrscheinlichkeit, $upd_kunde, $upd_budget, $upd_dauer, $upd_archivierungsdatum, $upd_potenzial,  $upd_startdatum, $upd_enddatum, $upd_projektID]);
             if ($update->execute()) {
-                header ("Location: ?aktion=bearbeiten&projektID=$upd_projektID");
+                header ("Location: einzelprojekt.php");
                 echo '<p class="feedbackerfolg">Datensatz wurde geändert</p>';
                 $modus_aendern = false;
+
             }
         }
         else echo "Bitte geben sie alle notwendigen Informationen an!";
@@ -178,6 +190,7 @@ if ($modus_aendern==false){?>
             <th scope="col">Dauer</th>
             <th scope="col">Enddatum</th>
             <th scope="col">Archivierung</th>
+            <th scope="col">Projektstatus</th>
             <th scope="col">Bearbeiten</th>
             </tr>
         </thead>
@@ -198,6 +211,8 @@ if ($modus_aendern==false){?>
                     <td><?php echo sicherheit($inhalt->endzeit); ?></td>
                     <td><?php echo sicherheit($inhalt->archivierungsdatum); ?></td>
                     <!--<td><a href = "?aktion=anzeigen&mitarbeiterID=<?php echo $inhalt->projektID; ?>" class="w3-btn w3-black">Anzeigen</a></td>-->
+                    <?php if ($inhalt->ist_archiviert ==true){?><td><?php echo "archiviert"; ?></td><?php }?>
+                    <?php if ($inhalt->ist_archiviert ==false){?><td><?php echo "laufend"; ?></td><?php }?>
                     <td><a href = "?aktion=bearbeiten&projektID=<?php echo $inhalt->projektID; ?>" class="btn btn-secondary">Bearbeiten</a></td>
                 </tr>
                 <?php
@@ -226,6 +241,7 @@ if ( $modus_aendern == true and isset($_GET['projektID']) ) {
             $potenzial = $row['potenzial'];
             $startdatum = $row['startzeit'];
             $enddatum = $row ['endzeit'];
+            $ist_archiviert = $row['ist_archiviert'];
         }
     }
 }
@@ -279,28 +295,36 @@ if ($modus_aendern == true){
         <label>Archivierung: <br>
             <input type="date" name="archivierungsdatum" id="archivierungsdatum" value="<?php echo $archivierungsdatum; ?>">       
         </label><br>
+        <label><br>
+            <input type="hidden" name="ist_archiviert" id="ist_archiviert" value="<?php echo $ist_archiviert; ?>">       
+        </label>
         Potenzial:<br>
         <select name = "potenzial">
+            <option value='<?php echo $potenzial?>' selected='selected'><?php echo $potenzial?></option>
             <option value ="+">+</option>
-           <option value ="++">++</option>
-           <option value ="+++">+++</option>
-           value="<?php echo $potenzial; ?>"
+            <option value ="++">++</option>
+            <option value ="+++">+++</option>
         </select><br> <br>
         <br>
         <!--<a href = "?aktion=loeschen&projektID=<?php echo $inhalt->projektID; ?>" onclick="return confirm('Soll das Projekt wirklich gelöscht werden?')"  class="btn btn-danger">Löschen</a></td>-->
-        <input type="submit" onclick="return confirm('Änderungen übernehmen?')" name="aktion" value="Änderungen übernehmen" class="btn btn-success">
+        <input type="submit"  name="aktion" value="Übernehmen" class="btn btn-success">
         <input type ="submit" onclick="return confirm('Soll das Projekt wirklich gelöscht werden?')" name ="aktion" value ="Projekt loeschen" class="btn btn-danger">
+        <?php
+        if ($ist_archiviert == 1){?>
+            <input type="submit" name = "aktion" class="btn btn-warning" value="Aktivieren">
+        <?php
+        }
+        if ($ist_archiviert == 0){?>
+            <input type="submit" name = "aktion" class="btn btn-warning" value="Archivieren">
+        <?php
+        }?>
         <!--<input type="hidden" name="aktion" value="speichern">-->
-  </form>  
-    <?php
+        <br><br>
+        <a href = "einzelprojekt.php" class="btn btn-dark">Zurück zum Dashboard</a></td>
+        </form>  
+        <?php
 } 
 
-if ($modus_aendern == true)
-{   /*
-    echo '<input type="hidden" name="aktion" value="korrigieren">';
-    echo '<input type="submit" class="btn btn-success" value="Übernehmen">';
-    echo '</form>';*/
-}
             ?>			
         </tbody>
     </table>
