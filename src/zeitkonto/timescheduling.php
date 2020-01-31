@@ -3,6 +3,7 @@ include 'datenbank/db_connection.php';
 include 'get_entries.php';
 //include 'check_login.php';
 //include 'database.php';
+
 ?>
 
 <div class="container h-100">
@@ -27,24 +28,22 @@ include 'get_entries.php';
    <div class="row">
       <div class="col-12 pb-3">
          <div class="card">
-            <div class="card-header text-light bg-success">Projektübersicht</div>
+            <div class="card-header text-light bg-success">Deine Wochenübersicht</div>
             <div class="card-body">
                <table class="table table-striped">
                   <thead>
                      <tr>
                         <th>Kunde</th>
                         <th>Projekt</th>
-                        <th>Projektende</th>
-                        <th>Gebuchte Stunden insgesamt</th>
+                        <th>Bisher gebuchte Stunden für diese Woche</th>
                      </tr>
                   </thead>
                   <?php
-                  if (!empty($result)) {
-                     foreach ($result as $row) {
+                  if (!empty($result_month)) {
+                     foreach ($result_month  as $row) {
                         echo '<tr>';
-                        echo '<td contenteditable="false">' . $row["kunde"] . '</td>';
-                        echo '<td contenteditable="false">' . $row["projektname"] . '</td>';
-                        echo '<td contenteditable="false">' . $row["endzeit"] . '</td>';
+                        echo '<td contenteditable="false">' . $row["Kunde"] . '</td>';
+                        echo '<td contenteditable="false">' . $row["zuordnung"] . '</td>';
                         echo '<td contenteditable="false">' . $row["gesamt"] . '</td>';
                         echo '</tr> ';
                      }
@@ -52,6 +51,13 @@ include 'get_entries.php';
                   ?>
                </table>
             </div>
+            <h6 class="card-footer">
+                  Insgesamt diese Woche gebucht:
+                    
+                  <?php while($row = $week_hours-> fetch()){
+                     echo $row['weekhours']; 
+                  } ?> 
+               </h6>
          </div>
       </div>
    </div>
@@ -61,7 +67,7 @@ include 'get_entries.php';
    <div class="row">
       <div class="col-12 pb-3">
          <div class="card mt-3">
-            <div class="card-header text-light bg-success">Zeiterfassung - Wochenübersicht</div>
+            <div class="card-header text-light bg-success">Deine gebuchten Zeiten für diese Woche</div>
             <div class="card-body">
                <table class="table table-hover" id="table-editable">
                   <thead>
@@ -83,7 +89,6 @@ include 'get_entries.php';
                         echo '<td contenteditable="false"" id="hours-' . $row . '">' . $value["stunden_anzahl"] . '</td>';
                         echo '<td contenteditable="false" id="zeit-comment">' . $value["kommentar"] . '</td>';
                         echo '<td ><button type="button" class="btn btn-outline-success btn-edit-modal"  data-toggle="modal" data-target="#myEditModal">Bearbeiten</button></td>';
-                        echo '<td ><button type="button" class="btn btn-outline-success" id="btnSave">Speichern</button></td>';
                         echo '</tr> ';
                      }
                   }
@@ -153,11 +158,11 @@ include 'get_entries.php';
                   </div>
                   <div class="form-group mb-3">
                      <label for="Date">Datum:</label>
-                     <input type="date" name="erfassungs_tag_zuordenbar" class="form-control" value="<?php echo $today; ?>">
+                     <input type="date"   name="erfassungs_tag_zuordenbar" class="form-control" value="<?php echo $today; ?>">
                   </div>
                   <div class="form-group mb-3">
                      <label for="Date">Stunden:</label>
-                     <input  name="stunden_anzahl_zuordenbar" class="form-control"  id="booking-allocatable-hours">                   
+                     <input name="stunden_anzahl_zuordenbar" class="form-control"  id="booking-allocatable-hours">                   
                   </div>
                   <div>
                   <button type="submit" class="btn btn-success" name="erfassen">Erfassen</button>
@@ -170,17 +175,17 @@ include 'get_entries.php';
 
                   <div class="form-group mb-3">
                      <label for="Date">Datum:</label>
-                     <input name="erfassungs_tag" class="form-control"  value="<?php echo $today; ?>">
+                     <input name="erfassungs_tag" class="form-control"   value="<?php echo $today; ?>">
                   </div>
 
                   <div class="form-group mb-3">
                      <label for="Date">Stunden:</label>
-                     <input name="stunden_anzahl" class="form-control" id="booking-not-allocatable-hours" >
+                     <input type="time" name="stunden_anzahl" class="form-control"  id="booking-not-allocatable-hours" >
                   </div>
 
                   <div class="form-group">
                      <label for="comment">Kommentar:</label>
-                     <textarea class="form-control" name="kommentar" rows="5" id="comment" ></textarea>
+                     <textarea class="form-control" name="kommentar"   rows="5" id="comment" ></textarea>
                   </div>
                <div>
                <button type="submit" class="btn btn-success" name="erfassen2">Erfassen</button>
@@ -237,14 +242,12 @@ include 'get_entries.php';
 
             <div class = "form-group mt 3 mb-3">
                <label for="zeit-date">Datum</label>
-               <input type="text" placeholder="MM/DD/YYYY" name="erfassungs_tag"  class="form-control"  id="zeit-date"
-        onfocus="(this.type='date')"
-        onblur="(this.type='text')"> 
+               <input type='date' placeholder="MM/DD/YYYY" name="erfassungs_tag"  class="form-control"  id="zeit-date"> 
             </div>
 
             <div class="form-group mb-3">
             <label for="date">Stunden:</label>
-            <input name="stunden_anzahl" class="form-control" id="zeit-hours">
+            <input type ="time" name="stunden_anzahl" class="form-control" id="zeit-hours">
          </div>
 
          <div class="form-group">

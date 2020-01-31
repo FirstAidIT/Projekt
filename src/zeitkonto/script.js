@@ -5,17 +5,20 @@ $(document).ready(() => {
   let isResumed = false;
   let time;
   let interval = 0;
+  let hours = 0;
 
 //Timer auslöser 
   $(".clicker").click(() => {
-    if (!isStarted && !isPaused && !isResumed) {
+    if (!isStarted && !isPaused && !isResumed && hours < 1) {
       isStarted = true;
       [interval, time] = startTimer();
-    } else if (isPaused) {
+    }
+     else if (isPaused) {
       isPaused = false;
       isResumed = true;
       [interval, time] = resumeTimer(time);
-    } else {
+    } 
+    else {
       isPaused = true;
       isResumed = false;
       pauseTimer(interval);
@@ -31,70 +34,38 @@ $(document).ready(() => {
     // Zelleninhalt holen
     const id = tr.cells[0].textContent;
     const projekt = tr.cells[1].textContent;
-    const dateformat = tr.cells[2].textContent;
-    console.log(dateformat)
-    const date = new Date(tr.cells[2].textContent);
-    console.log(date)
-    const day =  date.getDate() < 10 ? ("0" + date.getDate()).slice(-2) : date.getDate().toString().slice(-2);
-    console.log(day)
-    const month =  (date.getMonth() + 1) < 10 ?  ("0" + (date.getMonth() + 1)).slice(-2) : (date.getMonth() + 1).toString().slice(-2);
-    console.log(month)
-    const year = (date.getFullYear());
-    const formattedDate = (day)+"-"+(month)+"-"+(year) ;
-    console.log(formattedDate)
-    const hours = tr.cells[3].textContent;
+    const bookedHours = tr.cells[3].textContent;
     const comment = tr.cells[4].textContent;
     console.log(id);
+
+    var date = new Date(tr.cells[2].textContent);
+     var day = date.getDate(),
+    month = date.getMonth() + 1,
+    year = date.getFullYear(),
+    month = (month < 10 ? "0" : "") + month;
+    day = (day < 10 ? "0" : "") + day;
+    var formattedDate = year + "-" + month + "-" + day;
+    
 
     //Modal mit Inhalt füllen
     $('#zeit-id').val(id);
     $('#editProjekt').val(projekt);
-    $('#zeit-date').val(formattedDate);
-    $('#zeit-hours').val(hours);
+    $('#zeit-hours').val(bookedHours);
+    document.getElementById('zeit-date').value = formattedDate; 
     $('#comment2').val(comment);
     
   }); 
 
 
   $('.container-timer').on('click', 'button.save-time-btn',function (ele) {
-    //the <tr> variable is use to set the parentNode from "ele
     const tr = ele.target.parentNode.parentNode;
     const id = $('#timer-text').text();
-    //I get the value from the cells (td) using the parentNode (var tr)
     console.log(id);
 
-    //Prefill the fields with the gathered information
+    //Zeit im Zeit buchen Modal anzeigen
     $('#booking-not-allocatable-hours').val(id);
     $('#booking-allocatable-hours').val(id);
   });
-
-
-  /* function save(){ 
-    var par = $(this).parent().parent(); //tr 
-    var tdProjekt = par.children("td:nth-child(1)"); 
-    var tdDatum = par.children("td:nth-child(2)"); 
-    var tdstunden_anzahl = par.children("td:nth-child(3)"); 
-    var tdKommentar = par.children("td:nth-child(4)");
-     
-     tdProjekt.html(tdProjekt.children("input[type=text]").val()); 
-     tdstunden_anzahl.html(tdstunden_anzahl.children("input[type=text]").val()); 
-     tdDatum.html(tdDatum.children("input[type=text]").val());
-
-
-
-     $(".btnEdit").bind("click", Edit); 
-    }; */ 
-
-
-
-
-
-  /*$(function(){ 
-    //A Edit and Save  functions code 
-    $(".btnEdit").bind("click", edit); 
-    $(".btnSave").bind("click", save); 
-    }); */
-
 
 
   
@@ -110,8 +81,12 @@ $(document).ready(() => {
       $('.save-time-btn').show();
       const interval = setInterval(() => {
         time = new Date(new Date() - start);
-        const hours = time.getHours() - 1;
+        hours = time.getHours() - 1;
         const minutes = time.getMinutes();
+        if (hours >= 1) {
+          alert("Du hast deine maximale Arbeitszeit von 10h überschritten");
+          pauseTimer(interval);
+        }
         const seconds = time.getSeconds();
         const timeAsString = hours + ':' + minutes + ':' + seconds;
         $("#timer-text").text(timeAsString);
@@ -157,6 +132,7 @@ $(document).ready(() => {
         isStarted = true;
         haveTime = true;
         $("#timer-text").text(time);
+        
         return [interval, newDate];
       }, 1000);
       return [interval, start];
@@ -169,6 +145,8 @@ $(document).ready(() => {
         $('.editbtn').addClass('btn-outline-warning');
         $('.editbtn').text('Speichern');
       }
+
+    
 
 
 

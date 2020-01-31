@@ -3,28 +3,38 @@ include './datenbank/db_connection.php';
 //include 'check_login.php';
 //include 'database.php';
 
-
+//session_start();
+//$mitarbeiterid = $_SESSION['mitarbeiterID'];
 $mitarbeiterID = 1;
 
     
 
     if(ISSET($_POST['erfassen'])){
 
-             $zuordnung = $_POST['zuordnung'];
+
+            $zuordnung = $_POST['zuordnung'];
+            $kunden_abfrage = $db->prepare("SELECT kunde FROM projekt WHERE projektname ='$zuordnung'");
+            $kunden_abfrage -> execute();
+
+            $kunde = $kunden_abfrage->fetchColumn();
+
+            
+            
+          
             $erfassungs_tag = $_POST['erfassungs_tag_zuordenbar'];
             $stunden_anzahl = calculateTime($_POST['stunden_anzahl_zuordenbar']);
 
-            $create_allocate = "INSERT INTO zeitkonto SET zuordnung=?, erfassungs_tag=?, stunden_anzahl=?, mitarbeiterID=?";
+            $create_allocate = "INSERT INTO zeitkonto SET zuordnung=?, kunde=?, erfassungs_tag=?, stunden_anzahl=?, mitarbeiterID=?";
+
 
             $stmt_update = $db->prepare($create_allocate);
-            $stmt_update->execute([$zuordnung, $erfassungs_tag , $stunden_anzahl, $mitarbeiterID ]);
+            $stmt_update->execute([$zuordnung, $kunde, $erfassungs_tag , $stunden_anzahl, $mitarbeiterID ]);
            header("location: ./../../index.php");
             }
 
     if(ISSET($_POST['erfassen2'])) {
         $erfassungs_tag = $_POST['erfassungs_tag'];
         $stunden_anzahl = calculateTime($_POST['stunden_anzahl']);
-        
         $kommentar = $_POST['kommentar'];
 
         $create_no_allocate = "INSERT INTO zeitkonto SET erfassungs_tag=?, stunden_anzahl=?, kommentar=?, mitarbeiterID=?";
@@ -77,5 +87,7 @@ $mitarbeiterID = 1;
         }
         return $stunden_anzahl;
     }
+
+  
 
 ?>
