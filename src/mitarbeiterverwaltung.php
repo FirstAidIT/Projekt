@@ -102,7 +102,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
     }
 }
 
-$id = $_SESSION['mitarbeiterid']
+$id = $_SESSION['usid']
 $dseinlesen = $conn->prepare("SELECT mitarbeiterID, email, passwort, name, rolle FROM person WHERE email = '$id' ");
         $dseinlesen->execute();
         while ($row = $dseinlesen->fetch()) {
