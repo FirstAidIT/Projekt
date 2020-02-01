@@ -3,17 +3,52 @@
 <meta charset="utf-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-    <link rel="stylesheet" href="/main.css">
+
 <title>WI-Projekt</title>
 <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
+
+
+<?php
+    $rolle = $conn->prepare(sprintf("SELECT Rolle FROM users where id = %d", $_SESSION['userid']));
+    $rolle->execute();
+    $dbRolle = $rolle->fetch()['Rolle'];
+    switch($dbRolle){
+        case "Manager": 
+            $link = "management.php";
+            break;
+        case "Vertrieb":
+            $link = "vertrieb.php";
+            break;
+        case "Mitarbeiter":
+            $link = "start.php";
+            break;
+    }
+    ?>
+
+      <nav class="navbar navbar-default navbar-expand-sm">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                        <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
+                </li>
+
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                        <a class="btn btn-light custom-btn" href="logout.php">Logout</a>
+                </li>
+            </ul>
+        </nav>
+
+
+
 <body><nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
   <div class="collapse navbar-collapse" id="navbarText">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" href="projekterstellen.php">Projekterstellung <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="managmement.php">Projekterstellung <span class="sr-only">(current)</span></a>
       </li>
 	 
     </ul>
@@ -132,7 +167,7 @@ if ($projektname != '' and $kunde != '')
     $speichern = $db->prepare("INSERT INTO braucht(projektID, skillID)
                                 VALUES(?,?)");
     $speichern->bind_param('ii', $projektID, skillID);
-    $speichern = $db->prepare("INSERT INTO Arbeitet_an(projektID, mitarbeiterID)
+    $speichern = $db->prepare("INSERT INTO Arbeiten_an(projektID, mitarbeiterID)
                                 VALUES(?,?)");
     $speichern->bind_param('ii', $projektID, mitarbeiterID);
 
