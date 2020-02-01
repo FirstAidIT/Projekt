@@ -12,7 +12,7 @@
 
     <body>
 
-      <<!-- navbar mit custom-link je nach Recht -->
+    <!-- navbar mit custom-link je nach Recht -->
     <?php
     $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
     $rolle->execute();
