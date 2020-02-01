@@ -1,10 +1,10 @@
 <?php 
 include 'database.php'; 
-$rolle = $conn->prepare(sprintf("SELECT Rolle FROM users where id = %d", $_SESSION['userid']));
+$rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
         $rolle->execute();
-        $dbRolle = $rolle->fetch()['Rolle'];
+        $dbRolle = $rolle->fetch()['rolle'];
         switch($dbRolle){
-            case "Manager": 
+            case "Management": 
                 break;
             case "Vertrieb":
                 break;

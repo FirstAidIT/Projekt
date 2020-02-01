@@ -7,15 +7,33 @@
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <title>Einstellungen</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="einstellungen.css">
+        <link rel="stylesheet" type="text/css" href="css/einstellungen.css">
     </head>
 
     <body>
 
+      <<!-- navbar mit custom-link je nach Recht -->
+    <?php
+    $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
+    $rolle->execute();
+    $dbRolle = $rolle->fetch()['rolle'];
+    switch($dbRolle){
+        case "Management": 
+            $link = "management.php";
+            break;
+        case "Vertrieb":
+            $link = "vertrieb.php";
+            break;
+        case "Mitarbeiter":
+            $link = "start.php";
+            break;
+    }    
+    ?>
+
       <nav class="navbar navbar-default navbar-expand-sm">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                        <a class="btn btn-light custom-btn" href="start.php">Zurück zum Hauptmenü</a>
+                        <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
