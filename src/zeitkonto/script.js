@@ -1,5 +1,5 @@
 
-$(document).ready(() => {
+(document).ready(() => {
   let isStarted = false;
   let isPaused = false;
   let isResumed = false;
@@ -28,7 +28,6 @@ $(document).ready(() => {
 
   //Tabelle bearbeiten 
   $('#table-editable').on('click', 'button.btn-edit-modal',function (ele) {
-    //the <tr> variable is use to set the parentNode from "ele
     const tr = ele.target.parentNode.parentNode;
 
     // Zelleninhalt holen
@@ -60,6 +59,7 @@ $(document).ready(() => {
   $('.container-timer').on('click', 'button.save-time-btn',function (ele) {
     const tr = ele.target.parentNode.parentNode;
     const id = $('#timer-text').text();
+
     console.log(id);
 
     //Zeit im Zeit buchen Modal anzeigen
@@ -132,7 +132,6 @@ $(document).ready(() => {
         isStarted = true;
         haveTime = true;
         $("#timer-text").text(time);
-        
         return [interval, newDate];
       }, 1000);
       return [interval, start];

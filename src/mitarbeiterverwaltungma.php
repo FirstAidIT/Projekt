@@ -12,11 +12,11 @@
 <?php
 
 
-require 'inc/db.php';
+//require 'inc/db.php';
 SESSION_START();
 
-//include 'check_login.php';
-//include 'database.php';
+include 'check_login.php';
+include 'database.php';
 
 
 ?>

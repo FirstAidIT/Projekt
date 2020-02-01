@@ -5,12 +5,11 @@
     <!-- Required Meta tags -->
      <meta charset = 'utf-8'>
      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
-
-     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
+     <link rel="stylesheet" href="/zeitkonto.css">
+     
+     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
      <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    
     <style>
       html {
         height: 100%;
@@ -63,13 +62,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.6.3/js/all.js" integrity="sha384- EIHISlAOj4zgYieurP0SdoiBYfGJKkgWedPHH4jCzpCXLmzVsw1ouK59MuUtP4a1" crossorigin="anonymous"></script>
-    <script src="src/zeitkonto/script.js" type="text/javascript"></script>
+    <script src="script.js" type="text/javascript"></script>
     <script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="//rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.js"></script>
     <link href="//rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.css" rel="stylesheet">
-
 </head>
 <body>
- <?php include_once('src/zeitkonto/timescheduling.php'); ?> 
+ <?php include_once('timescheduling.php'); ?> 
 </body>
 </html>
