@@ -1,4 +1,4 @@
-.btn-dark, .btn-warning{
+.btn-dark{
     margin-top: 40px;
     margin-bottom: 20px;
     padding: 20px 200px;
@@ -15,15 +15,6 @@
 
 .btn-dark.custom-btn:hover{
     background-color: #7CB53F;
-}
-
-.btn-warning.custom-btn{
-    background-color: #999999;
-    border-color: #fff;
-}
-
-.btn-warning.custom-btn:hover{
-    background-color: #888888;
 }
 
 .btn-light.custom-btn{

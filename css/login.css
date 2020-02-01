@@ -34,12 +34,6 @@ input[type=password]{
     margin-top: 30px;
 }
 
-.reset {
-    font-size: 22px;
-    margin-top: 20px;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
 .btn-dark.custom-btn{
     background-color: #8DC640;
     border-color: #e9ecef;
@@ -50,20 +44,6 @@ input[type=password]{
     
 }
 
-.btn-dark.custom-btn2{
-    background-color: #8DC640;
-    border-color: #e9ecef;
-    color: #000;
-    border-radius: 5px;
-    font-size: 18px;
-    padding: 6px 20px;
-    
-}
-
 .btn-dark.custom-btn:hover{
-    background-color: #7CB53F;
-}
-
-.btn-dark.custom-btn2:hover{
     background-color: #7CB53F;
 }
