@@ -1,5 +1,5 @@
 
-$(document).ready(() => {
+(document).ready(() => {
   let isStarted = false;
   let isPaused = false;
   let isResumed = false;
@@ -59,6 +59,7 @@ $(document).ready(() => {
   $('.container-timer').on('click', 'button.save-time-btn',function (ele) {
     const tr = ele.target.parentNode.parentNode;
     const id = $('#timer-text').text();
+
     console.log(id);
 
     //Zeit im Zeit buchen Modal anzeigen

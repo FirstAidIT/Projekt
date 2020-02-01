@@ -1,0 +1,36 @@
+.btn-dark, .btn-warning{
+    margin-top: 40px;
+    margin-bottom: 20px;
+    padding: 20px 200px;
+    border-radius: 0px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+}
+
+.btn-dark.custom-btn{
+    background-color: #8DC640;
+    border-color: #fff;
+    color: #000;
+}
+
+.btn-dark.custom-btn:hover{
+    background-color: #7CB53F;
+}
+
+.btn-light.custom-btn{
+    background-color: #8DC640;
+    border-color: #e9ecef;
+    color: #000;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    padding: 5px 20px;
+}
+
+.btn-light.custom-btn:hover{
+    background-color: #7CB53F;
+}
+
+.navbar-default{
+    background-color:#e9ecef;
+}
+

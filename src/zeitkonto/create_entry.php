@@ -29,7 +29,7 @@ $mitarbeiterID = 1;
 
             $stmt_update = $db->prepare($create_allocate);
             $stmt_update->execute([$zuordnung, $kunde, $erfassungs_tag , $stunden_anzahl, $mitarbeiterID ]);
-           header("location: ./../../index.php");
+           header("location: zeitkontostart.php");
             }
 
     if(ISSET($_POST['erfassen2'])) {
@@ -41,7 +41,7 @@ $mitarbeiterID = 1;
 
         $stmt_update = $db->prepare($create_no_allocate);
         $stmt_update->execute([$erfassungs_tag , $stunden_anzahl, $kommentar, $mitarbeiterID ]);
-        header("location: ./../../index.php");
+        header("location: zeitkontostart.php");
     }
 
     
