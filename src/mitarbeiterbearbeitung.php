@@ -72,14 +72,14 @@ while ($row = $dseinlesen->fetch()) {
 E-Mail:
 <br>
 <label>
-    <input type="text" name="email" id="email" value="<?php echo $email; ?>">
+    <input type="text" name="email" class= "form-control" id="email" value="<?php echo $email; ?>">
 </label> 
 
 <label>
     <input type="hidden" name="emailalt" id="emailalt" value="<?php echo $email; ?>">
 </label><br>
 <label>Name: <br>
-    <input type="text" name="name" id="name" value="<?php echo $name; ?>">       
+    <input type="text" name="name" class= "form-control" id="name" value="<?php echo $name; ?>">       
 </label><br>
 Rolle:<br>
 <select name = "rolle">
