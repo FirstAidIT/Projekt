@@ -22,6 +22,15 @@ SESSION_START();
 include 'check_login.php';
 include 'database.php';
 
+$id = $_SESSION['mitarbeiterid'];
+
+$abfrage = $db->prepare("SELECT * from person where mitarbeiterID = $id");
+$abfrage -> execute();
+while ($row = $abfrage ->fetch()){
+    $rolle_eingeloggt = $row['rolle'];
+}
+
+
 if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt loeschen') {
     if (isset($_POST['projektID'])) {
         $projektID =$_POST['projektID'];
@@ -295,7 +304,7 @@ if ($modus_aendern == true){
         <input type="submit"  name="aktion" value="Übernehmen" class="btn btn-success">
         <input type ="submit" onclick="return confirm('Soll das Projekt wirklich gelöscht werden?')" name ="aktion" value ="Projekt loeschen" class="btn btn-danger">
         <?php
-        if ($ist_archiviert == 0){?>
+        if ($ist_archiviert == 0 && $rolle_eingeloggt == "Management"){?>
             <input type="submit" name = "aktion" class="btn btn-warning" value="Archivieren">
         <?php
         }?>
