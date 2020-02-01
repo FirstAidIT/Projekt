@@ -1,8 +1,10 @@
 <?php
-include 'datenbank/db_connection.php'; 
+//include 'datenbank/db_connection.php'; 
+include 'check_login.php';
+include 'database.php';
 
-//session_start();
-//$mitarbeiterid = $_SESSION['mitarbeiterID'];
+session_start();
+$mitarbeiterid = $_SESSION['mitarbeiterID'];
 
 // SQL Abfrage für Monatsübersicht - Projektebene
 
@@ -15,7 +17,7 @@ WHERE erfassungs_tag BETWEEN curdate()- INTERVAL 30 DAY and curdate()
 AND zuordnung is not null
 GROUP BY zuordnung ,kunde 
 ";
-$result_month_projects = $db->query($sql_month_projects);
+$result_month_projects = $conn->query($sql_month_projects);
 $e = function($value) {
     return htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
 
@@ -31,7 +33,7 @@ FROM zeitkonto
 WHERE erfassungs_tag BETWEEN curdate()- INTERVAL 7 DAY and curdate()
 GROUP BY zuordnung ,kunde 
 ";
-$result_month = $db->query($sql_month);
+$result_month = $conn->query($sql_month);
 $e = function($value) {
     return htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
 
@@ -52,20 +54,19 @@ stunden_anzahl,
 kommentar 
 FROM zeitkonto
 WHERE erfassungs_tag between curdate() - interval 7 day and curdate()" ;
-$result2= $db->query($sql2);
+$result2= $conn->query($sql2);
 $e = function($value) {
     return htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
 
 };
 
-$mitarbeiterID = 1;
 
 $projekt = "SELECT projektID, projektname , kunde, startzeit, endzeit
 FROM projekt 
 WHERE EXISTS ( SELECT * FROM Arbeiten_an WHERE mitarbeiterID=?)
 AND ist_archiviert is null";
 
-$stmt = $db->prepare($projekt);
+$stmt = $conn->prepare($projekt);
 $stmt-> execute([$mitarbeiterID]);
 $projects = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 

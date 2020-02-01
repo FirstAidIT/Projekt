@@ -1,7 +1,7 @@
 <?php
-include './datenbank/db_connection.php'; 
-//include 'check_login.php';
-//include 'database.php';
+//include './datenbank/db_connection.php'; 
+include 'check_login.php';
+include 'database.php';
 
 //session_start();
 //$mitarbeiterid = $_SESSION['mitarbeiterID'];
@@ -13,7 +13,7 @@ $mitarbeiterID = 1;
 
 
             $zuordnung = $_POST['zuordnung'];
-            $kunden_abfrage = $db->prepare("SELECT kunde FROM projekt WHERE projektname ='$zuordnung'");
+            $kunden_abfrage = $conn->prepare("SELECT kunde FROM projekt WHERE projektname ='$zuordnung'");
             $kunden_abfrage -> execute();
 
             $kunde = $kunden_abfrage->fetchColumn();
@@ -27,7 +27,7 @@ $mitarbeiterID = 1;
             $create_allocate = "INSERT INTO zeitkonto SET zuordnung=?, kunde=?, erfassungs_tag=?, stunden_anzahl=?, mitarbeiterID=?";
 
 
-            $stmt_update = $db->prepare($create_allocate);
+            $stmt_update = $conn->prepare($create_allocate);
             $stmt_update->execute([$zuordnung, $kunde, $erfassungs_tag , $stunden_anzahl, $mitarbeiterID ]);
            header("location: zeitkontostart.php");
             }
@@ -39,7 +39,7 @@ $mitarbeiterID = 1;
 
         $create_no_allocate = "INSERT INTO zeitkonto SET erfassungs_tag=?, stunden_anzahl=?, kommentar=?, mitarbeiterID=?";
 
-        $stmt_update = $db->prepare($create_no_allocate);
+        $stmt_update = $conn->prepare($create_no_allocate);
         $stmt_update->execute([$erfassungs_tag , $stunden_anzahl, $kommentar, $mitarbeiterID ]);
         header("location: zeitkontostart.php");
     }

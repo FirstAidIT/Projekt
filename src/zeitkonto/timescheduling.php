@@ -1,13 +1,13 @@
 <?php
-include 'datenbank/db_connection.php';
+//include 'datenbank/db_connection.php';
 include 'get_entries.php';
-//include 'check_login.php';
-//include 'database.php';
+include 'check_login.php';
+include 'database.php';
 
-//$rolle = $conn->prepare(sprintf("SELECT rolle 
-//FROM person 
-//where mitarbeiterID = %d", $_SESSION['userid'])); 
-//$rolle->execute(); $dbRolle = $rolle->fetch()['rolle']; switch($dbRolle){ case "Management": $link = "management.php"; break; case "Vertrieb": $link = "vertrieb.php"; break; case "Mitarbeiter": $link = "start.php"; break; } 
+$rolle = $conn->prepare(sprintf("SELECT rolle 
+FROM person 
+where mitarbeiterID = %d", $_SESSION['userid'])); 
+$rolle->execute(); $dbRolle = $rolle->fetch()['rolle']; switch($dbRolle){ case "Management": $link = "management.php"; break; case "Vertrieb": $link = "vertrieb.php"; break; case "Mitarbeiter": $link = "start.php"; break; } 
 
 ?>
 
