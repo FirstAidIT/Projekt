@@ -11,7 +11,7 @@ include 'create_entry.php';
        $stmt_update->execute([$_POST['zuordnung'], $_POST['erfassungs_tag'], $stunden_anzahl, $_POST['kommentar'], $_POST['zeitkontoID']]);
        
  
-		header("location: ./../../index.php");
+		header("location: zeitkontostart.php");
     }
     
 

@@ -5,81 +5,81 @@ include 'database.php';
 // skill #1
 if(isset($_POST['skill1'])) {
     if($_POST['skill1'] !== "0") {
-        $conn->prepare(sprintf("REPLACE INTO userskills (id_skill, id_user, skilllevel) VALUES ('1', '%d', '%s');", $_SESSION['userid'], $_POST['skill1']))->execute();
+        $conn->prepare(sprintf("REPLACE INTO besitzt (skillID, mitarbeiterID, auspraegung) VALUES ('1', '%d', '%s');", $_SESSION['userid'], $_POST['skill1']))->execute();
     } else {
-        $conn->prepare(sprintf("DELETE FROM userskills where id_skill = 1 and id_user = %d", $_SESSION['userid']))->execute();
+        $conn->prepare(sprintf("DELETE FROM besitzt where skillID = 1 and mitarbeiterID = %d", $_SESSION['userid']))->execute();
     }
 }
 // skill #2 
 if(isset($_POST['skill2'])) {
     if($_POST['skill2'] !== "0") {
-        $conn->prepare(sprintf("REPLACE INTO userskills (id_skill, id_user, skilllevel) VALUES ('2', '%d', '%s');", $_SESSION['userid'], $_POST['skill2']))->execute();
+        $conn->prepare(sprintf("REPLACE INTO besitzt (skillID, mitarbeiterID, auspraegung) VALUES ('2', '%d', '%s');", $_SESSION['userid'], $_POST['skill2']))->execute();
     } else {
-        $conn->prepare(sprintf("DELETE FROM userskills where id_skill = 2 and id_user = %d", $_SESSION['userid']))->execute();
+        $conn->prepare(sprintf("DELETE FROM besitzt where skillID = 2 and mitarbeiterID = %d", $_SESSION['userid']))->execute();
     }
 }
 // skill #3
 if(isset($_POST['skill3'])) {
     if($_POST['skill3'] !== "0") {
-        $conn->prepare(sprintf("REPLACE INTO userskills (id_skill, id_user, skilllevel) VALUES ('3', '%d', '%s');", $_SESSION['userid'], $_POST['skill3']))->execute();
+        $conn->prepare(sprintf("REPLACE INTO besitzt (skillID, mitarbeiterID, auspraegung) VALUES ('3', '%d', '%s');", $_SESSION['userid'], $_POST['skill3']))->execute();
     } else {
-        $conn->prepare(sprintf("DELETE FROM userskills where id_skill = 3 and id_user = %d", $_SESSION['userid']))->execute();
+        $conn->prepare(sprintf("DELETE FROM besitzt where skillID = 3 and mitarbeiterID = %d", $_SESSION['userid']))->execute();
     }
 }
 // skill #4
 if(isset($_POST['skill4'])) {
     if($_POST['skill4'] !== "0") {
-        $conn->prepare(sprintf("REPLACE INTO userskills (id_skill, id_user, skilllevel) VALUES ('4', '%d', '%s');", $_SESSION['userid'], $_POST['skill4']))->execute();
+        $conn->prepare(sprintf("REPLACE INTO besitzt (skillID, mitarbeiterID, auspraegung) VALUES ('4', '%d', '%s');", $_SESSION['userid'], $_POST['skill4']))->execute();
     } else {
-        $conn->prepare(sprintf("DELETE FROM userskills where id_skill = 4 and id_user = %d", $_SESSION['userid']))->execute();
+        $conn->prepare(sprintf("DELETE FROM besitzt where skillID = 4 and mitarbeiterID = %d", $_SESSION['userid']))->execute();
     }
 }
 // skill #5
 if(isset($_POST['skill5'])) {
     if($_POST['skill5'] !== "0") {
-        $conn->prepare(sprintf("REPLACE INTO userskills (id_skill, id_user, skilllevel) VALUES ('5', '%d', '%s');", $_SESSION['userid'], $_POST['skill5']))->execute();
+        $conn->prepare(sprintf("REPLACE INTO besitzt (skillID, mitarbeiterID, auspraegung) VALUES ('5', '%d', '%s');", $_SESSION['userid'], $_POST['skill5']))->execute();
     } else {
-        $conn->prepare(sprintf("DELETE FROM userskills where id_skill = 5 and id_user = %d", $_SESSION['userid']))->execute();
+        $conn->prepare(sprintf("DELETE FROM besitzt where skillID = 5 and mitarbeiterID = %d", $_SESSION['userid']))->execute();
     }
 }
 // skill #6
 if(isset($_POST['skill6'])) {
     if($_POST['skill6'] !== "0") {
-        $conn->prepare(sprintf("REPLACE INTO userskills (id_skill, id_user, skilllevel) VALUES ('6', '%d', '%s');", $_SESSION['userid'], $_POST['skill6']))->execute();
+        $conn->prepare(sprintf("REPLACE INTO besitzt (skillID, mitarbeiterID, auspraegung) VALUES ('6', '%d', '%s');", $_SESSION['userid'], $_POST['skill6']))->execute();
     } else {
-        $conn->prepare(sprintf("DELETE FROM userskills where id_skill = 6 and id_user = %d", $_SESSION['userid']))->execute();
+        $conn->prepare(sprintf("DELETE FROM besitzt where skillID = 6 and mitarbeiterID = %d", $_SESSION['userid']))->execute();
     }
 }
 // skill #7
 if(isset($_POST['skill7'])) {
     if($_POST['skill7'] !== "0") {
-        $conn->prepare(sprintf("REPLACE INTO userskills (id_skill, id_user, skilllevel) VALUES ('7', '%d', '%s');", $_SESSION['userid'], $_POST['skill7']))->execute();
+        $conn->prepare(sprintf("REPLACE INTO besitzt (skillID, mitarbeiterID, auspraegung) VALUES ('7', '%d', '%s');", $_SESSION['userid'], $_POST['skill7']))->execute();
     } else {
-        $conn->prepare(sprintf("DELETE FROM userskills where id_skill = 7 and id_user = %d", $_SESSION['userid']))->execute();
+        $conn->prepare(sprintf("DELETE FROM besitzt where skillID = 7 and mitarbeiterID = %d", $_SESSION['userid']))->execute();
     }
 }
 // skill #8
 if(isset($_POST['skill8'])) {
     if($_POST['skill8'] !== "0") {
-        $conn->prepare(sprintf("REPLACE INTO userskills (id_skill, id_user, skilllevel) VALUES ('8', '%d', '%s');", $_SESSION['userid'], $_POST['skill8']))->execute();
+        $conn->prepare(sprintf("REPLACE INTO besitzt (skillID, mitarbeiterID, auspraegung) VALUES ('8', '%d', '%s');", $_SESSION['userid'], $_POST['skill8']))->execute();
     } else {
-        $conn->prepare(sprintf("DELETE FROM userskills where id_skill = 8 and id_user = %d", $_SESSION['userid']))->execute();
+        $conn->prepare(sprintf("DELETE FROM besitzt where skillID = 8 and mitarbeiterID = %d", $_SESSION['userid']))->execute();
     }
 }
 // skill #9
 if(isset($_POST['skill9'])) {
     if($_POST['skill9'] !== "0") {
-        $conn->prepare(sprintf("REPLACE INTO userskills (id_skill, id_user, skilllevel) VALUES ('9', '%d', '%s');", $_SESSION['userid'], $_POST['skill9']))->execute();
+        $conn->prepare(sprintf("REPLACE INTO besitzt (skillID, mitarbeiterID, auspraegung) VALUES ('9', '%d', '%s');", $_SESSION['userid'], $_POST['skill9']))->execute();
     } else {
-        $conn->prepare(sprintf("DELETE FROM userskills where id_skill = 9 and id_user = %d", $_SESSION['userid']))->execute();
+        $conn->prepare(sprintf("DELETE FROM besitzt where skillID = 9 and mitarbeiterID = %d", $_SESSION['userid']))->execute();
     }
 }
 // skill #10
 if(isset($_POST['skill10'])) {
     if($_POST['skill10'] !== "0") {
-        $conn->prepare(sprintf("REPLACE INTO userskills (id_skill, id_user, skilllevel) VALUES ('10', '%d', '%s');", $_SESSION['userid'], $_POST['skill10']))->execute();
+        $conn->prepare(sprintf("REPLACE INTO besitzt (skillID, mitarbeiterID, auspraegung) VALUES ('10', '%d', '%s');", $_SESSION['userid'], $_POST['skill10']))->execute();
     } else {
-        $conn->prepare(sprintf("DELETE FROM userskills where id_skill = 10 and id_user = %d", $_SESSION['userid']))->execute();
+        $conn->prepare(sprintf("DELETE FROM besitzt where skillID = 10 and mitarbeiterID = %d", $_SESSION['userid']))->execute();
     }
 }
 ?>
@@ -91,18 +91,18 @@ if(isset($_POST['skill10'])) {
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <title>Skillmanagement</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="skillmanagement.css">
+        <link rel="stylesheet" type="text/css" href="css/skillmanagement.css">
     </head>
 
 <body>
 
     <!-- navbar mit custom-link je nach Recht -->
     <?php
-    $rolle = $conn->prepare(sprintf("SELECT Rolle FROM users where id = %d", $_SESSION['userid']));
+    $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
     $rolle->execute();
-    $dbRolle = $rolle->fetch()['Rolle'];
+    $dbRolle = $rolle->fetch()['rolle'];
     switch($dbRolle){
-        case "Manager": 
+        case "Management": 
             $link = "management.php";
             break;
         case "Vertrieb":
@@ -126,6 +126,7 @@ if(isset($_POST['skill10'])) {
                 </li>
             </ul>
         </nav>
+        
     <div class="container">
             <h2><br>Verwaltung der Skills</h2>       
                 <table class="table table-striped">
@@ -141,21 +142,21 @@ if(isset($_POST['skill10'])) {
                 <tr>
                     <td>
                     <?php // skill #1
-                    $stmt1 = $conn->prepare("SELECT Skillname FROM skills where ID = 1");
+                    $stmt1 = $conn->prepare("SELECT skillname FROM skills where skillID = 1");
                     $stmt1->execute();
 
-                    $stmt2 = $conn->prepare(sprintf("SELECT skilllevel FROM userskills where id_skill = 1 and id_user = %d", $_SESSION['userid']));
+                    $stmt2 = $conn->prepare(sprintf("SELECT auspraegung FROM besitzt where skillID = 1 and mitarbeiterID = %d", $_SESSION['userid']));
                     $stmt2->execute();
 
-                    echo "<p style='font-size:16pt; font-family:arial;'>" . $stmt1->fetch()['Skillname'] . "</p>";
-                    $sskill = ($stmt2->fetch()['skilllevel'] ?? 0);
+                    echo "<p style='font-size:16pt; font-family:arial;'>" . $stmt1->fetch()['skillname'] . "</p>";
+                    $sskill = ($stmt2->fetch()['auspraegung'] ?? 0);
                     ?>
                     </td>
 
                     <td>
-                    <?php $sql = sprintf("SELECT skilllevel FROM userskills where id_skill = 1 and id_user = %d", $_SESSION['userid']);
+                    <?php $sql = sprintf("SELECT auspraegung FROM besitzt where skillID = 1 and mitarbeiterID = %d", $_SESSION['userid']);
                     foreach ($conn->query($sql) as $level) {
-                        echo "<p style='font-size:16pt; font-family:arial;'>" . $level['skilllevel'] . "</p>";
+                        echo "<p style='font-size:16pt; font-family:arial;'>" . $level['auspraegung'] . "</p>";
                     }?>
                     </td>
 
@@ -177,21 +178,21 @@ if(isset($_POST['skill10'])) {
                 <tr>
                     <td>
                     <?php // skill #2
-                    $stmt1 = $conn->prepare("SELECT Skillname FROM skills where ID = 2");
+                    $stmt1 = $conn->prepare("SELECT skillname FROM skills where skillID = 2");
                     $stmt1->execute();
 
-                    $stmt2 = $conn->prepare(sprintf("SELECT skilllevel FROM userskills where id_skill = 2 and id_user = %d", $_SESSION['userid']));
+                    $stmt2 = $conn->prepare(sprintf("SELECT auspraegung FROM besitzt where skillID = 2 and mitarbeiterID = %d", $_SESSION['userid']));
                     $stmt2->execute();
 
-                    echo "<p style='font-size:16pt; font-family:arial;'>" . $stmt1->fetch()['Skillname'] . "</p>";
-                    $sskill = ($stmt2->fetch()['skilllevel'] ?? 0);
+                    echo "<p style='font-size:16pt; font-family:arial;'>" . $stmt1->fetch()['skillname'] . "</p>";
+                    $sskill = ($stmt2->fetch()['auspraegung'] ?? 0);
                     ?>
                     </td>
 
                     <td>
-                    <?php $sql = sprintf("SELECT skilllevel FROM userskills where id_skill = 2 and id_user = %d", $_SESSION['userid']);
+                    <?php $sql = sprintf("SELECT auspraegung FROM besitzt where skillID = 2 and mitarbeiterID = %d", $_SESSION['userid']);
                     foreach ($conn->query($sql) as $level) {
-                        echo "<p style='font-size:16pt; font-family:arial;'>" . $level['skilllevel'] . "</p>";
+                        echo "<p style='font-size:16pt; font-family:arial;'>" . $level['auspraegung'] . "</p>";
                     }?>
                     </td>
 
@@ -213,21 +214,21 @@ if(isset($_POST['skill10'])) {
                 <tr>
                     <td>
                     <?php // skill #3
-                    $stmt1 = $conn->prepare("SELECT Skillname FROM skills where ID = 3");
+                    $stmt1 = $conn->prepare("SELECT skillname FROM skills where skillID = 3");
                     $stmt1->execute();
 
-                    $stmt2 = $conn->prepare(sprintf("SELECT skilllevel FROM userskills where id_skill = 3 and id_user = %d", $_SESSION['userid']));
+                    $stmt2 = $conn->prepare(sprintf("SELECT auspraegung FROM besitzt where skillID = 3 and mitarbeiterID = %d", $_SESSION['userid']));
                     $stmt2->execute();
 
-                    echo "<p style='font-size:16pt; font-family:arial;'>" . $stmt1->fetch()['Skillname'] . "</p>";
-                    $sskill = ($stmt2->fetch()['skilllevel'] ?? 0);
+                    echo "<p style='font-size:16pt; font-family:arial;'>" . $stmt1->fetch()['skillname'] . "</p>";
+                    $sskill = ($stmt2->fetch()['auspraegung'] ?? 0);
                     ?>
                     </td>
 
                     <td>
-                    <?php $sql = sprintf("SELECT skilllevel FROM userskills where id_skill = 3 and id_user = %d", $_SESSION['userid']);
+                    <?php $sql = sprintf("SELECT auspraegung FROM besitzt where skillID = 3 and mitarbeiterID = %d", $_SESSION['userid']);
                     foreach ($conn->query($sql) as $level) {
-                        echo "<p style='font-size:16pt; font-family:arial;'>" . $level['skilllevel'] . "</p>";
+                        echo "<p style='font-size:16pt; font-family:arial;'>" . $level['auspraegung'] . "</p>";
                     }?>
                     </td>
 
@@ -249,21 +250,21 @@ if(isset($_POST['skill10'])) {
                 <tr>
                     <td>
                     <?php // skill #4
-                    $stmt1 = $conn->prepare("SELECT Skillname FROM skills where ID = 4");
+                    $stmt1 = $conn->prepare("SELECT skillname FROM skills where skillID = 4");
                     $stmt1->execute();
 
-                    $stmt2 = $conn->prepare(sprintf("SELECT skilllevel FROM userskills where id_skill = 4 and id_user = %d", $_SESSION['userid']));
+                    $stmt2 = $conn->prepare(sprintf("SELECT auspraegung FROM besitzt where skillID = 4 and mitarbeiterID = %d", $_SESSION['userid']));
                     $stmt2->execute();
 
-                    echo "<p style='font-size:16pt; font-family:arial;'>" . $stmt1->fetch()['Skillname'] . "</p>";
-                    $sskill = ($stmt2->fetch()['skilllevel'] ?? 0);
+                    echo "<p style='font-size:16pt; font-family:arial;'>" . $stmt1->fetch()['skillname'] . "</p>";
+                    $sskill = ($stmt2->fetch()['auspraegung'] ?? 0);
                     ?>
                     </td>
 
                     <td>
-                    <?php $sql = sprintf("SELECT skilllevel FROM userskills where id_skill = 4 and id_user = %d", $_SESSION['userid']);
+                    <?php $sql = sprintf("SELECT auspraegung FROM besitzt where skillID = 4 and mitarbeiterID = %d", $_SESSION['userid']);
                     foreach ($conn->query($sql) as $level) {
-                        echo "<p style='font-size:16pt; font-family:arial;'>" . $level['skilllevel'] . "</p>";
+                        echo "<p style='font-size:16pt; font-family:arial;'>" . $level['auspraegung'] . "</p>";
                     }?>
                     </td>
 
@@ -285,21 +286,21 @@ if(isset($_POST['skill10'])) {
                 <tr>
                     <td>
                     <?php // skill #5
-                    $stmt1 = $conn->prepare("SELECT Skillname FROM skills where ID = 5");
+                    $stmt1 = $conn->prepare("SELECT skillname FROM skills where skillID = 5");
                     $stmt1->execute();
 
-                    $stmt2 = $conn->prepare(sprintf("SELECT skilllevel FROM userskills where id_skill = 5 and id_user = %d", $_SESSION['userid']));
+                    $stmt2 = $conn->prepare(sprintf("SELECT auspraegung FROM besitzt where skillID = 5 and mitarbeiterID = %d", $_SESSION['userid']));
                     $stmt2->execute();
 
-                    echo "<p style='font-size:16pt; font-family:arial;'>" . $stmt1->fetch()['Skillname'] . "</p>";
-                    $sskill = ($stmt2->fetch()['skilllevel'] ?? 0);
+                    echo "<p style='font-size:16pt; font-family:arial;'>" . $stmt1->fetch()['skillname'] . "</p>";
+                    $sskill = ($stmt2->fetch()['auspraegung'] ?? 0);
                     ?>
                     </td>
 
                     <td>
-                    <?php $sql = sprintf("SELECT skilllevel FROM userskills where id_skill = 5 and id_user = %d", $_SESSION['userid']);
+                    <?php $sql = sprintf("SELECT auspraegung FROM besitzt where skillID = 5 and mitarbeiterID = %d", $_SESSION['userid']);
                     foreach ($conn->query($sql) as $level) {
-                        echo "<p style='font-size:16pt; font-family:arial;'>" . $level['skilllevel'] . "</p>";
+                        echo "<p style='font-size:16pt; font-family:arial;'>" . $level['auspraegung'] . "</p>";
                     }?>
                     </td>
 
@@ -321,21 +322,21 @@ if(isset($_POST['skill10'])) {
                 <tr>
                     <td>
                     <?php // skill #6
-                    $stmt1 = $conn->prepare("SELECT Skillname FROM skills where ID = 6");
+                    $stmt1 = $conn->prepare("SELECT skillname FROM skills where skillID = 6");
                     $stmt1->execute();
 
-                    $stmt2 = $conn->prepare(sprintf("SELECT skilllevel FROM userskills where id_skill = 6 and id_user = %d", $_SESSION['userid']));
+                    $stmt2 = $conn->prepare(sprintf("SELECT auspraegung FROM besitzt where skillID = 6 and mitarbeiterID = %d", $_SESSION['userid']));
                     $stmt2->execute();
 
-                    echo "<p style='font-size:16pt; font-family:arial;'>" . $stmt1->fetch()['Skillname'] . "</p>";
-                    $sskill = ($stmt2->fetch()['skilllevel'] ?? 0);
+                    echo "<p style='font-size:16pt; font-family:arial;'>" . $stmt1->fetch()['skillname'] . "</p>";
+                    $sskill = ($stmt2->fetch()['auspraegung'] ?? 0);
                     ?>
                     </td>
 
                     <td>
-                    <?php $sql = sprintf("SELECT skilllevel FROM userskills where id_skill = 6 and id_user = %d", $_SESSION['userid']);
+                    <?php $sql = sprintf("SELECT auspraegung FROM besitzt where skillID = 6 and mitarbeiterID = %d", $_SESSION['userid']);
                     foreach ($conn->query($sql) as $level) {
-                        echo "<p style='font-size:16pt; font-family:arial;'>" . $level['skilllevel'] . "</p>";
+                        echo "<p style='font-size:16pt; font-family:arial;'>" . $level['auspraegung'] . "</p>";
                     }?>
                     </td>
 
@@ -357,21 +358,21 @@ if(isset($_POST['skill10'])) {
                 <tr>
                     <td>
                     <?php // skill #7
-                    $stmt1 = $conn->prepare("SELECT Skillname FROM skills where ID = 7");
+                    $stmt1 = $conn->prepare("SELECT skillname FROM skills where skillID = 7");
                     $stmt1->execute();
 
-                    $stmt2 = $conn->prepare(sprintf("SELECT skilllevel FROM userskills where id_skill = 7 and id_user = %d", $_SESSION['userid']));
+                    $stmt2 = $conn->prepare(sprintf("SELECT auspraegung FROM besitzt where skillID = 7 and mitarbeiterID = %d", $_SESSION['userid']));
                     $stmt2->execute();
 
-                    echo "<p style='font-size:16pt; font-family:arial;'>" . $stmt1->fetch()['Skillname'] . "</p>";
-                    $sskill = ($stmt2->fetch()['skilllevel'] ?? 0);
+                    echo "<p style='font-size:16pt; font-family:arial;'>" . $stmt1->fetch()['skillname'] . "</p>";
+                    $sskill = ($stmt2->fetch()['auspraegung'] ?? 0);
                     ?>
                     </td>
 
                     <td>
-                    <?php $sql = sprintf("SELECT skilllevel FROM userskills where id_skill = 7 and id_user = %d", $_SESSION['userid']);
+                    <?php $sql = sprintf("SELECT auspraegung FROM besitzt where skillID = 7 and mitarbeiterID = %d", $_SESSION['userid']);
                     foreach ($conn->query($sql) as $level) {
-                        echo "<p style='font-size:16pt; font-family:arial;'>" . $level['skilllevel'] . "</p>";
+                        echo "<p style='font-size:16pt; font-family:arial;'>" . $level['auspraegung'] . "</p>";
                     }?>
                     </td>
 
@@ -393,21 +394,21 @@ if(isset($_POST['skill10'])) {
                 <tr>
                     <td>
                     <?php // skill #8
-                    $stmt1 = $conn->prepare("SELECT Skillname FROM skills where ID = 8");
+                    $stmt1 = $conn->prepare("SELECT skillname FROM skills where skillID = 8");
                     $stmt1->execute();
 
-                    $stmt2 = $conn->prepare(sprintf("SELECT skilllevel FROM userskills where id_skill = 8 and id_user = %d", $_SESSION['userid']));
+                    $stmt2 = $conn->prepare(sprintf("SELECT auspraegung FROM besitzt where skillID = 8 and mitarbeiterID = %d", $_SESSION['userid']));
                     $stmt2->execute();
 
-                    echo "<p style='font-size:16pt; font-family:arial;'>" . $stmt1->fetch()['Skillname'] . "</p>";
-                    $sskill = ($stmt2->fetch()['skilllevel'] ?? 0);
+                    echo "<p style='font-size:16pt; font-family:arial;'>" . $stmt1->fetch()['skillname'] . "</p>";
+                    $sskill = ($stmt2->fetch()['auspraegung'] ?? 0);
                     ?>
                     </td>
 
                     <td>
-                    <?php $sql = sprintf("SELECT skilllevel FROM userskills where id_skill = 8 and id_user = %d", $_SESSION['userid']);
+                    <?php $sql = sprintf("SELECT auspraegung FROM besitzt where skillID = 8 and mitarbeiterID = %d", $_SESSION['userid']);
                     foreach ($conn->query($sql) as $level) {
-                        echo "<p style='font-size:16pt; font-family:arial;'>" . $level['skilllevel'] . "</p>";
+                        echo "<p style='font-size:16pt; font-family:arial;'>" . $level['auspraegung'] . "</p>";
                     }?>
                     </td>
 
@@ -429,21 +430,21 @@ if(isset($_POST['skill10'])) {
                 <tr>
                     <td>
                     <?php // skill #9
-                    $stmt1 = $conn->prepare("SELECT Skillname FROM skills where ID = 9");
+                    $stmt1 = $conn->prepare("SELECT skillname FROM skills where skillID = 9");
                     $stmt1->execute();
 
-                    $stmt2 = $conn->prepare(sprintf("SELECT skilllevel FROM userskills where id_skill = 9 and id_user = %d", $_SESSION['userid']));
+                    $stmt2 = $conn->prepare(sprintf("SELECT auspraegung FROM besitzt where skillID = 9 and mitarbeiterID = %d", $_SESSION['userid']));
                     $stmt2->execute();
 
-                    echo "<p style='font-size:16pt; font-family:arial;'>" . $stmt1->fetch()['Skillname'] . "</p>";
-                    $sskill = ($stmt2->fetch()['skilllevel'] ?? 0);
+                    echo "<p style='font-size:16pt; font-family:arial;'>" . $stmt1->fetch()['skillname'] . "</p>";
+                    $sskill = ($stmt2->fetch()['auspraegung'] ?? 0);
                     ?>
                     </td>
 
                     <td>
-                    <?php $sql = sprintf("SELECT skilllevel FROM userskills where id_skill = 9 and id_user = %d", $_SESSION['userid']);
+                    <?php $sql = sprintf("SELECT auspraegung FROM besitzt where skillID = 9 and mitarbeiterID = %d", $_SESSION['userid']);
                     foreach ($conn->query($sql) as $level) {
-                        echo "<p style='font-size:16pt; font-family:arial;'>" . $level['skilllevel'] . "</p>";
+                        echo "<p style='font-size:16pt; font-family:arial;'>" . $level['auspraegung'] . "</p>";
                     }?>
                     </td>
 
@@ -465,21 +466,21 @@ if(isset($_POST['skill10'])) {
                 <tr>
                     <td>
                     <?php // skill #10
-                    $stmt1 = $conn->prepare("SELECT Skillname FROM skills where ID = 10");
+                    $stmt1 = $conn->prepare("SELECT skillname FROM skills where skillID = 10");
                     $stmt1->execute();
 
-                    $stmt2 = $conn->prepare(sprintf("SELECT skilllevel FROM userskills where id_skill = 10 and id_user = %d", $_SESSION['userid']));
+                    $stmt2 = $conn->prepare(sprintf("SELECT auspraegung FROM besitzt where skillID = 10 and mitarbeiterID = %d", $_SESSION['userid']));
                     $stmt2->execute();
 
-                    echo "<p style='font-size:16pt; font-family:arial;'>" . $stmt1->fetch()['Skillname'] . "</p>";
-                    $sskill = ($stmt2->fetch()['skilllevel'] ?? 0);
+                    echo "<p style='font-size:16pt; font-family:arial;'>" . $stmt1->fetch()['skillname'] . "</p>";
+                    $sskill = ($stmt2->fetch()['auspraegung'] ?? 0);
                     ?>
                     </td>
 
                     <td>
-                    <?php $sql = sprintf("SELECT skilllevel FROM userskills where id_skill = 10 and id_user = %d", $_SESSION['userid']);
+                    <?php $sql = sprintf("SELECT auspraegung FROM besitzt where skillID = 10 and mitarbeiterID = %d", $_SESSION['userid']);
                     foreach ($conn->query($sql) as $level) {
-                        echo "<p style='font-size:16pt; font-family:arial;'>" . $level['skilllevel'] . "</p>";
+                        echo "<p style='font-size:16pt; font-family:arial;'>" . $level['auspraegung'] . "</p>";
                     }?>
                     </td>
 

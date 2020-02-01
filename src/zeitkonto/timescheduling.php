@@ -4,10 +4,10 @@ include 'get_entries.php';
 //include 'check_login.php';
 //include 'database.php';
 
-$rolle = $conn->prepare(sprintf("SELECT rolle 
-FROM person 
-where mitarbeiterID = %d", $_SESSION['userid'])); 
-$rolle->execute(); $dbRolle = $rolle->fetch()['rolle']; switch($dbRolle){ case "Management": $link = "management.php"; break; case "Vertrieb": $link = "vertrieb.php"; break; case "Mitarbeiter": $link = "start.php"; break; } 
+//$rolle = $conn->prepare(sprintf("SELECT rolle 
+//FROM person 
+//where mitarbeiterID = %d", $_SESSION['userid'])); 
+//$rolle->execute(); $dbRolle = $rolle->fetch()['rolle']; switch($dbRolle){ case "Management": $link = "management.php"; break; case "Vertrieb": $link = "vertrieb.php"; break; case "Mitarbeiter": $link = "start.php"; break; } 
 
 ?>
 
@@ -35,7 +35,7 @@ $rolle->execute(); $dbRolle = $rolle->fetch()['rolle']; switch($dbRolle){ case "
     <div class="row">
 
         <div class="col-3 offset-9 pb-3 text-right">
-            <button class="btn btn-success bottom-settime" data-toggle="modal" data-target="#myModal">Zeit
+            <button class="btn btn-light custom-btn bottom-settime" data-toggle="modal" data-target="#myModal">Zeit
                 erfassen</button>
         </div>
 
@@ -46,7 +46,7 @@ $rolle->execute(); $dbRolle = $rolle->fetch()['rolle']; switch($dbRolle){ case "
     <div class="row">
         <div class="col-12 pb-3">
             <div class="card">
-                <div class="card-header text-light bg-success">Deine Wochenübersicht</div>
+            <div class="card-header text-dark" style="background-color: #8DC640;">Deine Wochenübersicht</div>
                 <div class="card-body">
                     <table class="table table-striped">
                         <thead>
@@ -85,7 +85,7 @@ $rolle->execute(); $dbRolle = $rolle->fetch()['rolle']; switch($dbRolle){ case "
     <div class="row">
         <div class="col-12 pb-3">
             <div class="card mt-3">
-                <div class="card-header text-light bg-success">Deine gebuchten Zeiten für diese Woche</div>
+                <div class="card-header text-dark" style="background-color: #8DC640;">Deine gebuchten Zeiten für diese Woche</div>
                 <div class="card-body">
                     <table class="table table-hover" id="table-editable">
                         <thead>
@@ -106,7 +106,7 @@ $rolle->execute(); $dbRolle = $rolle->fetch()['rolle']; switch($dbRolle){ case "
                         echo '<td input type ="date" contenteditable="false" id= "zeit-projekt">' . $value["erfassungs_tag"] . '</td>';
                         echo '<td contenteditable="false"" id="hours-' . $row . '">' . $value["stunden_anzahl"] . '</td>';
                         echo '<td contenteditable="false" id="zeit-comment">' . $value["kommentar"] . '</td>';
-                        echo '<td ><button type="button" class="btn btn-outline-success btn-edit-modal"  data-toggle="modal" data-target="#myEditModal">Bearbeiten</button></td>';
+                        echo '<td ><button type="button" class="btn btn-light custom-btn btn-edit-modal"  data-toggle="modal" data-target="#myEditModal">Bearbeiten</button></td>';
                         echo '</tr> ';
                      }
                   }
@@ -191,7 +191,7 @@ $rolle->execute(); $dbRolle = $rolle->fetch()['rolle']; switch($dbRolle){ case "
                                     id="booking-allocatable-hours">
                             </div>
                             <div>
-                                <button type="submit" class="btn btn-success" name="erfassen">Erfassen</button>
+                                <button type="submit" class="btn btn-light custom-btn" name="erfassen">Erfassen</button>
                             </div>
                         </div>
 
@@ -215,7 +215,7 @@ $rolle->execute(); $dbRolle = $rolle->fetch()['rolle']; switch($dbRolle){ case "
                                 <textarea class="form-control" name="kommentar" rows="5" id="comment"></textarea>
                             </div>
                             <div>
-                                <button type="submit" class="btn btn-success" name="erfassen2">Erfassen</button>
+                                <button type="submit" class="btn btn-light custom-btn" name="erfassen2">Erfassen</button>
                             </div>
 
                         </div>
@@ -288,7 +288,7 @@ $rolle->execute(); $dbRolle = $rolle->fetch()['rolle']; switch($dbRolle){ case "
 
             <div class="modal-footer">
                 <button type="submit" class="btn btn-secondary" data-dismiss="modal">Schließen</button>
-                <button type="submit" name="update" class="btn btn-primary">Änderungen speichern</button>
+                <button type="submit" name="update" class="btn btn-light custom-btn">Änderungen speichern</button>
             </div>
             </form>
         </div>
