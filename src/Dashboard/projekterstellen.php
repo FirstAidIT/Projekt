@@ -8,91 +8,6 @@
 <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
-<body>
-
-
-<?php
-include 'check_login.php';
-include 'database.php'; 
-if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
-    $projektname = "";
-    if (isset($_POST['projektname'])) {
-        $projektname = trim($_POST['projektname']);
-    }
-    $kunde = "";
-    if (isset($_POST['kunde'])) {
-        $kunde = trim($_POST['kunde']);
-    }
-    $budget = "";
-    if (isset($_POST['budget'])) {
-        $budget = trim($_POST['budget']);
-    }
-	$aufwand = "";
-    if (isset($_POST['aufwand'])) {
-        $aufwand = trim($_POST['aufwand']);
-    }
-	$dauer = "";
-    if (isset($_POST['dauer'])) {
-        $dauer = trim($_POST['dauer']);
-    }
-	$wahrscheinlichkeit = "";
-    if (isset($_POST['wahrscheinlichkeit'])) {
-        $wahrscheinlichkeit = trim($_POST['wahrscheinlichkeit']);
-    }
-	$potenzial = "";
-    if (isset($_POST['potenzial'])) {
-        $potenzial = trim($_POST['potenzial']);
-    }
-	$skills = "";
-    if (isset($_POST['skills'])) {
-        $skills = trim($_POST['skills']);
-    }
-	$mitarbeiter = "";
-    if (isset($_POST['mitarbeiter'])) {
-        $mitarbeiter = trim($_POST['mitarbeiter']);
-    }
-	$erstellungsdatum = "";
-    if (isset($_POST['erstellungsdatum'])) {
-        $restellungsdatum = trim($_POST['restellungsdatum']);
-    }
-   
-    if ( $projektname != '' or $kunde != '' or $budget != '' )
-    {
-        // speichern
-        $einfuegen = $db->prepare("
-                INSERT INTO tester (projektname, kunde, budget, aufwand, dauer, wahrscheinlichkeit, potenzial, erstellungsdatum) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, CAST('". $date ."' AS DATE))");
-
-                
-        $einfuegen->bind_param('ssiiiiss', $projektname, $kunde, $budget, $aufwand, $dauer, $wahrscheinlichkeit, $potenzial, erstellungsdatum);
-        if ($einfuegen->execute()) {
-            header('Location: index.php?aktion=feedbackgespeichert');
-            die();
-            echo "<h1>gespeichert</h1>";
-        }
-    }  
-}
-if (isset($_GET['aktion']) and $_GET['aktion']=='feedbackgespeichert') {
-    echo '<p class="feedbackerfolg">Datensatz wurde gespeichert</p>';
-}
-$daten = array();
-if ($erg = $db->query("SELECT * FROM tester")) {
-    if ($erg->num_rows) {
-        while($datensatz = $erg->fetch_object()) {
-            $daten[] = $datensatz;
-        }
-        $erg->free();
-    }   
-}
-if (!count($daten)) {
-    echo "<p>Es liegen keine Daten vor :(</p>";
-} else {
-?>
-    
-<?php   
-}
-
-?>
 <body><nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
   <div class="collapse navbar-collapse" id="navbarText">
@@ -102,7 +17,6 @@ if (!count($daten)) {
       </li>
 	 
     </ul>
-
     <ul class="navbar-nav ml-auto">
     </li>
     <li class="nav-item ">
@@ -111,9 +25,9 @@ if (!count($daten)) {
     </ul>
   </div>
 </nav>
+</body>
 
-
-
+<body>
 <h3>Neues Projekt erstellen</h3>
 <form class = "form-horizontal" action="projekterstellen.php" method="post">
     <label>projektname:  <br>
@@ -135,7 +49,7 @@ if (!count($daten)) {
         <input type="number" name="wahrscheinlichkeit" id="wahrscheinlichkeit" value="">       
     </label><br>
 	 potenzial:<br>
-    <select name = "potenial">
+    <select name = "potenzial">
         <option value ="+">+</option>
         <option value ="++">++</option>
         <option value ="+++">+++</option>
@@ -165,7 +79,64 @@ if (!count($daten)) {
 
 </form>
 
+</body>
+</html>
 
-// Wie speicher ich welches Projekt welche skills benötigt
-//wie speicher ich welche mitarbeiter an welchem projekt arbeiten
-//Speichern von ENUM $potenzial
+<?php
+include 'check_login.php';
+include 'database.php'; 
+
+
+ if($db->connect_error){
+    echo 'keine Verbindung zur Datenbank';
+ }
+
+if(isset(§_Post['aktion'])){
+     $projektname = $_POST['projektname'];
+}
+if(isset(§_Post['aktion'])){
+     $aufwand = $_POST['aufwand'];
+}
+if(isset(§_Post['aktion'])){
+     $wahrscheinlichkeit = $_POST['wahrscheinlichkeit'];         
+}
+if(isset(§_Post['aktion'])){
+     $kunde = $_POST['kunde']; 
+}     
+if(isset(§_Post['aktion'])){
+     $dauer = $_POST['dauer'];
+}
+if(isset(§_Post['aktion'])){
+     $potenzial = $_POST['potenzial'];
+}   
+if(isset(§_Post['aktion'])){
+      $erstellungsdatum = $_POST['erstellungsdatum'];
+}                   
+if(isset(§_Post['aktion'])){
+     $projektID = $_POST['projektID'];    
+}
+if(isset(§_Post['aktion'])){
+        $mitarbeiterID = $_POST['mitarbeiterID'];
+}
+if(isset(§_Post['aktion'])){
+        $skillID = $_POST['skillID'];
+}        
+
+if ($projektname != '' and $kunde != '')
+    {
+
+    $speichern = $db->prepare("INSERT INTO projekt(projetname, aufwand, wahrscheinlichkeit, kunde, budget, dauer, potenzial, erstellungsdatum)
+                               VALUES (?,?,?,?,?,?,?,NOW())");
+    $speichern->bind_param('siisiis', $projektname, $aufwand, $wahrscheinlichkeit, $kunde, $dauer, $potenzial);                           
+        
+    $speichern = $db->prepare("INSERT INTO braucht(projektID, skillID)
+                                VALUES(?,?)");
+    $speichern->bind_param('ii', $projektID, skillID);
+    $speichern = $db->prepare("INSERT INTO Arbeitet_an(projektID, mitarbeiterID)
+                                VALUES(?,?)");
+    $speichern->bind_param('ii', $projektID, mitarbeiterID);
+
+   
+    $speichern->execute();    
+     } 
+?>
