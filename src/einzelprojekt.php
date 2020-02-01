@@ -22,6 +22,15 @@ SESSION_START();
 include 'check_login.php';
 include 'database.php';
 
+$id = $_SESSION['mitarbeiterid'];
+
+$abfrage = $db->prepare("SELECT * from person where mitarbeiterID = $id");
+$abfrage -> execute();
+while ($row = $abfrage ->fetch()){
+    $rolle_eingeloggt = $row['rolle'];
+}
+
+
 if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt loeschen') {
     if (isset($_POST['projektID'])) {
         $projektID =$_POST['projektID'];
@@ -46,12 +55,6 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Archivieren') {
     header ("Location: ?aktion=bearbeiten&projektID=$projektIDarchivieren");
 }
 
-if (isset($_POST['aktion']) and $_POST['aktion']=='Aktivieren') {
-    $projektIDaktivieren = $_POST['projektID'];
-    $update = $db->prepare("UPDATE projekt SET ist_archiviert = 0 WHERE projektID=?");
-    $update -> execute([$projektIDaktivieren]);
-    header ("Location: ?aktion=bearbeiten&projektID=$projektIDaktivieren");
-}
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
 
@@ -151,25 +154,17 @@ if (!count($daten)) {
 } else {
 ?>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-
-  <div class="collapse navbar-collapse" id="navbarText">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="benutzerverwaltungma.php">Benutzerverwaltung <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="einzelprojekt.php">Projekt bearbeiten</a>
-      </li>
+<nav class="navbar navbar-default navbar-expand-sm">
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+                <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
+        </li>
     </ul>
-
     <ul class="navbar-nav ml-auto">
-    </li>
-    <li class="nav-item ">
-        <a class="fas fa-user fa-2x" href="mitarbeiterverwaltung.php" ></a>
-    </li>
+        <li class="nav-item">
+                <a class="btn btn-light custom-btn" href="logout.php">Logout</a>
+        </li>
     </ul>
-  </div>
 </nav>
 
 <br>
@@ -271,7 +266,7 @@ if ($modus_aendern == true){
             <input type="text" name="aufwand" class= "form-control" id="aufwand" value="<?php echo $aufwand; ?>">
         </label><br>
         <label>Erstellungsdatum: <br>
-            <input type="date" name="erstellungsdatum" class= "form-control" id="erstellungsdatum" value="<?php echo $erstellungsdatum; ?>">
+            <input type="date" name="erstellungsdatum" class= "form-control" id="erstellungsdatum" value="<?php echo $erstellungsdatum; ?>" readonly>
         </label><br>
         <label>Startdatum: <br>
             <input type="date" name="startdatum" class= "form-control" id="startdatum" value="<?php echo $startdatum; ?>">
@@ -280,7 +275,7 @@ if ($modus_aendern == true){
             <input type="text" name="wahrscheinlichkeit" class= "form-control" id="wahrscheinlichkeit" value="<?php echo $wahrscheinlichkeit; ?>">       
         </label><br>
         <label>Kunde: <br>
-            <input type="text" name="kunde" class= "form-control" id="kunde" value="<?php echo $kunde; ?>">       
+            <input type="text" name="kunde" class= "form-control" id="kunde" value="<?php echo $kunde; ?>" readonly>       
         </label><br>
         <label>Budget: <br>
             <input type="text" name="budget" class= "form-control" id="budget" value="<?php echo $budget; ?>">       
@@ -309,11 +304,7 @@ if ($modus_aendern == true){
         <input type="submit"  name="aktion" value="Übernehmen" class="btn btn-success">
         <input type ="submit" onclick="return confirm('Soll das Projekt wirklich gelöscht werden?')" name ="aktion" value ="Projekt loeschen" class="btn btn-danger">
         <?php
-        if ($ist_archiviert == 1){?>
-            <input type="submit" name = "aktion" class="btn btn-warning" value="Aktivieren">
-        <?php
-        }
-        if ($ist_archiviert == 0){?>
+        if ($ist_archiviert == 0 && $rolle_eingeloggt == "Management"){?>
             <input type="submit" name = "aktion" class="btn btn-warning" value="Archivieren">
         <?php
         }?>

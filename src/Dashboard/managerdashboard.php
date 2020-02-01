@@ -15,27 +15,18 @@
 </head>
 <body>
 
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-
-  <div class="collapse navbar-collapse" id="navbarText">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="start.php">Menü <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="projekterstellen.php">Projekt erstellen</a> 
-      </li>
-    </ul>
-
-    <ul class="navbar-nav ml-auto">
-    </li>
-    <li class="nav-item ">
-        <a class="fas fa-user fa-2x" href="managerdashboard.php" ></a>
-    </li>
-    </ul>
-  </div>
-</nav>
+<nav class="navbar navbar-default navbar-expand-sm">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                        <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                        <a class="btn btn-light custom-btn" href="logout.php">Logout</a>
+                </li>
+            </ul>
+        </nav>
 
 <br>
 </body>
@@ -46,11 +37,11 @@
 include 'check_login.php';
 include 'database.php'; 
 
-$sql = "SELECT projekt.kunde, projekt.projektname, projekt.dauer, projekt.budget, projekt.aufwand, person.name, skills.skillname
-	      FROM projekt, person, braucht, Arbeitet_an
-        WHERE projekt.projektId = braucht.projektId
-        AND skills.skillID = braucht.skillID
-        AND person.mitarbeiterID = Arbeitet_an.mitarbeiterID ";
+$sql = "SELECT projekt.projektname, projekt.kunde, projekt.dauer, zeitkonto.stunden_anzahl, projekt.projektID, projekt.startzeit
+        FROM projekt, zeitkonto, Arbeiten_an, person
+        WHERE Arbeiten_an.mitarbeiterID = person.mitarbeiterID
+        AND Arbeiten_an.projektID = projekt.projektID
+        AND projekt.ist_archiviert = '0'";
 
 	echo '<table class="table">'; 
 	echo 	"<thead>";
@@ -67,15 +58,17 @@ $sql = "SELECT projekt.kunde, projekt.projektname, projekt.dauer, projekt.budget
 	echo	  "</thead>";
 
 	foreach ($db->query($sql) as $row) {
+    if ($startzeit <= NOW()) {
+      $color = "0000FF";}
 	echo "<tr>";
-	echo "<td>".$row['projektname'] . "</td>";
-	echo "<td>".$row['kunde'] . "</td>";
-  echo "<td>". $row['dauer'] . "</td>";
-  echo "<td>". $row['budget'] . "</td>";
-  echo "<td>".$row['aufwand']. "</td>";
-  echo "<td>". $row['skillname'] . "</td>";
-  echo "<td>". $row['name'] . "</td>";
-  echo '<td ><button type="button" class="btn btn-outline-success btn-edit-modal"  data-toggle="modal" data-target="#myEditModal">Bearbeiten</button></td>';
+	echo "<td style='background: #" . $color . "'>".$row['projektname'] . "</td>";
+	echo "<td style='background: #" . $color . "'>".$row['kunde'] . "</td>";
+  echo "<td style='background: #" . $color . "'>". $row['dauer'] . "</td>";
+  echo "<td style='background: #" . $color . "'>". $row['budget'] . "</td>";
+  echo "<td style='background: #" . $color . "'>".$row['aufwand']. "</td>";
+  echo "<td style='background: #" . $color . "'>". $row['skillname'] . "</td>";
+  echo "<td style='background: #" . $color . "'>". $row['name'] . "</td>";
+  echo "<td><a href='einzelprojekt.php' &projektID >Bearbeiten</a></td>";
 	echo "</tr>";}
 
     echo "</table>";

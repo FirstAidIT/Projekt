@@ -6,19 +6,19 @@ if(isset($_POST['email'])) {
     $email = $_POST['email'];
     $passwort = $_POST['passwort'];
     
-    $statement = $conn->prepare("SELECT * FROM users WHERE email = :email");
+    $statement = $conn->prepare("SELECT * FROM person WHERE email = :email");
     $statement->execute(array('email' => $email));
     
     $user = $statement->fetch();
     
         
     if ($user !== false && password_verify($passwort, $user['passwort'])) {
-        $_SESSION['userid'] = $user['id'];
-        $rolle = $conn->prepare(sprintf("SELECT Rolle FROM users where id = %d", $_SESSION['userid']));
+        $_SESSION['userid'] = $user['mitarbeiterID'];
+        $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
         $rolle->execute();
-        $dbRolle = $rolle->fetch()['Rolle'];
+        $dbRolle = $rolle->fetch()['rolle'];
         switch($dbRolle){
-            case "Manager": 
+            case "Management": 
                 header("location: management.php");
                 die(); 
                 break;
@@ -44,7 +44,7 @@ if(isset($_POST['email'])) {
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <title>LOGIN</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="login.css">
+        <link rel="stylesheet" type="text/css" href="css/login.css">
     </head>
 
     <body>
@@ -75,46 +75,11 @@ if(isset($errorMessage)) {
                             <button type="submit" value="Abschicken" class="btn btn-dark custom-btn">Anmelden</button>
                         </div>  
                     </form>
-                </div>
-
-                <div class="col d-flex justify-content-center">
-                    <div class="reset">
-                        <label>Haben Sie Ihre Anmeldedaten vergessen?</label>
-                        <label>Fordern Sie jetzt Hilfe von Ihrem Vorgesetzten an</label><br>
-                        
-                        <button type="button" class="btn btn-dark custom-btn2" data-toggle="modal" data-target="#helpModal">
-                            Hilfe anfordern
-                        </button>
-
-                        <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">  
-                                <div class="modal-body">
-                                <form id="form" action="sendmail.php" method="post">
-                                        <input type="text" id="name" name="name" placeholder="Name">
-                                        <input type="text" id="betreff" name="betreff" placeholder="Betreff">
-                                        <textarea id="nachricht" name="nachricht" rows="5" cols="30" placeholder="Nachricht"></textarea>
-                                        <input type="submit" name="submit">
-                                    </form>
-                                   
-                                </div>
-                                <div class="modal-footer">
-                                <button type="button" class="btn btn-dark custom-btn2" data-dismiss="modal">Schließen</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                        <!--<form action="">
-                        <button type="submit" class="btn btn-dark custom-btn2">Hilfe anfordern</button>
-                        </form>-->
-                    </div>
-                </div>
+                </div> 
             </div>
     </div>
    
     
-
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>        

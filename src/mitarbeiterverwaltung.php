@@ -173,25 +173,17 @@ function PassStrength($Password) {
 
 ?>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-
-  <div class="collapse navbar-collapse" id="navbarText">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="benutzerverwaltungma.php">Benutzerverwaltung <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="einzelprojekt.php">Projekt bearbeiten</a>
-      </li>
+<nav class="navbar navbar-default navbar-expand-sm">
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+                <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
+        </li>
     </ul>
-
     <ul class="navbar-nav ml-auto">
-    </li>
-    <li class="nav-item ">
-        <a class="fas fa-user fa-2x" href="mitarbeiterverwaltung.php" ></a>
-    </li>
+        <li class="nav-item">
+                <a class="btn btn-light custom-btn" href="logout.php">Logout</a>
+        </li>
     </ul>
-  </div>
 </nav>
 
 <form class = "form-horizontal" style= "width:400;  margin:auto;" action="mitarbeiterverwaltung.php" method="post">
@@ -214,13 +206,9 @@ function PassStrength($Password) {
     <label>Neues Passwort wiederholen:<br>
         <input type="password" name="passwortneu2" class= "form-control" id="passwortneu2" value="">    
     </label><br>
-    Rolle:<br>
-    <select name = "rolle" value="<?php echo $rolle; ?>">
-        <option value='<?php echo $rolle?>' selected='selected'><?php echo $rolle?></option>
-        <option value ="Mitarbeiter">Mitarbeiter</option>
-        <option value ="Vertrieb">Vertrieb</option>
-        <option value ="Management">Management</option>
-    </select><br><br>
+    <label>Rolle:<br>
+    <input type = "text" class= "form-control" name = "rolle" value="<?php echo $rolle; ?>" readonly><br>
+    </label>
     <?php $check = "";?>
     <?php   if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen'){ 
                 if (!empty($passwortneu1)){ 
@@ -250,6 +238,8 @@ function PassStrength($Password) {
     <?php echo "<font color='#FF0000'> $check</font>"; ?><br><br>
             
     <input type="submit"  class="btn btn-success" name = "aktion" value="Übernehmen">
+    <br><br>
+    <a href = "benutzerverwaltungma.php" class="btn btn-dark">Zurück zur Benutzerverwaltung</a>
       
 
 </form>

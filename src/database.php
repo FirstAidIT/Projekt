@@ -1,5 +1,5 @@
 <?php
-    include '//wip19_g3@web06.iis.uni-bamberg.de/wip19_g3/config.php';
+    include 'config.php';
 
     $conn = null;
     
