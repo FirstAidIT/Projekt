@@ -25,7 +25,7 @@ $_SESSION['checkaendern']= "";
 $_SESSION['geaendert'] = false;
 
 
-/require 'inc/db.php';
+//require 'inc/db.php';
 
 
 include 'check_login.php';
@@ -43,7 +43,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Löschen') {
         $mitarbeiterloeschen = $_POST['mitarbeiterID'];
         if ($mitarbeiterloeschen > 0)
         {
-            $update = $conn->prepare("DELETE FROM person WHERE mitarbeiterID=?");
+            $update = $db->prepare("DELETE FROM person WHERE mitarbeiterID=?");
             $update->execute([$mitarbeiterloeschen]); 
                 header("Location: benutzerverwaltungma.php");
                 echo "<p>Datensatz wurde gelöscht</p>";
@@ -58,7 +58,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Benutzer deaktivieren') {
 
     $mitarbeiterdeaktivieren = $_POST['mitarbeiterID'];
 
-    $update = $conn->prepare("UPDATE person SET active = 0 WHERE mitarbeiterID=?");
+    $update = $db->prepare("UPDATE person SET active = 0 WHERE mitarbeiterID=?");
     $update->execute([$mitarbeiterdeaktivieren]); 
     header("Location: mitarbeiterbearbeitung.php");
 }
@@ -69,7 +69,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Benutzer reaktivieren') {
 
     $mitarbeiterreaktivieren = $_POST['mitarbeiterID'];
 
-    $update = $conn->prepare("UPDATE person SET active = 1 WHERE mitarbeiterID=?");
+    $update = $db->prepare("UPDATE person SET active = 1 WHERE mitarbeiterID=?");
     $update->execute([$mitarbeiterreaktivieren]);
     header("Location: mitarbeiterbearbeitung.php");
  
@@ -108,7 +108,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
     }
 
 
-    $statement = $conn->prepare("SELECT* FROM person WHERE email = '$upd_email'");
+    $statement = $db->prepare("SELECT* FROM person WHERE email = '$upd_email'");
     $statement->execute(array('Max')); 
     $anzahl_user = $statement->rowCount();
 
@@ -134,7 +134,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
     if ($upd_email != '' or $upd_passwort != '' or $upd_name != '' or $upd_rolle != '')
     {
         // speichern
-        $update = $conn->prepare("UPDATE person SET email =?, passwort=?, name=?, rolle=? WHERE mitarbeiterID=?");
+        $update = $db->prepare("UPDATE person SET email =?, passwort=?, name=?, rolle=? WHERE mitarbeiterID=?");
         $update->execute([$upd_email, $hashed_password, $upd_name, $upd_rolle, $upd_id]);
         if ($update->execute()) {
             $_SESSION['geaendert'] = true;
@@ -179,7 +179,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
     $hashed_password = password_hash($passwort, PASSWORD_DEFAULT);
     
 
-    $statement = $conn->prepare("SELECT* FROM person WHERE email = '$email'");
+    $statement = $db->prepare("SELECT* FROM person WHERE email = '$email'");
     $statement->execute(array('Max')); 
     $anzahl_user = $statement->rowCount();
 
@@ -216,7 +216,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
                     else{
                 
                         // speichern
-                        $einfuegen = $conn->prepare("INSERT INTO person(email, passwort, name, rolle) VALUES (?,?,?,?)");
+                        $einfuegen = $db->prepare("INSERT INTO person(email, passwort, name, rolle) VALUES (?,?,?,?)");
                         $einfuegen->bindParam(1, $email, PDO::PARAM_STR);
                         $einfuegen->bindParam(2, $hashed_password, PDO::PARAM_STR);
                         $einfuegen->bindParam(3, $name, PDO::PARAM_STR);
@@ -251,7 +251,7 @@ if ($modus_aendern != true)
 {
 
 $daten = array();
-if ($erg = $conn->query("SELECT * FROM person")) {
+if ($erg = $db->query("SELECT * FROM person")) {
 	if ($erg->rowCount()) {
 		while($datensatz = $erg->fetchObject()) {
 			$daten[] = $datensatz;
@@ -326,7 +326,7 @@ $modus_suchen = false;
         $suchbegriff = trim ($_GET['suchbegriff']);
         //echo "<p>Gesucht wird nach: <b>$suchbegriff</b></p>"; 
         $suche_nach = "%{$suchbegriff}%";
-        $abc = $conn->prepare("SELECT * FROM person WHERE name LIKE ? ORDER BY name ASC");
+        $abc = $db->prepare("SELECT * FROM person WHERE name LIKE ? ORDER BY name ASC");
         $abc->bindParam(1, $suche_nach, PDO::PARAM_STR);
         $abc->execute();
     }
@@ -335,10 +335,10 @@ $modus_suchen = false;
     {
         $paginierung = 1;
 
-        $s = $conn->query($query);
+        $s = $db->query($query);
         $total_results = $s->fetchColumn();
         $total_pages = ceil($total_results/$limit);
-        $abc = $conn->prepare("SELECT *  FROM person ORDER BY name ASC LIMIT $starting_limit, $limit");
+        $abc = $db->prepare("SELECT *  FROM person ORDER BY name ASC LIMIT $starting_limit, $limit");
         $abc->execute();
     }
 
@@ -402,7 +402,7 @@ if ( $modus_aendern == true and isset($_GET['mitarbeiterID']) ) {
     $id_einlesen = (INT) $_GET['mitarbeiterID'];
     if ($id_einlesen > 0)
     {   
-        $dseinlesen = $conn->prepare("SELECT mitarbeiterID, email, passwort, name, rolle, active FROM person WHERE mitarbeiterID=? ORDER BY name ASC");
+        $dseinlesen = $db->prepare("SELECT mitarbeiterID, email, passwort, name, rolle, active FROM person WHERE mitarbeiterID=? ORDER BY name ASC");
         $dseinlesen->execute([$id_einlesen]);
         $dseinlesen->execute();
         while ($row = $dseinlesen->fetch()) {

@@ -21,10 +21,10 @@
 
 $erfolg = false;
 
-require 'inc/db.php';
+//require 'inc/db.php';
 
-//include 'check_login.php';
-//include 'database.php';
+include 'check_login.php';
+include 'database.php';
 
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
@@ -102,7 +102,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
     }
 }
 
-$id = $_SESSION['usid']
+$id = $_SESSION['mitarbeiterID']
 $dseinlesen = $conn->prepare("SELECT mitarbeiterID, email, passwort, name, rolle FROM person WHERE email = '$id' ");
         $dseinlesen->execute();
         while ($row = $dseinlesen->fetch()) {
