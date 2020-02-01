@@ -6,41 +6,25 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="stylesheet" href="/main.css">
-<title>Einzelprojektansicht</title>
+<title>Mitarbeiterdashboard</title>
 <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
 </head>
 <body>
-<?php
-//require 'inc/db.php';
 
-include 'check_login.php';
-include 'database.php';
-
-
-
-$daten = array();
-if ($erg = $db->query("SELECT * FROM projekt order by erstellungsdatum asc")) {
-	if ($erg->rowCount()) {
-		while($datensatz = $erg->fetchObject()) {
-			$daten[] = $datensatz;
-		}
-	}	
-}
-if (!count($daten)) {
-    echo "<p>Es liegen keine Daten vor :(</p>";
-}
-?>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
   <div class="collapse navbar-collapse" id="navbarText">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" href="start.php">Übersicht <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="start.php">Menü <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="projekterstellen.php">Projekt erstellen</a>
+        <a class="nav-link" href="projekterstellen.php">Projekt erstellen</a> 
       </li>
     </ul>
 
@@ -54,50 +38,45 @@ if (!count($daten)) {
 </nav>
 
 <br>
-<?php
-$sql = "SELECT projekt.projektname, projekt.kunde, projekt.dauer, zeitkonto.stunden_anzahl, projekt.budget, projekt.aufwand, person.name, SKILLS????
-  FROM projekt, person";
-
-echo '<table class="table">'; 
-echo 	"<thead>";
-echo		"<tr>";
-echo			"<th>Projektname</th>";
-echo			"<th>Kunde</th>";
-echo	  		"<th>Projektdauer</th>";		
-echo	  		"<th>Budget insgesamt</th>";
-echo	  		"<th>Budget pro Monat</th>";
-echo	  		"<th>Aufwand</th>";
-echo	  		"<th>Skills</th>";
-echo	  		"<th>Aufwand Mitarbeiter</th>";
-echo	  		"<th>Bearbeiten</th>";
-
-
-echo		"</tr>";
-echo	  "</thead>";
-
-foreach ($db->query($sql) as $row) {
-echo "<tr>";
-echo "<td>".$row['projektname'] . "</td>";
-echo "<td>".$row['kunde'] . "</td>";
-echo "<td>". $row['dauer'] . "</td>";
-echo "<td>".$row['budget']. "</td>";
-echo "<td>".$row['budget/dauer']. "</td>";
-echo "<td>".$row['aufwand']. "</td>";
-echo "<td>".$row['SKILLS']. "</td>";
-echo "<td>".$row['person.name']. "</td>";
-echo "<td><a href='einzelprojekt.php'>bearbeiten</a></td>";
-echo "</tr>";}
-
-echo "</table>";
-
-
-function sicherheit($inhalt='') {
-  $inhalt = trim($inhalt);
-  $inhalt = htmlentities($inhalt, ENT_QUOTES, "UTF-8");
-  return($inhalt);
-}
- ?>			
-      </tbody>
-  </table>
-  </body>
+</body>
 </html>
+
+<?php
+
+include 'check_login.php';
+include 'database.php'; 
+
+$sql = "SELECT projekt.kunde, projekt.projektname, projekt.dauer, projekt.budget, projekt.aufwand, person.name, skills.skillname
+	      FROM projekt, person, braucht, Arbeitet_an
+        WHERE projekt.projektId = braucht.projektId
+        AND skills.skillID = braucht.skillID
+        AND person.mitarbeiterID = Arbeitet_an.mitarbeiterID ";
+
+	echo '<table class="table">'; 
+	echo 	"<thead>";
+	echo		"<tr>";
+	echo			"<th>Projektname</th>";
+	echo			"<th>Kunde</th>";
+	echo	  		"<th>Projektdauer</th>";		
+  echo	  		"<th>Budget</th>";
+  echo	  		"<th>Aufwand</th>";
+  echo	  		"<th>Skills</th>";
+  echo	  		"<th>Mitarbeiter</th>";
+  echo	  		"<th>Projektansicht</th>";
+	echo		"</tr>";
+	echo	  "</thead>";
+
+	foreach ($db->query($sql) as $row) {
+	echo "<tr>";
+	echo "<td>".$row['projektname'] . "</td>";
+	echo "<td>".$row['kunde'] . "</td>";
+  echo "<td>". $row['dauer'] . "</td>";
+  echo "<td>". $row['budget'] . "</td>";
+  echo "<td>".$row['aufwand']. "</td>";
+  echo "<td>". $row['skillname'] . "</td>";
+  echo "<td>". $row['name'] . "</td>";
+  echo '<td ><button type="button" class="btn btn-outline-success btn-edit-modal"  data-toggle="modal" data-target="#myEditModal">Bearbeiten</button></td>';
+	echo "</tr>";}
+
+    echo "</table>";
+?>

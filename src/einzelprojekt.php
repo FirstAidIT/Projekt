@@ -262,37 +262,37 @@ if ($modus_aendern == true){
             <input type="hidden" name="projektID" id="projektID" value="<?php echo $projektID; ?>">
         </label><br>
         <label>Projektame: <br>
-            <input type="text" name="projektname" id="projektname" value="<?php echo $projektname; ?>">       
+            <input type="text" name="projektname" class= "form-control" id="projektname" value="<?php echo $projektname; ?>">       
         </label><br>
 
-        <input type="hidden" name="projektnamealt" id="projektnamealt" value="<?php echo $projektname; ?>">       
+        <input type="hidden" name="projektnamealt" class= "form-control" id="projektnamealt" value="<?php echo $projektname; ?>">       
 
         <label>Aufwand:<br>
-            <input type="text" name="aufwand" id="aufwand" value="<?php echo $aufwand; ?>">
+            <input type="text" name="aufwand" class= "form-control" id="aufwand" value="<?php echo $aufwand; ?>">
         </label><br>
         <label>Erstellungsdatum: <br>
-            <input type="date" name="erstellungsdatum" id="erstellungsdatum" value="<?php echo $erstellungsdatum; ?>">
+            <input type="date" name="erstellungsdatum" class= "form-control" id="erstellungsdatum" value="<?php echo $erstellungsdatum; ?>">
         </label><br>
         <label>Startdatum: <br>
-            <input type="date" name="startdatum" id="startdatum" value="<?php echo $startdatum; ?>">
+            <input type="date" name="startdatum" class= "form-control" id="startdatum" value="<?php echo $startdatum; ?>">
         </label><br>
         <label>Wahrscheinlichkeit: <br>
-            <input type="text" name="wahrscheinlichkeit" id="wahrscheinlichkeit" value="<?php echo $wahrscheinlichkeit; ?>">       
+            <input type="text" name="wahrscheinlichkeit" class= "form-control" id="wahrscheinlichkeit" value="<?php echo $wahrscheinlichkeit; ?>">       
         </label><br>
         <label>Kunde: <br>
-            <input type="text" name="kunde" id="kunde" value="<?php echo $kunde; ?>">       
+            <input type="text" name="kunde" class= "form-control" id="kunde" value="<?php echo $kunde; ?>">       
         </label><br>
         <label>Budget: <br>
-            <input type="text" name="budget" id="budget" value="<?php echo $budget; ?>">       
+            <input type="text" name="budget" class= "form-control" id="budget" value="<?php echo $budget; ?>">       
         </label><br>
         <label>Dauer: <br>
-            <input type="text" name="dauer" id="dauer" value="<?php echo $dauer; ?>">       
+            <input type="text" name="dauer" class= "form-control" id="dauer" value="<?php echo $dauer; ?>">       
         </label><br>
         <label>Enddatum: <br>
-            <input type="date" name="enddatum" id="enddatum" value="<?php echo $enddatum; ?>">
+            <input type="date" name="enddatum" class= "form-control" id="enddatum" value="<?php echo $enddatum; ?>">
         </label><br>
         <label>Archivierung: <br>
-            <input type="date" name="archivierungsdatum" id="archivierungsdatum" value="<?php echo $archivierungsdatum; ?>">       
+            <input type="date" name="archivierungsdatum" class= "form-control" id="archivierungsdatum" value="<?php echo $archivierungsdatum; ?>">       
         </label><br>
         <label><br>
             <input type="hidden" name="ist_archiviert" id="ist_archiviert" value="<?php echo $ist_archiviert; ?>">       
