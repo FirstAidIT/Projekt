@@ -46,12 +46,6 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Archivieren') {
     header ("Location: ?aktion=bearbeiten&projektID=$projektIDarchivieren");
 }
 
-if (isset($_POST['aktion']) and $_POST['aktion']=='Aktivieren') {
-    $projektIDaktivieren = $_POST['projektID'];
-    $update = $db->prepare("UPDATE projekt SET ist_archiviert = 0 WHERE projektID=?");
-    $update -> execute([$projektIDaktivieren]);
-    header ("Location: ?aktion=bearbeiten&projektID=$projektIDaktivieren");
-}
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
 
@@ -271,7 +265,7 @@ if ($modus_aendern == true){
             <input type="text" name="aufwand" class= "form-control" id="aufwand" value="<?php echo $aufwand; ?>">
         </label><br>
         <label>Erstellungsdatum: <br>
-            <input type="date" name="erstellungsdatum" class= "form-control" id="erstellungsdatum" value="<?php echo $erstellungsdatum; ?>">
+            <input type="date" name="erstellungsdatum" class= "form-control" id="erstellungsdatum" value="<?php echo $erstellungsdatum; ?>" readonly>
         </label><br>
         <label>Startdatum: <br>
             <input type="date" name="startdatum" class= "form-control" id="startdatum" value="<?php echo $startdatum; ?>">
@@ -280,7 +274,7 @@ if ($modus_aendern == true){
             <input type="text" name="wahrscheinlichkeit" class= "form-control" id="wahrscheinlichkeit" value="<?php echo $wahrscheinlichkeit; ?>">       
         </label><br>
         <label>Kunde: <br>
-            <input type="text" name="kunde" class= "form-control" id="kunde" value="<?php echo $kunde; ?>">       
+            <input type="text" name="kunde" class= "form-control" id="kunde" value="<?php echo $kunde; ?>" readonly>       
         </label><br>
         <label>Budget: <br>
             <input type="text" name="budget" class= "form-control" id="budget" value="<?php echo $budget; ?>">       
@@ -309,10 +303,6 @@ if ($modus_aendern == true){
         <input type="submit"  name="aktion" value="Übernehmen" class="btn btn-success">
         <input type ="submit" onclick="return confirm('Soll das Projekt wirklich gelöscht werden?')" name ="aktion" value ="Projekt loeschen" class="btn btn-danger">
         <?php
-        if ($ist_archiviert == 1){?>
-            <input type="submit" name = "aktion" class="btn btn-warning" value="Aktivieren">
-        <?php
-        }
         if ($ist_archiviert == 0){?>
             <input type="submit" name = "aktion" class="btn btn-warning" value="Archivieren">
         <?php
