@@ -3,8 +3,8 @@
 include 'check_login.php';
 include 'database.php';
 
-//session_start();
-//$mitarbeiterid = $_SESSION['mitarbeiterID'];
+session_start();
+$mitarbeiterid = $_SESSION['mitarbeiterID'];
 $mitarbeiterID = 1;
 
     
