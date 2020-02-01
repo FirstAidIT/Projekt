@@ -126,6 +126,7 @@ if(isset($_POST['skill10'])) {
                 </li>
             </ul>
         </nav>
+        
     <div class="container">
             <h2><br>Verwaltung der Skills</h2>       
                 <table class="table table-striped">
