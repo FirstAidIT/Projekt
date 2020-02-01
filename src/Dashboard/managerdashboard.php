@@ -37,7 +37,7 @@
 include 'check_login.php';
 include 'database.php'; 
 
-$sql = "SELECT projekt.projektname, projekt.kunde, projekt.dauer, zeitkonto.stunden_anzahl
+$sql = "SELECT projekt.projektname, projekt.kunde, projekt.dauer, zeitkonto.stunden_anzahl, projekt.projektID, projekt.startzeit
         FROM projekt, zeitkonto, Arbeiten_an, person
         WHERE Arbeiten_an.mitarbeiterID = person.mitarbeiterID
         AND Arbeiten_an.projektID = projekt.projektID
@@ -58,15 +58,17 @@ $sql = "SELECT projekt.projektname, projekt.kunde, projekt.dauer, zeitkonto.stun
 	echo	  "</thead>";
 
 	foreach ($db->query($sql) as $row) {
+    if ($startzeit <= NOW()) {
+      $color = "0000FF";}
 	echo "<tr>";
-	echo "<td>".$row['projektname'] . "</td>";
-	echo "<td>".$row['kunde'] . "</td>";
-  echo "<td>". $row['dauer'] . "</td>";
-  echo "<td>". $row['budget'] . "</td>";
-  echo "<td>".$row['aufwand']. "</td>";
-  echo "<td>". $row['skillname'] . "</td>";
-  echo "<td>". $row['name'] . "</td>";
-  echo "<td><a href='einzelprojekt.php'>Bearbeiten</a></td>";
+	echo "<td style='background: #" . $color . "'>".$row['projektname'] . "</td>";
+	echo "<td style='background: #" . $color . "'>".$row['kunde'] . "</td>";
+  echo "<td style='background: #" . $color . "'>". $row['dauer'] . "</td>";
+  echo "<td style='background: #" . $color . "'>". $row['budget'] . "</td>";
+  echo "<td style='background: #" . $color . "'>".$row['aufwand']. "</td>";
+  echo "<td style='background: #" . $color . "'>". $row['skillname'] . "</td>";
+  echo "<td style='background: #" . $color . "'>". $row['name'] . "</td>";
+  echo "<td><a href='einzelprojekt.php' &projektID >Bearbeiten</a></td>";
 	echo "</tr>";}
 
     echo "</table>";

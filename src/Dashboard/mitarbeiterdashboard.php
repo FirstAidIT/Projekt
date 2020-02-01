@@ -44,7 +44,8 @@ $sql = "SELECT projekt.projektname, projekt.kunde, projekt.dauer, zeitkonto.stun
 	      FROM projekt, zeitkonto, Arbeitet_an, person
         WHERE Arbeiten_an.mitarbeiterID = person.mitarbeiterID
         AND Arbeitet_an.projektID = projekt.projektID
-        AND projekt.ist_archiviert = '0'";
+        AND projekt.ist_archiviert = '0'
+        AND projekt.startzeit <= NOW()";
 
 	echo '<table class="table">'; 
 	echo 	"<thead>";
