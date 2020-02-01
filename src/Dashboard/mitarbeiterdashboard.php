@@ -24,7 +24,7 @@
         <a class="nav-link" href="start.php">Menü <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="stunden.php">Gesamtstundenübersicht</a> 
+        <a class="nav-link" href="zeitkontostart.php">Gesamtstundenübersicht</a> 
       </li>
     </ul>
 

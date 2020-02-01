@@ -75,7 +75,7 @@ $sql = "SELECT projekt.kunde, projekt.projektname, projekt.dauer, projekt.budget
   echo "<td>".$row['aufwand']. "</td>";
   echo "<td>". $row['skillname'] . "</td>";
   echo "<td>". $row['name'] . "</td>";
-  echo '<td ><button type="button" class="btn btn-outline-success btn-edit-modal"  data-toggle="modal" data-target="#myEditModal">Bearbeiten</button></td>';
+  echo "<td><a href='einzelprojekt.php'>Bearbeiten</a></td>";
 	echo "</tr>";}
 
     echo "</table>";
