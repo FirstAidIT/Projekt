@@ -398,7 +398,7 @@ if ($modus_aendern == true){
                     ?>
                     <option value='<?php echo $maID?>'><?php echo $maauswahl?></option>
                     <?php }?>
-        </select><br><br><input type="submit"  name="aktion" value="Mitarbeiter hinzufügen" class="btn btn-success">
+        </select><br><br><input type="submit"  name="aktion" value="Mitarbeiter hinzufügen" class="btn btn-dark">
         <br><br>
         <!--<a href = "?aktion=loeschen&projektID=<?php echo $inhalt->projektID; ?>" onclick="return confirm('Soll das Projekt wirklich gelöscht werden?')"  class="btn btn-danger">Löschen</a></td>-->
         <input type="submit"  name="aktion" value="Übernehmen" class="btn btn-success">
