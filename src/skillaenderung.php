@@ -3,6 +3,7 @@
 include 'check_login.php';
 include 'database.php';
 
+echo time();
 
 	$sql = "SELECT person.name, skills.skillname, besitzt.auspraegung, besitzt.timestmp 
 	FROM besitzt, person, skills
