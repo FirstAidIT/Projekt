@@ -11,6 +11,10 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
+
+
+
+
 <?php
 
 
@@ -37,91 +41,6 @@ $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = 
             break;
     }
 
-if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
-
-
-    $upd_erstellungsdatum = "";
-    if (isset($_POST['erstellungsdatum'])) {
-        $upd_erstellungsdatum = trim($_POST['erstellungsdatum']);
-    }
-    //zum Vergleichen
-    $projektnamealt = $_POST['projektnamealt'];
-    $upd_aufwand = "";
-    if (isset($_POST['aufwand'])) {
-        $upd_aufwand = trim($_POST['aufwand']);
-    }
-    $upd_projektname = "";
-    if (isset($_POST['projektname'])) {
-        $upd_projektname = trim($_POST['projektname']);
-    }
-    $upd_wahrscheinlichkeit = "";
-    if (isset($_POST['wahrscheinlichkeit'])) {
-        $upd_wahrscheinlichkeit = trim($_POST['wahrscheinlichkeit']);
-    }
-    $upd_projektID = "";
-    if (isset($_POST['projektID'])) {
-        $upd_projektID = trim($_POST['projektID']);
-    }
-    $upd_kunde = "";
-    if (isset($_POST['kunde'])) {
-        $upd_kunde = trim($_POST['kunde']);
-    }
-    $upd_budget = "";
-    if (isset($_POST['budget'])) {
-        $upd_budget = trim($_POST['budget']);
-    }
-    $upd_dauer = "";
-    if (isset($_POST['dauer'])) {
-        $upd_dauer = trim($_POST['dauer']);
-    }
-    $upd_archivierungsdatum = "";
-    if (isset($_POST['archivierungsdatum'])) {
-        $upd_archivierungsdatum = trim($_POST['archivierungsdatum']);
-    }
-    $upd_potenzial = "";
-    if (isset($_POST['potenzial'])) {
-        $upd_potenzial = trim($_POST['potenzial']);
-    }
-    $upd_startdatum = "";
-    if (isset($_POST['startdatum'])) {
-        $upd_startdatum = trim($_POST['startdatum']);
-    }
-    $upd_enddatum = "";
-    if (isset($_POST['enddatum'])) {
-        $upd_enddatum = trim($_POST['enddatum']);
-    }
-
-    $statement = $conn->prepare("SELECT* FROM projekt WHERE projektname = '$upd_projektname'");
-    $statement->execute(array('Max')); 
-    $anzahl_projekte = $statement->rowCount();
-
-    if ($anzahl_projekte > 0 && $upd_projektname != $projektnamealt ){
-        header ("Location: ?aktion=bearbeiten&projektID=$upd_projektID");
-        echo "Dieser Projektname ist bereits vorhanden";
-    }
-
-    else{
-        if ($upd_erstellungsdatum != '' AND $upd_aufwand != '' AND  $upd_projektname != '' AND $upd_wahrscheinlichkeit != '' AND $upd_kunde != '' AND  $upd_budget != '')
-        {
-            // speichern
-            $update = $conn->prepare("UPDATE projekt SET erstellungsdatum =?, aufwand=?, projektname=?, wahrscheinlichkeit=? , kunde=?, budget=?, dauer=?, archivierungsdatum=?, potenzial=?, startzeit=?, endzeit=? WHERE projektID=?");
-            $update->execute([$upd_erstellungsdatum, $upd_aufwand, $upd_projektname, $upd_wahrscheinlichkeit, $upd_kunde, $upd_budget, $upd_dauer, $upd_archivierungsdatum, $upd_potenzial,  $upd_startdatum, $upd_enddatum, $upd_projektID]);
-            if ($update->execute()) {
-                header ("Location: einzelprojekt.php");
-                echo '<p class="feedbackerfolg">Datensatz wurde geändert</p>';
-                $modus_aendern = false;
-
-            }
-        }
-        else echo "Bitte geben sie alle notwendigen Informationen an!";
-    }   
-}
-
-$modus_aendern = false;
-if (isset($_GET['aktion']) and $_GET['aktion']=='bearbeiten') {
-    $modus_aendern = true;
-}
-
 $daten = array();
 if ($erg = $conn->query("SELECT * FROM projekt, skills, personen, arbeiten_an, braucht")) {
 	if ($erg->rowCount()) {
@@ -132,25 +51,10 @@ if ($erg = $conn->query("SELECT * FROM projekt, skills, personen, arbeiten_an, b
 }
 if (!count($daten)) {
     echo "<p>Es liegen keine Daten vor</p>";
-} else {
+} 
 ?>
 
-<nav class="navbar navbar-default navbar-expand-sm">
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-                <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
-        </li>
-    </ul>
-    <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-                <a class="btn btn-light custom-btn" href="logout.php">Logout</a>
-        </li>
-    </ul>
-</nav>
-
 <br>
-<?php
-if ($modus_aendern==false){?>
     <table class = "table table-success">
         <thead class="thead-dark">
             <tr>
@@ -184,132 +88,14 @@ if ($modus_aendern==false){?>
                 </tr>
                 <?php
             }
-        }
-}
 
-if ( $modus_aendern == true and isset($_GET['projektID']) ) {
-    
-    $id_einlesen = (INT) $_GET['projektID'];
-    if ($id_einlesen > 0)
-    {   
-        $dseinlesen = $conn->prepare("SELECT * FROM projekt WHERE projektID=? order by erstellungsdatum asc ");
-        $dseinlesen->execute([$id_einlesen]);
-        $dseinlesen->execute();
-        while ($row = $dseinlesen->fetch()) {
-            $projektID = $row['projektID'];
-            $erstellungsdatum = $row['erstellungsdatum'];
-            $aufwand = $row['aufwand'];
-            $projektname = $row['projektname'];
-            $wahrscheinlichkeit = $row['wahrscheinlichkeit'];
-            $kunde = $row['kunde'];
-            $budget = $row['budget'];
-            $dauer = $row['dauer'];
-            $archivierungsdatum = $row['archivierungsdatum'];
-            $potenzial = $row['potenzial'];
-            $startdatum = $row['startzeit'];
-            $enddatum = $row ['endzeit'];
-            $ist_archiviert = $row['ist_archiviert'];
-        }
-    }
-}
 
 function sicherheit($inhalt='') {
     $inhalt = trim($inhalt);
     $inhalt = htmlentities($inhalt, ENT_QUOTES, "UTF-8");
     return($inhalt);
 }
-if ($modus_aendern == true){
-    $heute = time();
-    $datumheute = date("Y-m-d", $heute);
-    $dh = strtotime($datumheute);
-    $ds = strtotime($startdatum);
-    $de = strtotime($enddatum);
-    ?>
-    <div style = "width:400; margin:auto">
-    <form class = "form-horizontal" action="einzelprojekt.php?aktion=bearbeiten&projektID=$projektID" method="post">
 
-        <br>
-        <h3>Projekt  bearbeiten</h3>
-        
-        <label>
-            <input type="hidden" name="projektID" id="projektID" value="<?php echo $projektID; ?>">
-        </label><br>
-        <label>Projektame: <br>
-            <input type="text" name="projektname" class= "form-control" id="projektname" value="<?php echo $projektname; ?>">       
-        </label><br>
-
-        <input type="hidden" name="projektnamealt" class= "form-control" id="projektnamealt" value="<?php echo $projektname; ?>">       
-
-        <label>Aufwand (Stunden/Woche):<br>
-            <input type="text" name="aufwand" class= "form-control" id="aufwand" value="<?php echo $aufwand; ?>">
-        </label><br>
-        <label>Erstellungsdatum: <br>
-            <input type="date" name="erstellungsdatum" class= "form-control" id="erstellungsdatum" value="<?php echo $erstellungsdatum; ?>" readonly>
-        </label><br>
-        <label>Startdatum: <br>
-            <input type="date" name="startdatum" class= "form-control" id="startdatum" value="<?php echo $startdatum; ?>">
-        </label><br>
-        <label>Wahrscheinlichkeit: <br>
-            <input type="text" name="wahrscheinlichkeit" class= "form-control" id="wahrscheinlichkeit" value="<?php echo $wahrscheinlichkeit; ?>">       
-        </label><br>
-        <label>Kunde: <br>
-            <input type="text" name="kunde" class= "form-control" id="kunde" value="<?php echo $kunde; ?>" readonly>       
-        </label><br>
-        <label>Budget: <br>
-            <input type="text" name="budget" class= "form-control" id="budget" value="<?php echo $budget; ?>">       
-        </label><br>
-        <label>Dauer: <br>
-            <input type="text" name="dauer" class= "form-control" id="dauer" value="<?php echo $dauer; ?>">       
-        </label><br>
-        <label>Enddatum: <br>
-            <input type="date" name="enddatum" class= "form-control" id="enddatum" value="<?php echo $enddatum; ?>">
-        </label><br>
-        <label>Archivierung: <br>
-            <input type="date" name="archivierungsdatum" class= "form-control" id="archivierungsdatum" value="<?php echo $archivierungsdatum; ?>">       
-        </label><br>
-        <label><br>
-            <input type="hidden" name="ist_archiviert" id="ist_archiviert" value="<?php echo $ist_archiviert; ?>">       
-        </label>
-        Potenzial:<br>
-        <select name = "potenzial">
-            <option value='<?php echo $potenzial?>' selected='selected'><?php echo $potenzial?></option>
-            <option value ="+">+</option>
-            <option value ="++">++</option>
-            <option value ="+++">+++</option>
-        </select>
-        <?php
-        /*
-        $skillsabfrage = $conn->prepare("SELECT * from braucht WHERE projektID = '$bearbeitung_projektid'");
-        $skillsabfrage ->execute();
-        $while ($saf = $skillsabfrage->fetch()){
-            $skills = $row['skillID'];
-        }
-        */
-        ?>
-<br> <br>
-        <br>
-        <!--<a href = "?aktion=loeschen&projektID=<?php echo $inhalt->projektID; ?>" onclick="return confirm('Soll das Projekt wirklich gelöscht werden?')"  class="btn btn-danger">Löschen</a></td>-->
-        <input type="submit"  name="aktion" value="Übernehmen" class="btn btn-success">
-        <input type ="submit" onclick="return confirm('Soll das Projekt wirklich gelöscht werden?')" name ="aktion" value ="Projekt loeschen" class="btn btn-danger">        
-        <?php 
-        if ($dh < $ds){?>
-        <input type ="submit" name ="aktion" value ="Projekt starten" class="btn btn-primary">
-        <?php
-        }
-        if ($dh < $de){?>
-            <input type ="submit" name ="aktion" value ="Projekt beenden" class="btn btn-primary">
-            <?php
-            }
-        if ($ist_archiviert == 0 && $rolle_eingeloggt == "Management"){?>
-            <input type="submit" name = "aktion" class="btn btn-warning" value="Archivieren">
-        <?php
-        }?>
-        <!--<input type="hidden" name="aktion" value="speichern">-->
-        <br><br>
-        <a href = "einzelprojekt.php" class="btn btn-dark">Zurück zum Dashboard</a></td>
-        </form>  
-        <?php
-} 
 
             ?>			
         </tbody>
