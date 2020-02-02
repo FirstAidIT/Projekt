@@ -42,9 +42,9 @@ while ($row = $dseinlesen->fetch()) {
 
 <!-- navbar mit custom-link je nach Recht -->
 <?php
-    $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
-    $rolle->execute();
-    $dbRolle = $rolle->fetch()['rolle'];
+    $rolle2 = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
+    $rolle2->execute();
+    $dbRolle = $rolle2->fetch()['rolle'];
     switch($dbRolle){
         case "Management": 
             $link = "management.php";
@@ -57,7 +57,7 @@ while ($row = $dseinlesen->fetch()) {
             break;
     }    
     ?>
-    
+
 
 <nav class="navbar navbar-default navbar-expand-sm">
     <ul class="navbar-nav mr-auto">
@@ -131,7 +131,6 @@ Rolle:<br>
 
     ?>
     <br><br>
-    <a href = "benutzerverwaltungma.php" class="btn btn-dark">Zurück zur Benutzerverwaltung</a></td>
     </form>
 <?php
 function sicherheit($inhalt='') {
