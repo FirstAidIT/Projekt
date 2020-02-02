@@ -266,7 +266,7 @@ if (!count($daten)) {
 } else {
 ?>
 
-<?php
+<?php/*
     $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
     $rolle->execute();
     $dbRolle = $rolle->fetch()['rolle'];
@@ -281,8 +281,8 @@ if (!count($daten)) {
             $link = "start.php";
             break;
     }
-    ?>
-<nav class="navbar navbar-default navbar-expand-sm">
+    */?>
+<!--<nav class="navbar navbar-default navbar-expand-sm">
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
                 <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
@@ -293,7 +293,7 @@ if (!count($daten)) {
                 <a class="btn btn-light custom-btn" href="logout.php">Logout</a>
         </li>
     </ul>
-</nav>
+</nav>-->
 
 <br>
 <form class = "form-inline" action="" method="get">
