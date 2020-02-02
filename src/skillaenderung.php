@@ -8,7 +8,7 @@ include 'database.php';
 	FROM besitzt, person, skills
 	WHERE person.mitarbeiterID = besitzt.mitarbeiterID 
 	AND besitzt.skillID = skills.skillID
-	AND besitzt.timestmp >= time() - (7 * 24 * 60 * 60);
+	AND besitzt.timestmp >= time() - (7 * 24 * 60 * 60)";
 
 	echo '<table class="table">'; 
 	echo 	"<thead>";
