@@ -77,14 +77,14 @@ include 'database.php';
 	Mitarbeiter:<br>	
     <?php
     $sql = "SELECT name FROM person";
-	foreach ($db->query($sql) as $row) {
+	foreach ($conn->query($sql) as $row) {
 		echo "<input type=\"checkbox\">" . $row['person']. "";
     }
     ?> <br>
 	Skills:<br>	
     <?php
     $sql = "SELECT skillname FROM skills";
-	foreach ($db->query($sql) as $row) {
+	foreach ($conn->query($sql) as $row) {
 		echo "<input type=\"checkbox\">" . $row['skillname']. "";
     }
     ?> <br>
@@ -156,19 +156,19 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
     if ( $projektname != '')
     {
         // speichern
-        $einfuegen = $db->prepare("
+        $einfuegen = $conn->prepare("
                 INSERT INTO tester (projektname, kunde, budget, dauer, aufwand, wahrscheinlichkeit, potenzial, erstellungsdatum) 
                 VALUES (?, ?, ?, ? , ?, ?, ?, NOW())
                 ");
         $einfuegen->bind_param('ssiiiis', $projektname, $kunde, $budget, $dauer, $aufwand, $wahrscheinlichkeit, $potenzial);
 		
-		$einfuegen = $db->prepare("
+		$einfuegen = $conn->prepare("
 				INSERT arbeiten_an(projektID, mitarbeiterID)
 				VALUES (?,?)
 				");
 		$einfuegen->bind_param('ii', $projektID, $mitarbeiterID);
 
-		$einfuegen = $db->prepare("
+		$einfuegen = $conn->prepare("
 				INSERT braucht(projektID, skillID)
 				VALUES (?,?)
 				");
