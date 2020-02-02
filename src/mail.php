@@ -19,14 +19,13 @@ try {
     $stmt_mail->execute();
     
     while ($row = $stmt_mail->fetch()) {
-       echo $projektname=$row['projektname'];
-       echo $name=$row['name'];
-       echo $email=$row['email'];
-       echo $startzeit=$row['startzeit'];
+        $projektname=$row['projektname'];
+        $name=$row['name'];
+        $email=$row['email'];
+        $startzeit=$row['startzeit'];
         $cdate = new DateTime($startzeit);
         $today = new DateTime("now");
         $difference = $cdate ->diff($today);
-        echo "difference " . $difference->y . " years, " . $difference->m." months, ".$difference->d." days "; 
         $days = $difference->d;
         $months = $difference->d;
         $years = $difference->y;
@@ -40,7 +39,7 @@ try {
             $text = "Hallo" + $name + "Dein Projekt" + $projektname + "startet in 14 Tagen!";
              
             mail($email, $betreff, $text, $from);   
-            echo ("E-Mail wurde verschickt");
+
 
         }   
       } 
