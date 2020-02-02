@@ -23,7 +23,7 @@ session_start();
 
 
 
-$id_einlesen = $_SESSION['id'];
+$id_einlesen = $_SESSION['userid'];
 
 $dseinlesen = $conn->prepare("SELECT* FROM person where mitarbeiterID = ?");
 $dseinlesen->execute([$id_einlesen]);
@@ -40,25 +40,36 @@ while ($row = $dseinlesen->fetch()) {
 ?>
 
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<!-- navbar mit custom-link je nach Recht -->
+<?php
+    $rolle2 = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
+    $rolle2->execute();
+    $dbRolle = $rolle2->fetch()['rolle'];
+    switch($dbRolle){
+        case "Management": 
+            $link = "management.php";
+            break;
+        case "Vertrieb":
+            $link = "vertrieb.php";
+            break;
+        case "Mitarbeiter":
+            $link = "start.php";
+            break;
+    }    
+    ?>
 
-<div class="collapse navbar-collapse" id="navbarText">
-  <ul class="navbar-nav">
-    <li class="nav-item">
-      <a class="nav-link" href="benutzerverwaltungma.php">Benutzerverwaltung <span class="sr-only">(current)</span></a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="einzelprojekt.php">Projekt bearbeiten</a>
-    </li>
-  </ul>
 
-  <ul class="navbar-nav ml-auto">
-  </li>
-  <li class="nav-item ">
-      <a class="fas fa-user fa-2x" href="mitarbeiterverwaltung.php" ></a>
-  </li>
-  </ul>
-</div>
+<nav class="navbar navbar-default navbar-expand-sm">
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+                <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
+        </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+                <a class="btn btn-light custom-btn" href="logout.php">Logout</a>
+        </li>
+    </ul>
 </nav>
 
 
@@ -120,7 +131,6 @@ Rolle:<br>
 
     ?>
     <br><br>
-    <a href = "benutzerverwaltungma.php" class="btn btn-dark">Zurück zur Benutzerverwaltung</a></td>
     </form>
 <?php
 function sicherheit($inhalt='') {

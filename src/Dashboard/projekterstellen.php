@@ -4,9 +4,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
-<title>WI-Projekt</title>
+<title>Projekt erstellen</title>
 <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" type="text/css" href="css/projekterstellen.css">
 </head>
 
 
@@ -15,11 +16,11 @@
 include 'check_login.php';
 include 'database.php'; 
 
-    $rolle = $conn->prepare(sprintf("SELECT Rolle FROM users where id = %d", $_SESSION['userid']));
+    $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
     $rolle->execute();
-    $dbRolle = $rolle->fetch()['Rolle'];
+    $dbRolle = $rolle->fetch()['rolle'];
     switch($dbRolle){
-        case "Manager": 
+        case "Management": 
             $link = "management.php";
             break;
         case "Vertrieb":
@@ -48,25 +49,25 @@ include 'database.php';
 <body>
 <h3>Neues Projekt erstellen</h3>
 <form class = "form-horizontal" action="projekterstellen.php" method="post">
-    <label>projektname:  <br>
+    <label>Projektname:  <br>
         <input type="text" name="projektname" id="projektname">
     </label><br>
-    <label>kunde: <br>
+    <label>Kunde: <br>
         <input type="text" name="kunde" id="kunde">
     </label>	<br>
-    <label>budget: <br>
+    <label>Budget: <br>
         <input type="number" name="budget" id="budget" value=""> 
     </label><br>
-	<label>aufwand: <br>
+	<label>Aufwand: <br>
         <input type="number" name="aufwand" id="aufwand" value=""> 
     </label><br>
-	<label>dauer: <br>
+	<label>Dauer: <br>
         <input type="number" name="dauer" id="dauer" value=""> 
     </label><br>
-	 <label>wahrscheinlichkeit: <br>
+	 <label>Wahrscheinlichkeit: <br>
         <input type="number" name="wahrscheinlichkeit" id="wahrscheinlichkeit" value="">       
     </label><br>
-	 potenzial:<br>
+	 Potenzial:<br>
     <select name = "potenzial">
         <option value ="+">+</option>
         <option value ="++">++</option>
@@ -74,37 +75,32 @@ include 'database.php';
         value=""
     </select><br> 	
 	Mitarbeiter:<br>	
-  <?php 
-	$sql = "SELECT name FROM person WHERE rolle = Mitarbeiter ORDER by name";
-	foreach ($db->query($sql) as $row) {
-		echo "<input type=\"checkbox\">" .$row['name']. " ";
-	}
-    ?><br>
-	Skills:<br>	
-  <?php 
-	$sql = "SELECT skillname FROM skills ORDER by skillID";
-	foreach ($db->query($sql) as $row) {
-		echo "<input type=\"checkbox\">" .$row['skillname']. " ";
-	}
+    <?php 
+	$sql = "SELECT name FROM person";
+	foreach ($conn->query($sql) as $row) {
+		echo "<input type=\"checkbox\">" .$row['name']. "";
+    }
     ?>
-
-
-</br>
+    <br>
+	Skills:<br>	
+    <?php
+    $sql = "SELECT skillname FROM skills";
+	foreach ($conn->query($sql) as $row) {
+		echo "<input type=\"checkbox\">" .$row['skillname']. "";
+    }
+    ?>
+<br>
 
     <input type="submit" name="aktion" onclick="return confirm('Soll das Projekt erstellt werden?')" value="speichern" class="w3-btn w3-green">
     <input type="submit" name="back" value="Zurück" class="w3-btn w3-black" href = "managerdashboard.php">
 
 
 </form>
-
 </body>
 </html>
 
 <?php
 
-
-
- 
 SESSION_START();
 
 $_SESSION['check'] = "";
@@ -116,10 +112,6 @@ $_SESSION['checkchange'] = "";
 $_SESSION['checkaendern']= "";
 
 $_SESSION['geaendert'] = false;
-
-
-
-
 
    if(isset(§_Post['aktion'])){
         $projektname = $_POST['projektname'];
@@ -167,13 +159,13 @@ $_SESSION['geaendert'] = false;
        
         else {
             if ($anzahl_projektname > 0){
-                $_SESSION['check'] = "Email bereits vergeben";
-                header("Location: mitarbeiterverwaltungma.php");
+                $_SESSION['check'] = "Projektname bereits vergeben";
+                header("Location: projekterstellen.php");
             }
                     else{
                 
                         // speichern
-                        $einfuegen = $conn->prepare("INSERT INTO projekt(projetname, aufwand, wahrscheinlichkeit, kunde, budget, dauer, potenzial, erstellungsdatum) VALUES (?,?,?,?,?,?,?,time)");
+                        $einfuegen = $conn->prepare("INSERT INTO projekt(projetname, aufwand, wahrscheinlichkeit, kunde, budget, dauer, potenzial, erstellungsdatum VALUES (?,?,?,?,?,?,?,time)");
                         $einfuegen->bindParam(1, $projektname, PDO::PARAM_STR);
                         $einfuegen->bindParam(2, $aufwand, PDO::PARAM_INT);
                         $einfuegen->bindParam(3, $wahrscheinlichkeit, PDO::PARAM_INT);
@@ -183,17 +175,14 @@ $_SESSION['geaendert'] = false;
                         $einfuegen->bindParam(7, $potenzial, PDO::PARAM_STR);
                         $einfuegen->bindParam(8, $erstellungsdatum, PDO::PARAM_STR);
                 
-                        $einfuegen = $conn->prepare("INSERT INTO braucht) VALUES(?,?)");
-                        $einfuegen->bindParam(9, $projektID, PDO::PARAM_INT);
-                        $einfuegen->bindParam(10, $skillID, PDO::PARAM_INT);
-
-                        $einfuegen = $conn->prepare("INSERT INTO Arbeiten_an) VALUES(?,?)");
+                        $einfuegen = $conn->prepare("INSERT INTO braucht VALUES(?,?)");
                         $einfuegen->bindParam(1, $projektID, PDO::PARAM_INT);
-                        $einfuegen->bindParam(1, $mitarbeiterID, PDO::PARAM_INT);
+                        $einfuegen->bindParam(2, $skillID, PDO::PARAM_INT);
 
+                        $einfuegen = $conn->prepare("INSERT INTO Arbeiten_an VALUES(?,?)");
+                        $einfuegen->bindParam(1, $projektID, PDO::PARAM_INT);
+                        $einfuegen->bindParam(2, $mitarbeiterID, PDO::PARAM_INT);
   
-
-
 
                         if ($einfuegen->execute()) {
                         //header('Location: benutzerverwaltungma.php?aktion=feedbackgespeichert');
@@ -202,11 +191,5 @@ $_SESSION['geaendert'] = false;
                         //die();
                         }
                     }
-
                 }
-   
-
-
-
-
- 
+               

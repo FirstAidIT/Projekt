@@ -2,7 +2,7 @@
 include 'database.php';
 
 SESSION_START();
-$_SESSION['userid'] = $mitarbeiterID;
+ $mitarbeiterID = $_SESSION['userid'];
 
     
 

@@ -9,6 +9,7 @@
 <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/mitarbeiterdashboard.css">
 
 
 </head>
@@ -60,8 +61,8 @@ $sql = "SELECT projekt.projektname, projekt.kunde, projekt.dauer, zeitkonto.stun
 	    FROM projekt, zeitkonto, Arbeiten_an, person
         WHERE Arbeiten_an.mitarbeiterID = person.mitarbeiterID
         AND Arbeiten_an.projektID = projekt.projektID
-        AND projekt.ist_archiviert = '0'
-        AND projekt.startzeit <= NOW()";
+        AND projekt.ist_archiviert = '1'
+        AND projekt.startzeit <= now()";
 
 	echo '<table class="table">'; 
 	echo 	"<thead>";
@@ -70,16 +71,17 @@ $sql = "SELECT projekt.projektname, projekt.kunde, projekt.dauer, zeitkonto.stun
 	echo			"<th>Kunde</th>";
 	echo	  		"<th>Projektdauer</th>";		
 	echo	  		"<th>Gebuchte Stunden insgesamt</th>";
- //   echo	  		"<th>aktuelle Stunden</th>";
+    echo	  		"<th>aktuelle Stunden</th>";
 	echo		"</tr>";
 	echo	  "</thead>";
 
-	foreach ($db->query($sql) as $row) {
+	foreach ($conn->query($sql) as $row) {
 	echo "<tr>";
 	echo "<td>".$row['projektname'] . "</td>";
 	echo "<td>".$row['kunde'] . "</td>";
 	echo "<td>". $row['dauer'] . "</td>";
-	echo "<td>".$row['stunden_anzahl']. "</td>";
+    echo "<td>".$row['stunden_anzahl']. "</td>";
+    echo "<td>".$row['stunden_anzahl'/2]. "</td>";
 	echo "</tr>";}
 
     echo "</table>";

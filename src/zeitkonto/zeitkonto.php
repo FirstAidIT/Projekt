@@ -2,6 +2,9 @@
 <!DOCTYPE html>
 <html lang="de">
   <head>
+  <?php 
+    include 'check_login.php';
+  ?>
     <!-- Required Meta tags -->
      <meta charset = 'utf-8'>
      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
@@ -69,7 +72,6 @@
 </head>
 <body>
   <?php 
-    include 'check_login.php';
     include_once ('timescheduling.php') 
   ?>
 </body>

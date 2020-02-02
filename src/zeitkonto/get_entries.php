@@ -1,9 +1,10 @@
 <?php
 //include 'datenbank/db_connection.php'; 
+include 'check_login.php';
 include 'database.php';
 
 SESSION_START(); 
-$_SESSION['userid'] = $mitarbeiterID;
+$mitarbeiterID = $_SESSION['userid'];
 
 // SQL Abfrage für Monatsübersicht - Projektebene
 

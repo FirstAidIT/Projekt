@@ -1,6 +1,8 @@
 <?php
 include 'check_login.php';
 include 'database.php';
+
+
 ?>
 
 <?php
@@ -19,7 +21,8 @@ include 'database.php';
             break;
     }
     ?>
-
+	
+	
 <!DOCTYPE html> 
 <html>
 <head>
@@ -30,14 +33,11 @@ include 'database.php';
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="login.css">
+	<link rel="stylesheet" type="text/css" href="css/logfiles_modal.css">
 	<!-- Javascript -->
 	<script src="https://code.jquery.com/jquery-3.2.1.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-	<script src="functions.js"></script>
-	
 </head>
 			<nav class="navbar navbar-default navbar-expand-sm">
 				<ul class="navbar-nav mr-auto">
@@ -52,55 +52,89 @@ include 'database.php';
 				</ul>
 			</nav>
 <body> 
-	 <div class="container"><br> <br> <br>
-		<div class="row">
-			<div class="col d-flex justify-content-center">
-				 <div class="form-input">
-					<button type="button"  class="btn btn-dark custom-btn" data-toggle="modal" data-target=".bd-example-modal-lg1">Logfile Skillveränderung</button>
-						<!--beginn Modal 1 -->
-						<div class="modal fade bd-example-modal-lg1" id="skill" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-							<div class="modal-dialog modal-lg" role="document">
-								<div class="modal-content">
-									<div class="modal-header">
-										<h5 class="modal-title" id="modal-skill">Skillveränderungen</h5>
-												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-													<span aria-hidden="true">&times;</span>
-												</button>
-									</div>
-									<div class="modal-body-skill">			   
-									</div>
-									<div class="modal-footer">
-									</div>
-								</div>
-							</div>
-						</div>
+ <div class="container h-100">
+    <div class="row">
+        <div class="col-12"></div>
+    </div>
+   <div class="row">
+        <div class="col-12 pb-3">
+            <div class="card mt-3">
+                <div class="card-header text-light bg-success">Skillveränderungen</div>
+				 <div class="card-body">
+				 
+				 <?php
+						$sql = "SELECT person.name, skills.skillname, besitzt.auspraegung, besitzt.timestmp 
+						FROM besitzt, person, skills
+						WHERE person.mitarbeiterID = besitzt.mitarbeiterID 
+						AND besitzt.skillID = skills.skillID
+						AND besitzt.timestmp >= now() - INTERVAL 1 WEEK";
+
+						echo '<table class="table table-hover">'; 
+						echo 	"<thead>";
+						echo		"<tr>";
+						echo			"<th>Mitarbeitername</th>";
+						echo			"<th>Skill</th>";
+						echo	  		"<th>Ausprägung</th>";		
+						echo	  		"<th>Änderungszeitpunkt</th>";
+						echo		"</tr>";
+						echo	  "</thead>";
+
+						foreach ($conn->query($sql) as $row) {
+						echo "<tr>";
+						echo "<td>".$row['name'] . "</td>";
+						echo "<td>".$row['skillname'] . "</td>";
+						echo "<td>". $row['auspraegung'] . "</td>";
+						echo "<td>".$row['timestmp']. "</td>";
+						echo "</tr>";}
+
+						echo "</table>";
+					?> 		
 				</div>
 			</div>
 		</div>
-<br> <br> <br>
-		<div class="row">
-			<div class="col d-flex justify-content-center">
-				<div class="form-input">
-				<button type="button"  class="btn btn-dark custom-btn" data-toggle="modal" data-target=".bd-example-modal-lg2">Logfile Projektanläufe </button>
-					<div class="modal fade bd-example-modal-lg2" id="project" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-						<div class="modal-dialog modal-lg" role="document">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="modal-project">Neuaufgenommene Projekte</h5>
-										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-											<span aria-hidden="true">&times;</span>
-										</button>
-								</div>
-								<div class="modal-body-project">			   
-								</div>
-							<div class="modal-footer">
-							</div>
-							</div>
-						</div>
+	</div>
+			<br> <br> <br>
+
+
+	<div class="row">
+        <div class="col-12 pb-3">
+            <div class="card mt-3">
+                <div class="card-header text-light bg-success">Neu aufgenommene Dokumente</div>
+				 <div class="card-body">
+				 
+						<?php
+			
+									$sql = "SELECT erstellungsdatum, projektname, kunde, dauer, budget  
+									FROM projekt
+									WHERE erstellungsdatum >= now() - INTERVAL 4 WEEK";
+										
+									echo '<table class="table">'; 
+									echo 	"<thead>";
+									echo		"<tr>";
+									echo			"<th>Erstellungsdatum</th>";
+									echo	  		"<th>Projektname</th>";		
+									echo			"<th>Kunde</th>";
+									echo	  		"<th>Dauer</th>";
+									echo	  		"<th>Budget</th>";
+									echo		"</tr>";
+									echo	  "</thead>";
+										
+									foreach ($conn->query($sql) as $row) {
+									echo "<tr>";
+									echo "<td>".$row['erstellungsdatum'] . "</td>";
+									echo "<td>". $row['projektname'] . "</td>";
+									echo "<td>".$row['kunde'] . "</td>";
+									echo "<td>".$row['dauer']. "</td>";
+									echo "<td>".$row['budget']. "</td>";
+									echo "</tr>";}
+									
+									echo "</table>";
+						?> 		
+                
 					</div>
-				</div>  
-		   </div>
+			</div>
 		</div>
 	</div>
+</div>             
 </body>
 </html>

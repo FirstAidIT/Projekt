@@ -40,16 +40,15 @@ $modus_aenderung;
 $modus_mail = false;
 if (isset($_POST['aktion']) and $_POST['aktion']=='Löschen') {
     if (isset($_POST['mitarbeiterID'])) {
+        $modus_aendern = true;
         $mitarbeiterloeschen = $_POST['mitarbeiterID'];
-        if ($mitarbeiterloeschen > 0)
-        {
             $update = $conn->prepare("DELETE FROM person WHERE mitarbeiterID=?");
             $update->execute([$mitarbeiterloeschen]); 
                 header("Location: benutzerverwaltungma.php");
-                echo "<p>Datensatz wurde gelöscht</p>";
-            }
-        }       
-}
+            echo "<p>Datensatz wurde gelöscht</p>";
+        }
+}       
+
 
 
 //Benutzer deaktivieren
@@ -566,7 +565,6 @@ if ($modus_aendern == true)
     }
     ?>
     <br><br>
-    <a href = "benutzerverwaltungma.php" class="btn btn-dark">Zurück zur Benutzerverwaltung</a></td>
     </form>
     <?php
 }

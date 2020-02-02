@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="stylesheet" href="/main.css">
 <title>Einzelprojektansicht</title>
-<!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
@@ -21,7 +21,7 @@ include 'database.php';
 
 SESSION_START();
 
-
+$mitarbeiter = $_SESSION['userid'];
 
 
 // Rolle abfragen
@@ -56,13 +56,29 @@ while ($row_sk = $abfrage_sk ->fetch()){
 // Projekt löschen
 
 
+$abfrage = $conn->prepare("SELECT * from person where mitarbeiterID = $mitarbeiter");
+$abfrage -> execute();
+while ($row = $abfrage ->fetch()){
+    echo $row['rolle'];
+    echo $row['name'];
+
+    $rolle_eingeloggt = $row['rolle'];
+}
+
+
+
+
+
+//include 'check_login.php';
+//include 'database.php';
+
 if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt loeschen') {
     if (isset($_POST['projektID'])) {
         $projektID =$_POST['projektID'];
         if ($projektID > 0)
         {
             $loeschen = $conn->prepare("DELETE FROM projekt WHERE projektID=(?) LIMIT 1");
-            $loeschen->bindParam(1, $projektID, PDO::PARAM_STR);
+            $loeschen->execute([$projektID]);
             if ($loeschen->execute()) {
                 ?>
                 <meta http-equiv="refresh" content="5; URL=einzelprojekt.php"> 
@@ -73,38 +89,34 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt loeschen') {
     }
 }
 
-
-// Projekt starten
-
 $start = time();
 $datum = date("Y-m-d", $start);
 if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt starten') {
     if (isset($_POST['projektID'])) {
         $projektID =$_POST['projektID'];
-            $starten = $db->prepare("UPDATE projekt SET startzeit = '$datum' WHERE projektID=?");
-            $starten->bindParam(1, $projektID, PDO::PARAM_STR);
+            $starten = $conn->prepare("UPDATE projekt SET startzeit = '$datum' WHERE projektID=?");
+            $starten->execute([$projektID]);
             if ($starten->execute()) {
                 header ("Location: einzelprojekt.php");
+                echo "<p>Projekt gestartet</p>";
             }
     }       
 }
-
-//Projekt beenden
 
 $end = time();
 $datumend = date("Y-m-d", $end);
 if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt beenden') {
     if (isset($_POST['projektID'])) {
         $projektID =$_POST['projektID'];
-            $starten = $db->prepare("UPDATE projekt SET endzeit = '$datumend' WHERE projektID=?");
-            $starten->bindParam(1, $projektID, PDO::PARAM_STR);
+            $starten = $conn->prepare("UPDATE projekt SET endzeit = '$datumend' WHERE projektID=?");
+            $starten->execute([$projektID]);
             if ($starten->execute()) {
                 header ("Location: einzelprojekt.php");
+                echo "<p>Projekt gestartet</p>";
             }
     }       
 }
 
-//Projekt archivieren
 if (isset($_POST['aktion']) and $_POST['aktion']=='Archivieren') {
     $projektIDarchivieren = $_POST['projektID'];
     $update = $conn->prepare("UPDATE projekt SET ist_archiviert = 1 WHERE projektID=?");
@@ -207,38 +219,29 @@ if ($erg = $conn->query("SELECT * FROM projekt order by erstellungsdatum asc")) 
 	}	
 }
 if (!count($daten)) {
-    echo "<p>Es liegen keine Daten vor</p>";
+    echo "<p>Es liegen keine Daten vor :(</p>";
 } else {
 ?>
 
-<?php
-    $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
-    $rolle->execute();
-    $dbRolle = $rolle->fetch()['rolle'];
-    switch($dbRolle){
-        case "Management": 
-            $link = "management.php";
-            break;
-        case "Vertrieb":
-            $link = "vertrieb.php";
-            break;
-        case "Mitarbeiter":
-            $link = "start.php";
-            break;
-    }
-    ?>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
-<nav class="navbar navbar-default navbar-expand-sm">
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-                <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
-        </li>
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="benutzerverwaltungma.php">Benutzerverwaltung <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="einzelprojekt.php">Projekt bearbeiten</a>
+      </li>
     </ul>
+
     <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-                <a class="btn btn-light custom-btn" href="logout.php">Logout</a>
-        </li>
+    </li>
+    <li class="nav-item ">
+        <a class="fas fa-user fa-2x" href="mitarbeiterverwaltung.php" ></a>
+    </li>
     </ul>
+  </div>
 </nav>
 
 <br>
@@ -329,19 +332,18 @@ if ($modus_aendern == true){
     <div style = "width:400; margin:auto">
     <form class = "form-horizontal" action="einzelprojekt.php?aktion=bearbeiten&projektID=$projektID" method="post">
 
-        <br>
         <h3>Projekt  bearbeiten</h3>
         
         <label>
-            <input type="hidden" name="projektID" id="projektID" value="<?php echo $projektID; ?>">
+            <input type="hidden" name="projektID" class= "form-control" id="projektID" value="<?php echo $projektID; ?>">
         </label><br>
         <label>Projektame: <br>
-            <input type="text" name="projektname" class= "form-control" id="projektname" value="<?php echo $projektname; ?>">       
+            <input type="text" name="projektname" class= "form-control" id="projektname" value="<?php echo $projektname; ?>"<?php  if ($dh>=$ds){?> readonly <?php }?>>       
         </label><br>
 
-        <input type="hidden" name="projektnamealt" class= "form-control" id="projektnamealt" value="<?php echo $projektname; ?>">       
+        <input type="hidden" name="projektnamealt" id="projektnamealt" value="<?php echo $projektname; ?>">       
 
-        <label>Aufwand (Stunden/Woche):<br>
+        <label>Aufwand:<br>
             <input type="text" name="aufwand" class= "form-control" id="aufwand" value="<?php echo $aufwand; ?>">
         </label><br>
         <label>Erstellungsdatum: <br>
@@ -351,7 +353,7 @@ if ($modus_aendern == true){
             <input type="date" name="startdatum" class= "form-control" id="startdatum" value="<?php echo $startdatum; ?>">
         </label><br>
         <label>Wahrscheinlichkeit: <br>
-            <input type="text" name="wahrscheinlichkeit" class= "form-control" id="wahrscheinlichkeit" value="<?php echo $wahrscheinlichkeit; ?>">       
+            <input type="text" name="wahrscheinlichkeit" class= "form-control" id="wahrscheinlichkeit" value="<?php echo $wahrscheinlichkeit; ?>" <?php  if ($dh>=$ds){?> readonly <?php }?>>       
         </label><br>
         <label>Kunde: <br>
             <input type="text" name="kunde" class= "form-control" id="kunde" value="<?php echo $kunde; ?>" readonly>       
@@ -360,10 +362,10 @@ if ($modus_aendern == true){
             <input type="text" name="budget" class= "form-control" id="budget" value="<?php echo $budget; ?>">       
         </label><br>
         <label>Dauer: <br>
-            <input type="text" name="dauer" class= "form-control" id="dauer" value="<?php echo $dauer; ?>">       
+            <input type="text" name="dauer"  class= "form-control" id="dauer" value="<?php echo $dauer; ?>">       
         </label><br>
         <label>Enddatum: <br>
-            <input type="date" name="enddatum" class= "form-control" id="enddatum" value="<?php echo $enddatum; ?>">
+            <input type="date" class= "form-control" name="enddatum" id="enddatum" value="<?php echo $enddatum; ?>">
         </label><br>
         <label>Archivierung: <br>
             <input type="date" name="archivierungsdatum" class= "form-control" id="archivierungsdatum" value="<?php echo $archivierungsdatum; ?>">       
@@ -371,33 +373,28 @@ if ($modus_aendern == true){
         <label><br>
             <input type="hidden" name="ist_archiviert" id="ist_archiviert" value="<?php echo $ist_archiviert; ?>">       
         </label>
+        <?php  if ($dh<$ds){?>
         Potenzial:<br>
         <select name = "potenzial">
             <option value='<?php echo $potenzial?>' selected='selected'><?php echo $potenzial?></option>
             <option value ="+">+</option>
             <option value ="++">++</option>
             <option value ="+++">+++</option>
-        </select>
-        <?php
-        /*
-        $skillsabfrage = $conn->prepare("SELECT * from braucht WHERE projektID = '$bearbeitung_projektid'");
-        $skillsabfrage ->execute();
-        $while ($saf = $skillsabfrage->fetch()){
-            $skills = $row['skillID'];
-        }
-        */
-        ?>
-<br> <br>
+        </select><br>
+        <?php }?>
         <br>
         <!--<a href = "?aktion=loeschen&projektID=<?php echo $inhalt->projektID; ?>" onclick="return confirm('Soll das Projekt wirklich gelöscht werden?')"  class="btn btn-danger">Löschen</a></td>-->
         <input type="submit"  name="aktion" value="Übernehmen" class="btn btn-success">
-        <input type ="submit" onclick="return confirm('Soll das Projekt wirklich gelöscht werden?')" name ="aktion" value ="Projekt loeschen" class="btn btn-danger">        
-        <?php 
+        <input type ="submit" onclick="return confirm('Soll das Projekt wirklich gelöscht werden?')" name ="aktion" value ="Projekt loeschen" class="btn btn-danger">
+        <?php
+        //echo $ds;
+        //echo '<br>';
+        //echo $dh;
         if ($dh < $ds){?>
         <input type ="submit" name ="aktion" value ="Projekt starten" class="btn btn-primary">
         <?php
         }
-        if ($dh < $de){?>
+        if ($dh < $de && $ds <= $dh){?>
             <input type ="submit" name ="aktion" value ="Projekt beenden" class="btn btn-primary">
             <?php
             }
