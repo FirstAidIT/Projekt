@@ -59,7 +59,7 @@ while ($row_sk = $abfrage_sk ->fetch()){
 mitarbeiter = $_SESSION['mitarbeiterid'];
 // Rolle abfragen
 
-$abfrage = $db->prepare("SELECT * from person where mitarbeiterID = $mitarbeiter");
+$abfrage = $conn->prepare("SELECT * from person where mitarbeiterID = $mitarbeiter");
 $abfrage -> execute();
 while ($row = $abfrage ->fetch()){
     echo $row['rolle'];
@@ -77,7 +77,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt loeschen') {
         $projektID =$_POST['projektID'];
         if ($projektID > 0)
         {
-            $loeschen = $db->prepare("DELETE FROM projekt WHERE projektID=(?) LIMIT 1");
+            $loeschen = $conn->prepare("DELETE FROM projekt WHERE projektID=(?) LIMIT 1");
             $loeschen->bindParam(1, $projektID, PDO::PARAM_STR);
             if ($loeschen->execute()) {
                 ?>
@@ -94,7 +94,7 @@ $datum = date("Y-m-d", $start);
 if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt starten') {
     if (isset($_POST['projektID'])) {
         $projektID =$_POST['projektID'];
-            $starten = $db->prepare("UPDATE projekt SET startzeit = '$datum' WHERE projektID=?");
+            $starten = $conn->prepare("UPDATE projekt SET startzeit = '$datum' WHERE projektID=?");
             $starten->bindParam(1, $projektID, PDO::PARAM_STR);
             if ($starten->execute()) {
                 header ("Location: einzelprojekt.php");
@@ -108,7 +108,7 @@ $datumend = date("Y-m-d", $end);
 if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt beenden') {
     if (isset($_POST['projektID'])) {
         $projektID =$_POST['projektID'];
-            $starten = $db->prepare("UPDATE projekt SET endzeit = '$datumend' WHERE projektID=?");
+            $starten = $conn->prepare("UPDATE projekt SET endzeit = '$datumend' WHERE projektID=?");
             $starten->bindParam(1, $projektID, PDO::PARAM_STR);
             if ($starten->execute()) {
                 header ("Location: einzelprojekt.php");
