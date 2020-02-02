@@ -212,12 +212,12 @@ function PassStrength($Password) {
     
 
     <h3>Eigene Informationen bearbeiten</h3>
-    <?php echo $rolle; ?>
+    
     <label>
-        <input type="text" name="mitarbeiterID" id="mitarbeiterID" value="<?php echo $mitarbeiterID;?>">
+        <input type="hidden" name="mitarbeiterID" id="mitarbeiterID" value="<?php echo $mitarbeiterID;?>">
     </label> <br>
     <label>
-        <input type="text" name="email" id="email" value="<?php echo $email;?>">
+        <input type="hidden" name="email" id="email" value="<?php echo $email;?>">
     </label><br>
     <label>Name:<br>
         <input type="text" name="name" class= "form-control" id="name" value="<?php echo $name; ?>">        
@@ -229,7 +229,7 @@ function PassStrength($Password) {
         <input type="password" name="passwortneu2" class= "form-control" id="passwortneu2" value="">    
     </label><br>
     <label>Rolle:<br>
-    <input type="text" class="form-control" name ="rolle" value="<?php echo $rolle; ?>"><br>
+    <input type="text" class="form-control" name ="rolle" value="<?php echo $rolle; ?>" readonly><br>
     </label>
     <?php $check = "";?>
     <?php   if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen'){ 
