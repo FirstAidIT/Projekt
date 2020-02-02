@@ -38,14 +38,31 @@ $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = 
             break;
     }
 
-$daten = array();
-if ($erg = $conn->query("SELECT * FROM projekt, skills, person, Arbeiten_an, braucht")) {
+$datenprojekt = array();
+if ($erg = $conn->query("SELECT * FROM projekt")) {
 	if ($erg->rowCount()) {
 		while($datensatz = $erg->fetchObject()) {
-			$daten[] = $datensatz;
+			$datenporjekt[] = $datensatz;
 		}
 	}	
 }
+$datenperson = array();
+if ($erg = $conn->query("SELECT * FROM person")) {
+	if ($erg->rowCount()) {
+		while($datensatz = $erg->fetchObject()) {
+			$datenperson[] = $datensatz;
+		}
+	}	
+}
+$datenskills = array();
+if ($erg = $conn->query("SELECT * FROM skills")) {
+	if ($erg->rowCount()) {
+		while($datensatz = $erg->fetchObject()) {
+			$datenskills[] = $datensatz;
+		}
+	}	
+}
+
 if (!count($daten)) {
     echo "<p>Es liegen keine Daten vor</p>";
 } 
@@ -69,7 +86,7 @@ if (!count($daten)) {
         </thead>
         <tbody>
             <?php
-            foreach ($daten as $inhalt) {
+            foreach ($datenprojekt as $inhalt) {
             ?>			
                 <tr>
                     <td><?php echo sicherheit($inhalt->projektname); ?> <br> <?php echo sicherheit($inhalt->potenzial); ?></td>
