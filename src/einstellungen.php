@@ -51,7 +51,7 @@ include 'database.php';
             <div class="row">
                 <div class="col d-flex justify-content-center">
                     <div class="btn-group-vertical">
-                        <a class="btn btn-dark custom-btn" href="">Passwort ändern</a>
+                        <a class="btn btn-dark custom-btn" href="mitarbeiterverwaltung.php">Passwort ändern</a>
                         <a class="btn btn-dark custom-btn" href="skillmanagement.php">Skills ändern</a>
                     </div>
                 </div>
