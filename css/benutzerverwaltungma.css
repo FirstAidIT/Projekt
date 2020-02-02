@@ -1,3 +1,13 @@
+.btn-dark.custom-btn{
+    background-color: #8DC640;
+    border-color: #fff;
+    color: #000;
+}
+
+.btn-dark.custom-btn:hover{
+    background-color: #7CB53F;
+}
+
 .btn-light.custom-btn{
     background-color: #8DC640;
     border-color: #e9ecef;
