@@ -4,13 +4,28 @@
 <head>
 <meta charset="utf-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/managerdashboard.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
 
-
+<nav class="navbar navbar-default navbar-expand-sm">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                            <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
+                    </li>
+                    <li class="nav-item">
+            <a class="nav-link" href="zeitkontostart.php">Gesamtstundenübersicht</a> 
+                </li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                            <a class="btn btn-light custom-btn" href="logout.php">Logout</a>
+                    </li>
+                </ul>
+            </nav>
 
 
 <?php
@@ -35,6 +50,10 @@ $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = 
             $link = "start.php";
             break;
     }
+
+
+    
+   
 
 $datenprojekt = array();
 if ($erg = $conn->query("SELECT * FROM projekt")) {
@@ -61,9 +80,7 @@ if ($erg = $conn->query("SELECT * FROM skills")) {
 	}	
 }
 
-if (!count($daten)) {
-    echo "<p>Es liegen keine Daten vor</p>";
-} 
+
 ?>
 
 <br>
@@ -84,9 +101,7 @@ if (!count($daten)) {
         </thead>
         <tbody>
             <?php
-            foreach ($datenprojekt as $datenperson) {
-                foreach ($datenperson as $datenskills) {
-                    foreach ($datenskills as $inhalt){          
+            foreach ($datenprojekt as $datenperson) {      
             ?>			
                 <tr>
                     <td><?php echo sicherheit($inhalt->projektname); ?> <br> <?php echo sicherheit($inhalt->potenzial); ?></td>
@@ -102,8 +117,7 @@ if (!count($daten)) {
                 </tr>
                 <?php
             }
-        }
-    }
+   
 
 
 function sicherheit($inhalt='') {
