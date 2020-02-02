@@ -1,5 +1,5 @@
 
-(document).ready(() => {
+$(document).ready(() => {
   let isStarted = false;
   let isPaused = false;
   let isResumed = false;
