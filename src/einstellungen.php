@@ -1,4 +1,7 @@
-<?php include 'check_login.php'?>
+<?php 
+include 'check_login.php';
+include 'database.php';
+?>
 
 <!DOCTYPE html> 
 <html> 
