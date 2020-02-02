@@ -565,7 +565,6 @@ if ($modus_aendern == true)
     }
     ?>
     <br><br>
-    <a href = "benutzerverwaltungma.php" class="btn btn-dark">Zurück zur Benutzerverwaltung</a></td>
     </form>
     <?php
 }
