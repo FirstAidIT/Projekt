@@ -12,12 +12,15 @@
 <body>
 <?php
 
+
+include 'check_login.php';
+include 'database.php';
+
 session_start();
 
 //require 'inc/db.php';
 
-include 'check_login.php';
-include 'database.php';
+
 
 
 $id_einlesen = $_SESSION['id'];
@@ -36,6 +39,23 @@ while ($row = $dseinlesen->fetch()) {
 };
 ?>
 
+
+<?php
+    $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
+    $rolle->execute();
+    $dbRolle = $rolle->fetch()['rolle'];
+    switch($dbRolle){
+        case "Management": 
+            $link = "management.php";
+            break;
+        case "Vertrieb":
+            $link = "vertrieb.php";
+            break;
+        case "Mitarbeiter":
+            $link = "start.php";
+            break;
+    }
+    ?>
 
 <nav class="navbar navbar-default navbar-expand-sm">
         <ul class="navbar-nav mr-auto">
