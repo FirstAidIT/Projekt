@@ -40,6 +40,7 @@ $modus_aenderung;
 $modus_mail = false;
 if (isset($_POST['aktion']) and $_POST['aktion']=='Löschen') {
     if (isset($_POST['mitarbeiterID'])) {
+        $modus_aendern = true;
         $mitarbeiterloeschen = $_POST['mitarbeiterID'];
             $update = $conn->prepare("DELETE FROM person WHERE mitarbeiterID=?");
             $update->execute([$mitarbeiterloeschen]); 
