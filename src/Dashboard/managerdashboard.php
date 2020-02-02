@@ -101,7 +101,7 @@ if ($erg = $conn->query("SELECT * FROM skills")) {
         </thead>
         <tbody>
             <?php
-            foreach ($datenprojekt as $datenperson) {      
+            foreach ($datenprojekt as $inhalt) {      
             ?>			
                 <tr>
                     <td><?php echo sicherheit($inhalt->projektname); ?> <br> <?php echo sicherheit($inhalt->potenzial); ?></td>
