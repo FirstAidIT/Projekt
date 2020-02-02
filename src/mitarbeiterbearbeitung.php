@@ -23,7 +23,7 @@ session_start();
 
 
 
-$id_einlesen = $_SESSION['id'];
+$id_einlesen = $_POST['mitarbeiterID'];
 
 $dseinlesen = $conn->prepare("SELECT* FROM person where mitarbeiterID = ?");
 $dseinlesen->execute([$id_einlesen]);
@@ -38,6 +38,25 @@ while ($row = $dseinlesen->fetch()) {
 
 };
 ?>
+
+
+<!-- navbar mit custom-link je nach Recht -->
+<?php
+    $rolle2 = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
+    $rolle2->execute();
+    $dbRolle = $rolle2->fetch()['rolle'];
+    switch($dbRolle){
+        case "Management": 
+            $link = "management.php";
+            break;
+        case "Vertrieb":
+            $link = "vertrieb.php";
+            break;
+        case "Mitarbeiter":
+            $link = "start.php";
+            break;
+    }    
+    ?>
 
 
 <nav class="navbar navbar-default navbar-expand-sm">
@@ -112,7 +131,6 @@ Rolle:<br>
 
     ?>
     <br><br>
-    <a href = "benutzerverwaltungma.php" class="btn btn-dark">Zurück zur Benutzerverwaltung</a></td>
     </form>
 <?php
 function sicherheit($inhalt='') {
