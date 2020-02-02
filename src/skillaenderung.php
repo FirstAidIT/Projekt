@@ -7,7 +7,8 @@ include 'database.php';
 	$sql = "SELECT person.name, skills.skillname, besitzt.auspraegung, besitzt.timestmp 
 	FROM besitzt, person, skills
 	WHERE person.mitarbeiterID = besitzt.mitarbeiterID 
-	AND besitzt.skillID = skills.skillID";
+	AND besitzt.skillID = skills.skillID
+	AND besitzt.timestmp >= now() - INTERVAL 1 WEEK";
 
 	echo '<table class="table">'; 
 	echo 	"<thead>";
@@ -21,7 +22,6 @@ include 'database.php';
 
 	foreach ($conn->query($sql) as $row) {
 	echo "<tr>";
-	echo $row;
 	echo "<td>".$row['name'] . "</td>";
 	echo "<td>".$row['skillname'] . "</td>";
 	echo "<td>". $row['auspraegung'] . "</td>";
