@@ -77,10 +77,10 @@ $sql = "SELECT projekt.projektname, projekt.kunde, projekt.dauer, zeitkonto.stun
 	echo	  "</thead>";
     
 	foreach ($db->query($sql) as $row) {
-        $startzeit=$row['startzeit']; 
+        /*$startzeit=$row['startzeit']; 
         $dh = strtotime($startzeit);
     if ($dh <= NOW()) {
-      $color = "0000FF";}
+      $color = "0000FF";}*/
 	echo "<tr>";
 	echo "<td style='background: #" . $color . "'>".$row['projektname'] . "</td>";
 	echo "<td style='background: #" . $color . "'>".$row['kunde'] . "</td>";
