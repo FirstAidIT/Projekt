@@ -76,9 +76,9 @@ include 'database.php';
     </select><br> 	
 	Mitarbeiter:<br>	
     <?php 
-	$sql = "SELECT kunde FROM person";
+	$sql = "SELECT name FROM person";
 	foreach ($conn->query($sql) as $row) {
-		echo "<input type=\"checkbox\">" .$row['kunde']. "";
+		echo "<input type=\"checkbox\">" .$row['name']. "";
     }
     ?>
     <br>
