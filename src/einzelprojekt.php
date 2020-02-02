@@ -33,17 +33,26 @@ while ($row = $abfrage ->fetch()){
     $rolle_eingeloggt = $row['rolle'];
 }
 
+//Beteiligte Mitarbeiter abfragen
+
 $abfrage_ma = $conn->prepare("SELECT mitarbeiterID from Arbeiten_an where projektID = $bearbeitung_projektid");
 $abfrage_ma -> execute();
 while ($row_ma = $abfrage_ma ->fetch()){
     $ma_beteiligt = $row_ma['rolle'];
     echo $ma_beteiligt;
-}*/
+}
 
 //Skills abfragen
 
+$abfrage_sk = $conn->prepare("SELECT skillID from braucht where projektID = $bearbeitung_projektid");
+$abfrage_sk -> execute();
+while ($row_sk = $abfrage_sk ->fetch()){
+    $sk_projekt = $row_sk['skillID'];
+    echo $sk_projekt;
+}*/
 
 // Projekt löschen
+
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt loeschen') {
     if (isset($_POST['projektID'])) {
