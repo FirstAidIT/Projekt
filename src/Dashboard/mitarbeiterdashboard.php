@@ -14,6 +14,23 @@
 </head>
 <body>
 
+
+<?php
+    $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
+    $rolle->execute();
+    $dbRolle = $rolle->fetch()['rolle'];
+    switch($dbRolle){
+        case "Management": 
+            $link = "management.php";
+            break;
+        case "Vertrieb":
+            $link = "vertrieb.php";
+            break;
+        case "Mitarbeiter":
+            $link = "start.php";
+            break;
+    }
+    ?>
 <nav class="navbar navbar-default navbar-expand-sm">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
@@ -41,9 +58,9 @@ include 'database.php';
 
 
 $sql = "SELECT projekt.projektname, projekt.kunde, projekt.dauer, zeitkonto.stunden_anzahl
-	      FROM projekt, zeitkonto, Arbeitet_an, person
+	    FROM projekt, zeitkonto, Arbeiten_an, person
         WHERE Arbeiten_an.mitarbeiterID = person.mitarbeiterID
-        AND Arbeitet_an.projektID = projekt.projektID
+        AND Arbeiten_an.projektID = projekt.projektID
         AND projekt.ist_archiviert = '0'
         AND projekt.startzeit <= NOW()";
 

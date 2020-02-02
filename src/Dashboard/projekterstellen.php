@@ -41,27 +41,6 @@
             </ul>
         </nav>
 
-
-
-<body><nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-
-  <div class="collapse navbar-collapse" id="navbarText">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="managmement.php">Projekterstellung <span class="sr-only">(current)</span></a>
-      </li>
-	 
-    </ul>
-    <ul class="navbar-nav ml-auto">
-    </li>
-    <li class="nav-item ">
-        <a class="fas fa-user fa-2x" href="projekterstellen.php" ></a>
-    </li>
-    </ul>
-  </div>
-</nav>
-</body>
-
 <body>
 <h3>Neues Projekt erstellen</h3>
 <form class = "form-horizontal" action="projekterstellen.php" method="post">
