@@ -23,7 +23,7 @@ session_start();
 
 
 
-$id_einlesen = $_POST['mitarbeiterID'];
+$id_einlesen = $_SESSION['id'];
 
 $dseinlesen = $conn->prepare("SELECT* FROM person where mitarbeiterID = ?");
 $dseinlesen->execute([$id_einlesen]);
