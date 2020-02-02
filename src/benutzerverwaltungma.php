@@ -45,14 +45,14 @@ $modus_mail = false;
 if (isset($_POST['aktion']) and $_POST['aktion']=='Löschen') {
     if (isset($_POST['mitarbeiterID'])) {
         $mitarbeiterloeschen = $_POST['mitarbeiterID'];
-        if ($mitarbeiterloeschen > 0)
-        {
+        //if ($mitarbeiterloeschen > 0)
+        
             $update = $conn->prepare("DELETE FROM person WHERE mitarbeiterID=?");
             $update->execute([$mitarbeiterloeschen]); 
                 header("Location: benutzerverwaltungma.php");
                 echo "<p>Datensatz wurde gelöscht</p>";
-            }
-        }       
+            
+    }       
 }
 
 
