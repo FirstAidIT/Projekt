@@ -161,18 +161,20 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
                 VALUES (?, ?, ?, ? , ?, ?, ?, NOW())
                 ");
         $einfuegen->bind_param('ssiiiis', $projektname, $kunde, $budget, $dauer, $aufwand, $wahrscheinlichkeit, $potenzial);
-		
-		$einfuegen = $conn->prepare("
-				INSERT arbeiten_an(projektID, mitarbeiterID)
-				VALUES (?,?)
-				");
-		$einfuegen->bind_param('ii', $projektID, $mitarbeiterID);
+
+
 
 		$einfuegen = $conn->prepare("
-				INSERT braucht(projektID, skillID)
-				VALUES (?,?)
+				INSERT INTO Arbeiten_an(projektID, mitarbeiterID)
+				VALUES ('$projektID', '$mitarbeiterID')
 				");
-		$einfuegen->bind_param('ii', $projektID, $skillID);
+
+     
+		$einfuegen = $conn->prepare("
+				INSERT INTO braucht(projektID, skillID)
+				VALUES ('$projektID','$mitarbeiterID')
+				");
+
 		
 		
         if ($einfuegen->execute()) {
