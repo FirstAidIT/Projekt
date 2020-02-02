@@ -4,6 +4,8 @@ include 'get_entries.php';
 include 'check_login.php';
 include 'database.php';
 
+SESSION_START();
+
 $rolle = $conn->prepare(sprintf("SELECT rolle 
 FROM person 
 where mitarbeiterID = %d", $_SESSION['userid'])); 

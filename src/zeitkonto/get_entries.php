@@ -3,7 +3,8 @@
 include 'check_login.php';
 include 'database.php';
 
- $_SESSION['userid'] = $mitarbeiterID;
+SESSION_START(); 
+$_SESSION['userid'] = $mitarbeiterID;
 
 // SQL Abfrage für Monatsübersicht - Projektebene
 
