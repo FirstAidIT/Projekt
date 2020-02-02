@@ -212,7 +212,7 @@ function PassStrength($Password) {
     
 
     <h3>Eigene Informationen bearbeiten</h3>
-    
+    <?php echo $rolle; ?>
     <label>
         <input type="text" name="mitarbeiterID" id="mitarbeiterID" value="<?php echo $mitarbeiterID;?>">
     </label> <br>
