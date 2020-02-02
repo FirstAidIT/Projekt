@@ -84,8 +84,8 @@ if (!count($daten)) {
         </thead>
         <tbody>
             <?php
-            foreach ($datenprojekt as $inhalt) {
-                foreach ($datenperson as $inhalt) {
+            foreach ($datenprojekt as $datenperson) {
+                foreach ($datenperson as $datenskills) {
                     foreach ($datenskills as $inhalt){          
             ?>			
                 <tr>
@@ -93,10 +93,10 @@ if (!count($daten)) {
                     <td><?php echo sicherheit($inhalt->kunde); ?></td>
                     <td><?php echo sicherheit($inhalt->dauer); ?></td>
                     <td><?php echo sicherheit($inhalt->budget); ?></td>
+                    <td><?php echo sicherheit($inhalt->aufwand); ?></td>
+                    <td><?php echo sicherheit($inhalt->budget); ?></td>
                     <td><?php echo sicherheit($inhalt->skillname); ?></td>
                     <td><?php echo sicherheit($inhalt->mitarbeiter); ?></td>
-                    <td><?php echo sicherheit($inhalt->budget); ?></td>
-                    <td><?php echo sicherheit($inhalt->dauer); ?></td>
                     <?php if ($inhalt->ist_archiviert ==false){?><td><?php echo "laufend"; ?></td><?php }?>
                     <td><a href = "?aktion=bearbeiten&projektID=<?php echo $inhalt->projektID; ?>" class="btn btn-secondary">Bearbeiten</a></td>
                 </tr>
