@@ -1,5 +1,4 @@
 <?php
-//include './datenbank/db_connection.php'; 
 include 'check_login.php';
 include 'database.php';
 
