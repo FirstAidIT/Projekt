@@ -3,11 +3,6 @@
 include 'database.php';
 
 
-
-
-
-
-
 $sql_mail = "SELECT projekt.projektname, person.name, person.email, projekt.startzeit
 FROM projekt, person, Arbeiten_an
 WHERE Arbeiten_an.mitarbeiterID = person.mitarbeiterID
