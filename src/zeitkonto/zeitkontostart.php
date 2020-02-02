@@ -5,7 +5,7 @@
     <?php 
     include 'check_login.php';
     include 'database.php';
-    include_once('timescheduling.php');
+    include 'timescheduling.php';
     ?>
     <!-- Required Meta tags -->
      <meta charset = 'utf-8'>
