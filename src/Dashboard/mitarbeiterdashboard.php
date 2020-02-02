@@ -40,7 +40,7 @@ include 'database.php';
                         <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
                 </li>
                 <li class="nav-item">
-        <a class="nav-link" href="zeitkontostart.php">Gesamtstundenübersicht</a> 
+        <a class="nav-link" href="zeitkonto.php">Gesamtstundenübersicht</a> 
             </li>
             </ul>
             <ul class="navbar-nav ml-auto">
@@ -61,6 +61,7 @@ $sql = "SELECT projekt.projektname, projekt.kunde, projekt.dauer, zeitkonto.stun
 	    FROM projekt, zeitkonto, Arbeiten_an, person
         WHERE Arbeiten_an.mitarbeiterID = person.mitarbeiterID
         AND Arbeiten_an.projektID = projekt.projektID
+        AND person.mitarbeiterID = zeitkonto.mitarbeiterID
         AND projekt.ist_archiviert = '1'
         AND projekt.startzeit <= now()";
 
@@ -71,8 +72,7 @@ $sql = "SELECT projekt.projektname, projekt.kunde, projekt.dauer, zeitkonto.stun
 	echo			"<th>Kunde</th>";
 	echo	  		"<th>Projektdauer</th>";		
 	echo	  		"<th>Gebuchte Stunden insgesamt</th>";
-    echo	  		"<th>aktuelle Stunden</th>";
-	echo		"</tr>";
+   	echo		"</tr>";
 	echo	  "</thead>";
 
 	foreach ($conn->query($sql) as $row) {
@@ -81,7 +81,6 @@ $sql = "SELECT projekt.projektname, projekt.kunde, projekt.dauer, zeitkonto.stun
 	echo "<td>".$row['kunde'] . "</td>";
 	echo "<td>". $row['dauer'] . "</td>";
     echo "<td>".$row['stunden_anzahl']. "</td>";
-    echo "<td>".$row['stunden_anzahl'/2]. "</td>";
 	echo "</tr>";}
 
     echo "</table>";
