@@ -60,8 +60,8 @@ $sql = "SELECT projekt.projektname, projekt.kunde, projekt.dauer, zeitkonto.stun
         WHERE Arbeiten_an.mitarbeiterID = person.mitarbeiterID
         AND Arbeiten_an.projektID = projekt.projektID
         AND projekt.ist_archiviert is null";
-echo $sql;
-/*
+
+
 	echo '<table class="table">'; 
 	echo 	"<thead>";
 	echo		"<tr>";
@@ -75,9 +75,11 @@ echo $sql;
   echo	  		"<th>Projektansicht</th>";
 	echo		"</tr>";
 	echo	  "</thead>";
-
+    
 	foreach ($db->query($sql) as $row) {
-    if ($startzeit <= NOW()) {
+        $startzeit=$row['startzeit']; 
+        $dh = strtotime($startzeit);
+    if ($dh <= NOW()) {
       $color = "0000FF";}
 	echo "<tr>";
 	echo "<td style='background: #" . $color . "'>".$row['projektname'] . "</td>";
@@ -90,5 +92,5 @@ echo $sql;
   echo "<td><a href='einzelprojekt.php' &projektID >Bearbeiten</a></td>";
 	echo "</tr>";}
 
-    echo "</table>";*/
+    echo "</table>";
 ?>
