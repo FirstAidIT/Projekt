@@ -3,13 +3,12 @@
 include 'check_login.php';
 include 'database.php';
 
-echo time();
 
 	$sql = "SELECT person.name, skills.skillname, besitzt.auspraegung, besitzt.timestmp 
 	FROM besitzt, person, skills
 	WHERE person.mitarbeiterID = besitzt.mitarbeiterID 
 	AND besitzt.skillID = skills.skillID
-	AND besitzt.timestmp >= time() - INTERVAL 1 WEEK";
+	AND besitzt.timestmp >= time() - (7 * 24 * 60 * 60);
 
 	echo '<table class="table">'; 
 	echo 	"<thead>";
