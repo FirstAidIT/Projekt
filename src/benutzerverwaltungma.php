@@ -12,10 +12,6 @@
 </head>
 <body>
 <?php
-
-include 'check_login.php';
-include 'database.php';
-
 SESSION_START();
 
 $_SESSION['check'] = "";
@@ -29,10 +25,11 @@ $_SESSION['checkaendern']= "";
 $_SESSION['geaendert'] = false;
 
 
-//require 'inc/db.php';
+require 'inc/db.php';
 
 
-
+//include 'check_login.php';
+//include 'database.php';
 
 
 
@@ -46,7 +43,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Löschen') {
         $mitarbeiterloeschen = $_POST['mitarbeiterID'];
         if ($mitarbeiterloeschen > 0)
         {
-            $update = $db->prepare("DELETE FROM person WHERE mitarbeiterID=?");
+            $update = $conn->prepare("DELETE FROM person WHERE mitarbeiterID=?");
             $update->execute([$mitarbeiterloeschen]); 
                 header("Location: benutzerverwaltungma.php");
                 echo "<p>Datensatz wurde gelöscht</p>";
@@ -61,7 +58,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Benutzer deaktivieren') {
 
     $mitarbeiterdeaktivieren = $_POST['mitarbeiterID'];
 
-    $update = $db->prepare("UPDATE person SET active = 0 WHERE mitarbeiterID=?");
+    $update = $conn->prepare("UPDATE person SET active = 0 WHERE mitarbeiterID=?");
     $update->execute([$mitarbeiterdeaktivieren]); 
     header("Location: mitarbeiterbearbeitung.php");
 }
@@ -72,7 +69,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Benutzer reaktivieren') {
 
     $mitarbeiterreaktivieren = $_POST['mitarbeiterID'];
 
-    $update = $db->prepare("UPDATE person SET active = 1 WHERE mitarbeiterID=?");
+    $update = $conn->prepare("UPDATE person SET active = 1 WHERE mitarbeiterID=?");
     $update->execute([$mitarbeiterreaktivieren]);
     header("Location: mitarbeiterbearbeitung.php");
  
@@ -111,7 +108,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
     }
 
 
-    $statement = $db->prepare("SELECT* FROM person WHERE email = '$upd_email'");
+    $statement = $conn->prepare("SELECT* FROM person WHERE email = '$upd_email'");
     $statement->execute(array('Max')); 
     $anzahl_user = $statement->rowCount();
 
@@ -137,7 +134,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
     if ($upd_email != '' or $upd_passwort != '' or $upd_name != '' or $upd_rolle != '')
     {
         // speichern
-        $update = $db->prepare("UPDATE person SET email =?, passwort=?, name=?, rolle=? WHERE mitarbeiterID=?");
+        $update = $conn->prepare("UPDATE person SET email =?, passwort=?, name=?, rolle=? WHERE mitarbeiterID=?");
         $update->execute([$upd_email, $hashed_password, $upd_name, $upd_rolle, $upd_id]);
         if ($update->execute()) {
             $_SESSION['geaendert'] = true;
@@ -182,7 +179,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
     $hashed_password = password_hash($passwort, PASSWORD_DEFAULT);
     
 
-    $statement = $db->prepare("SELECT* FROM person WHERE email = '$email'");
+    $statement = $conn->prepare("SELECT* FROM person WHERE email = '$email'");
     $statement->execute(array('Max')); 
     $anzahl_user = $statement->rowCount();
 
@@ -219,7 +216,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='speichern') {
                     else{
                 
                         // speichern
-                        $einfuegen = $db->prepare("INSERT INTO person(email, passwort, name, rolle) VALUES (?,?,?,?)");
+                        $einfuegen = $conn->prepare("INSERT INTO person(email, passwort, name, rolle) VALUES (?,?,?,?)");
                         $einfuegen->bindParam(1, $email, PDO::PARAM_STR);
                         $einfuegen->bindParam(2, $hashed_password, PDO::PARAM_STR);
                         $einfuegen->bindParam(3, $name, PDO::PARAM_STR);
@@ -254,7 +251,7 @@ if ($modus_aendern != true)
 {
 
 $daten = array();
-if ($erg = $db->query("SELECT * FROM person")) {
+if ($erg = $conn->query("SELECT * FROM person")) {
 	if ($erg->rowCount()) {
 		while($datensatz = $erg->fetchObject()) {
 			$daten[] = $datensatz;
@@ -266,35 +263,25 @@ if (!count($daten)) {
 } else {
 ?>
 
-<?php/*
-    $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
-    $rolle->execute();
-    $dbRolle = $rolle->fetch()['rolle'];
-    switch($dbRolle){
-        case "Management": 
-            $link = "management.php";
-            break;
-        case "Vertrieb":
-            $link = "vertrieb.php";
-            break;
-        case "Mitarbeiter":
-            $link = "start.php";
-            break;
-    }
-    */?>
-<!--<nav class="navbar navbar-default navbar-expand-sm">
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-                <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
-        </li>
-    </ul>
-    <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-                <a class="btn btn-light custom-btn" href="logout.php">Logout</a>
-        </li>
-    </ul>
-</nav>-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="benutzerverwaltungma.php">Benutzerverwaltung <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="einzelprojekt.php">Projekt bearbeiten</a>
+    </ul>
+
+    <ul class="navbar-nav ml-auto">
+    </li>
+    <li class="nav-item ">
+        <a class="fas fa-user fa-2x" href="mitarbeiterverwaltung.php" ></a>
+    </li>
+    </ul>
+  </div>
+</nav>
 <br>
 <form class = "form-inline" action="" method="get">
     <div class="form-group mb-2">
@@ -339,7 +326,7 @@ $modus_suchen = false;
         $suchbegriff = trim ($_GET['suchbegriff']);
         //echo "<p>Gesucht wird nach: <b>$suchbegriff</b></p>"; 
         $suche_nach = "%{$suchbegriff}%";
-        $abc = $db->prepare("SELECT * FROM person WHERE name LIKE ? ORDER BY name ASC");
+        $abc = $conn->prepare("SELECT * FROM person WHERE name LIKE ? ORDER BY name ASC");
         $abc->bindParam(1, $suche_nach, PDO::PARAM_STR);
         $abc->execute();
     }
@@ -348,10 +335,10 @@ $modus_suchen = false;
     {
         $paginierung = 1;
 
-        $s = $db->query($query);
+        $s = $conn->query($query);
         $total_results = $s->fetchColumn();
         $total_pages = ceil($total_results/$limit);
-        $abc = $db->prepare("SELECT *  FROM person ORDER BY name ASC LIMIT $starting_limit, $limit");
+        $abc = $conn->prepare("SELECT *  FROM person ORDER BY name ASC LIMIT $starting_limit, $limit");
         $abc->execute();
     }
 
@@ -415,7 +402,7 @@ if ( $modus_aendern == true and isset($_GET['mitarbeiterID']) ) {
     $id_einlesen = (INT) $_GET['mitarbeiterID'];
     if ($id_einlesen > 0)
     {   
-        $dseinlesen = $db->prepare("SELECT mitarbeiterID, email, passwort, name, rolle, active FROM person WHERE mitarbeiterID=? ORDER BY name ASC");
+        $dseinlesen = $conn->prepare("SELECT mitarbeiterID, email, passwort, name, rolle, active FROM person WHERE mitarbeiterID=? ORDER BY name ASC");
         $dseinlesen->execute([$id_einlesen]);
         $dseinlesen->execute();
         while ($row = $dseinlesen->fetch()) {
@@ -505,18 +492,25 @@ function PassStrength($Password) {
 
 if ($modus_aendern == true){
 ?>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
-<nav class="navbar navbar-default navbar-expand-sm">
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-                <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
-        </li>
-    </ul>
-    <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-                <a class="btn btn-light custom-btn" href="logout.php">Logout</a>
-        </li>
-    </ul>
+<div class="collapse navbar-collapse" id="navbarText">
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" href="benutzerverwaltungma.php">Benutzerverwaltung <span class="sr-only">(current)</span></a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="einzelprojekt.php">Projekt bearbeiten</a>
+    </li>
+  </ul>
+
+  <ul class="navbar-nav ml-auto">
+  </li>
+  <li class="nav-item ">
+      <a class="fas fa-user fa-2x" href="mitarbeiterverwaltung.php" ></a>
+  </li>
+  </ul>
+</div>
 </nav>
 
 <div style = "width:400; margin:auto">
