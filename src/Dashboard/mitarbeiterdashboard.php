@@ -16,6 +16,8 @@
 
 
 <?php
+include 'check_login.php';
+include 'database.php'; 
     $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
     $rolle->execute();
     $dbRolle = $rolle->fetch()['rolle'];
@@ -52,9 +54,6 @@
 </html>
 
 <?php
-
-include 'check_login.php';
-include 'database.php'; 
 
 
 $sql = "SELECT projekt.projektname, projekt.kunde, projekt.dauer, zeitkonto.stunden_anzahl
