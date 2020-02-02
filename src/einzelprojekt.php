@@ -56,7 +56,7 @@ while ($row_sk = $abfrage_sk ->fetch()){
 // Projekt löschen
 
 
-mitarbeiter = $_SESSION['mitarbeiterid'];
+$mitarbeiter = $_SESSION['userid'];
 // Rolle abfragen
 
 $abfrage = $conn->prepare("SELECT * from person where mitarbeiterID = $mitarbeiter");
