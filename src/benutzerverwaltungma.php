@@ -282,26 +282,19 @@ if (!count($daten)) {
             break;
     }
     ?>
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-
-  <div class="collapse navbar-collapse" id="navbarText">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="benutzerverwaltungma.php">Benutzerverwaltung <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="einzelprojekt.php">Projekt bearbeiten</a>
+<nav class="navbar navbar-default navbar-expand-sm">
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+                <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
+        </li>
     </ul>
-
     <ul class="navbar-nav ml-auto">
-    </li>
-    <li class="nav-item ">
-        <a class="fas fa-user fa-2x" href="mitarbeiterverwaltung.php" ></a>
-    </li>
+        <li class="nav-item">
+                <a class="btn btn-light custom-btn" href="logout.php">Logout</a>
+        </li>
     </ul>
-  </div>
 </nav>
+
 <br>
 <form class = "form-inline" action="" method="get">
     <div class="form-group mb-2">
