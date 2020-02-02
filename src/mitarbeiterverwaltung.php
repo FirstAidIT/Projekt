@@ -101,8 +101,8 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
         }
     }
 }
-
-$dseinlesen = $conn->prepare("SELECT mitarbeiterID, email, passwort, name, rolle FROM person WHERE email = 'andreas@kerscher.de' ");
+$USERID = $_SESSION['userid'];
+$dseinlesen = $conn->prepare("SELECT mitarbeiterID, email, passwort, name, rolle FROM person WHERE email = '$USERID' ");
         $dseinlesen->execute();
         while ($row = $dseinlesen->fetch()) {
             $mitarbeiterID = $row['mitarbeiterID'];
