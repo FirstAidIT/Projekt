@@ -263,25 +263,36 @@ if (!count($daten)) {
 } else {
 ?>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<!-- navbar mit custom-link je nach Recht -->
+<?php
+    $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
+    $rolle->execute();
+    $dbRolle = $rolle->fetch()['rolle'];
+    switch($dbRolle){
+        case "Management": 
+            $link = "management.php";
+            break;
+        case "Vertrieb":
+            $link = "vertrieb.php";
+            break;
+        case "Mitarbeiter":
+            $link = "start.php";
+            break;
+    }    
+    ?>
 
-  <div class="collapse navbar-collapse" id="navbarText">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="benutzerverwaltungma.php">Benutzerverwaltung <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="einzelprojekt.php">Projekt bearbeiten</a>
-    </ul>
-
-    <ul class="navbar-nav ml-auto">
-    </li>
-    <li class="nav-item ">
-        <a class="fas fa-user fa-2x" href="mitarbeiterverwaltung.php" ></a>
-    </li>
-    </ul>
-  </div>
-</nav>
+      <nav class="navbar navbar-default navbar-expand-sm">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                        <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                        <a class="btn btn-light custom-btn" href="logout.php">Logout</a>
+                </li>
+            </ul>
+        </nav>
 <br>
 <form class = "form-inline" action="" method="get">
     <div class="form-group mb-2">
@@ -492,26 +503,36 @@ function PassStrength($Password) {
 
 if ($modus_aendern == true){
 ?>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<!-- navbar mit custom-link je nach Recht -->
+<?php
+    $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
+    $rolle->execute();
+    $dbRolle = $rolle->fetch()['rolle'];
+    switch($dbRolle){
+        case "Management": 
+            $link = "management.php";
+            break;
+        case "Vertrieb":
+            $link = "vertrieb.php";
+            break;
+        case "Mitarbeiter":
+            $link = "start.php";
+            break;
+    }    
+    ?>
 
-<div class="collapse navbar-collapse" id="navbarText">
-  <ul class="navbar-nav">
-    <li class="nav-item">
-      <a class="nav-link" href="benutzerverwaltungma.php">Benutzerverwaltung <span class="sr-only">(current)</span></a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="einzelprojekt.php">Projekt bearbeiten</a>
-    </li>
-  </ul>
-
-  <ul class="navbar-nav ml-auto">
-  </li>
-  <li class="nav-item ">
-      <a class="fas fa-user fa-2x" href="mitarbeiterverwaltung.php" ></a>
-  </li>
-  </ul>
-</div>
-</nav>
+      <nav class="navbar navbar-default navbar-expand-sm">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                        <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                        <a class="btn btn-light custom-btn" href="logout.php">Logout</a>
+                </li>
+            </ul>
+        </nav>
 
 <div style = "width:400; margin:auto">
 <form style= "width:400;  margin:auto;" class = "form-horizontal"  method="post">
