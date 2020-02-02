@@ -22,21 +22,35 @@ SESSION_START();
 include 'check_login.php';
 include 'database.php';
 
-$id = $_SESSION['mitarbeiterid'];
+// Rolle abfragen
 
-$abfrage = $db->prepare("SELECT * from person where mitarbeiterID = $id");
+//$id = $_SESSION['mitarbeiterid'];
+//$bearbeitung_projektid = $_POST['projektID'];
+
+/*$abfrage = $conn->prepare("SELECT * from person where mitarbeiterID = $id");
 $abfrage -> execute();
 while ($row = $abfrage ->fetch()){
     $rolle_eingeloggt = $row['rolle'];
 }
 
+$abfrage_ma = $conn->prepare("SELECT mitarbeiterID from Arbeiten_an where projektID = $bearbeitung_projektid");
+$abfrage_ma -> execute();
+while ($row_ma = $abfrage_ma ->fetch()){
+    $ma_beteiligt = $row_ma['rolle'];
+    echo $ma_beteiligt;
+}*/
+
+//Skills abfragen
+
+
+// Projekt löschen
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt loeschen') {
     if (isset($_POST['projektID'])) {
         $projektID =$_POST['projektID'];
         if ($projektID > 0)
         {
-            $loeschen = $db->prepare("DELETE FROM projekt WHERE projektID=(?) LIMIT 1");
+            $loeschen = $conn->prepare("DELETE FROM projekt WHERE projektID=(?) LIMIT 1");
             $loeschen->bindParam(1, $projektID, PDO::PARAM_STR);
             if ($loeschen->execute()) {
                 ?>
@@ -48,9 +62,41 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt loeschen') {
     }
 }
 
+
+// Projekt starten
+
+$start = time();
+$datum = date("Y-m-d", $start);
+if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt starten') {
+    if (isset($_POST['projektID'])) {
+        $projektID =$_POST['projektID'];
+            $starten = $db->prepare("UPDATE projekt SET startzeit = '$datum' WHERE projektID=?");
+            $starten->bindParam(1, $projektID, PDO::PARAM_STR);
+            if ($starten->execute()) {
+                header ("Location: einzelprojekt.php");
+            }
+    }       
+}
+
+//Projekt beenden
+
+$end = time();
+$datumend = date("Y-m-d", $end);
+if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt beenden') {
+    if (isset($_POST['projektID'])) {
+        $projektID =$_POST['projektID'];
+            $starten = $db->prepare("UPDATE projekt SET endzeit = '$datumend' WHERE projektID=?");
+            $starten->bindParam(1, $projektID, PDO::PARAM_STR);
+            if ($starten->execute()) {
+                header ("Location: einzelprojekt.php");
+            }
+    }       
+}
+
+//Projekt archivieren
 if (isset($_POST['aktion']) and $_POST['aktion']=='Archivieren') {
     $projektIDarchivieren = $_POST['projektID'];
-    $update = $db->prepare("UPDATE projekt SET ist_archiviert = 1 WHERE projektID=?");
+    $update = $conn->prepare("UPDATE projekt SET ist_archiviert = 1 WHERE projektID=?");
     $update -> execute([$projektIDarchivieren]);
     header ("Location: ?aktion=bearbeiten&projektID=$projektIDarchivieren");
 }
@@ -110,7 +156,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
         $upd_enddatum = trim($_POST['enddatum']);
     }
 
-    $statement = $db->prepare("SELECT* FROM projekt WHERE projektname = '$upd_projektname'");
+    $statement = $conn->prepare("SELECT* FROM projekt WHERE projektname = '$upd_projektname'");
     $statement->execute(array('Max')); 
     $anzahl_projekte = $statement->rowCount();
 
@@ -123,7 +169,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
         if ($upd_erstellungsdatum != '' AND $upd_aufwand != '' AND  $upd_projektname != '' AND $upd_wahrscheinlichkeit != '' AND $upd_kunde != '' AND  $upd_budget != '')
         {
             // speichern
-            $update = $db->prepare("UPDATE projekt SET erstellungsdatum =?, aufwand=?, projektname=?, wahrscheinlichkeit=? , kunde=?, budget=?, dauer=?, archivierungsdatum=?, potenzial=?, startzeit=?, endzeit=? WHERE projektID=?");
+            $update = $conn->prepare("UPDATE projekt SET erstellungsdatum =?, aufwand=?, projektname=?, wahrscheinlichkeit=? , kunde=?, budget=?, dauer=?, archivierungsdatum=?, potenzial=?, startzeit=?, endzeit=? WHERE projektID=?");
             $update->execute([$upd_erstellungsdatum, $upd_aufwand, $upd_projektname, $upd_wahrscheinlichkeit, $upd_kunde, $upd_budget, $upd_dauer, $upd_archivierungsdatum, $upd_potenzial,  $upd_startdatum, $upd_enddatum, $upd_projektID]);
             if ($update->execute()) {
                 header ("Location: einzelprojekt.php");
@@ -142,7 +188,7 @@ if (isset($_GET['aktion']) and $_GET['aktion']=='bearbeiten') {
 }
 
 $daten = array();
-if ($erg = $db->query("SELECT * FROM projekt order by erstellungsdatum asc")) {
+if ($erg = $conn->query("SELECT * FROM projekt order by erstellungsdatum asc")) {
 	if ($erg->rowCount()) {
 		while($datensatz = $erg->fetchObject()) {
 			$daten[] = $datensatz;
@@ -150,7 +196,7 @@ if ($erg = $db->query("SELECT * FROM projekt order by erstellungsdatum asc")) {
 	}	
 }
 if (!count($daten)) {
-    echo "<p>Es liegen keine Daten vor :(</p>";
+    echo "<p>Es liegen keine Daten vor</p>";
 } else {
 ?>
 
@@ -219,7 +265,7 @@ if ( $modus_aendern == true and isset($_GET['projektID']) ) {
     $id_einlesen = (INT) $_GET['projektID'];
     if ($id_einlesen > 0)
     {   
-        $dseinlesen = $db->prepare("SELECT * FROM projekt WHERE projektID=? order by erstellungsdatum asc ");
+        $dseinlesen = $conn->prepare("SELECT * FROM projekt WHERE projektID=? order by erstellungsdatum asc ");
         $dseinlesen->execute([$id_einlesen]);
         $dseinlesen->execute();
         while ($row = $dseinlesen->fetch()) {
@@ -246,6 +292,11 @@ function sicherheit($inhalt='') {
     return($inhalt);
 }
 if ($modus_aendern == true){
+    $heute = time();
+    $datumheute = date("Y-m-d", $heute);
+    $dh = strtotime($datumheute);
+    $ds = strtotime($startdatum);
+    $de = strtotime($enddatum);
     ?>
     <div style = "width:400; margin:auto">
     <form class = "form-horizontal" action="einzelprojekt.php?aktion=bearbeiten&projektID=$projektID" method="post">
@@ -262,7 +313,7 @@ if ($modus_aendern == true){
 
         <input type="hidden" name="projektnamealt" class= "form-control" id="projektnamealt" value="<?php echo $projektname; ?>">       
 
-        <label>Aufwand:<br>
+        <label>Aufwand (Stunden/Woche):<br>
             <input type="text" name="aufwand" class= "form-control" id="aufwand" value="<?php echo $aufwand; ?>">
         </label><br>
         <label>Erstellungsdatum: <br>
@@ -298,12 +349,30 @@ if ($modus_aendern == true){
             <option value ="+">+</option>
             <option value ="++">++</option>
             <option value ="+++">+++</option>
-        </select><br> <br>
+        </select>
+        <?php
+        /*
+        $skillsabfrage = $conn->prepare("SELECT * from braucht WHERE projektID = '$bearbeitung_projektid'");
+        $skillsabfrage ->execute();
+        $while ($saf = $skillsabfrage->fetch()){
+            $skills = $row['skillID'];
+        }
+        */
+        ?>
+<br> <br>
         <br>
         <!--<a href = "?aktion=loeschen&projektID=<?php echo $inhalt->projektID; ?>" onclick="return confirm('Soll das Projekt wirklich gelöscht werden?')"  class="btn btn-danger">Löschen</a></td>-->
         <input type="submit"  name="aktion" value="Übernehmen" class="btn btn-success">
-        <input type ="submit" onclick="return confirm('Soll das Projekt wirklich gelöscht werden?')" name ="aktion" value ="Projekt loeschen" class="btn btn-danger">
+        <input type ="submit" onclick="return confirm('Soll das Projekt wirklich gelöscht werden?')" name ="aktion" value ="Projekt loeschen" class="btn btn-danger">        
+        <?php 
+        if ($dh < $ds){?>
+        <input type ="submit" name ="aktion" value ="Projekt starten" class="btn btn-primary">
         <?php
+        }
+        if ($dh < $de){?>
+            <input type ="submit" name ="aktion" value ="Projekt beenden" class="btn btn-primary">
+            <?php
+            }
         if ($ist_archiviert == 0 && $rolle_eingeloggt == "Management"){?>
             <input type="submit" name = "aktion" class="btn btn-warning" value="Archivieren">
         <?php
