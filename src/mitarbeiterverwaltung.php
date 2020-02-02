@@ -209,7 +209,8 @@ function PassStrength($Password) {
 </nav>
 
 <form class = "form-horizontal" style= "width:400;  margin:auto;" action="mitarbeiterverwaltung.php" method="post">
-    
+<div class="container">
+            <div class="row d-flex justify-content-center">
 
     <h3>Eigene Informationen bearbeiten</h3>
     
@@ -253,7 +254,8 @@ function PassStrength($Password) {
             }
 
             if ($erfolg == true){
-                echo "Die Daten wurden geändert.";
+                $check ="Die Daten wurden geändert.";
+                
             }
     ?><br>
 
@@ -261,11 +263,12 @@ function PassStrength($Password) {
             
     <input type="submit"  class="btn btn-success" name = "aktion" value="Übernehmen">
     <br><br>
-    <a href = "benutzerverwaltungma.php" class="btn btn-dark">Zurück zur Benutzerverwaltung</a>
+    
       
 
 </form>
-
+        </div>
+        </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
