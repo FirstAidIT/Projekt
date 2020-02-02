@@ -25,11 +25,11 @@ $_SESSION['checkaendern']= "";
 $_SESSION['geaendert'] = false;
 
 
-require 'inc/db.php';
+//require 'inc/db.php';
 
 
-//include 'check_login.php';
-//include 'database.php';
+include 'check_login.php';
+include 'database.php';
 
 
 
