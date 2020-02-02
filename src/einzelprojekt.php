@@ -56,12 +56,28 @@ while ($row_sk = $abfrage_sk ->fetch()){
 // Projekt löschen
 
 
+mitarbeiter = $_SESSION['mitarbeiterid'];
+// Rolle abfragen
+
+$abfrage = $db->prepare("SELECT * from person where mitarbeiterID = $mitarbeiter");
+$abfrage -> execute();
+while ($row = $abfrage ->fetch()){
+    echo $row['rolle'];
+    echo $row['name'];
+
+    $rolle_eingeloggt = $row['rolle'];
+}
+
+
+
+
+
 if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt loeschen') {
     if (isset($_POST['projektID'])) {
         $projektID =$_POST['projektID'];
         if ($projektID > 0)
         {
-            $loeschen = $conn->prepare("DELETE FROM projekt WHERE projektID=(?) LIMIT 1");
+            $loeschen = $db->prepare("DELETE FROM projekt WHERE projektID=(?) LIMIT 1");
             $loeschen->bindParam(1, $projektID, PDO::PARAM_STR);
             if ($loeschen->execute()) {
                 ?>
@@ -73,9 +89,6 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt loeschen') {
     }
 }
 
-
-// Projekt starten
-
 $start = time();
 $datum = date("Y-m-d", $start);
 if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt starten') {
@@ -85,11 +98,10 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt starten') {
             $starten->bindParam(1, $projektID, PDO::PARAM_STR);
             if ($starten->execute()) {
                 header ("Location: einzelprojekt.php");
+                echo "<p>Projekt gestartet</p>";
             }
     }       
 }
-
-//Projekt beenden
 
 $end = time();
 $datumend = date("Y-m-d", $end);
@@ -100,10 +112,10 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt beenden') {
             $starten->bindParam(1, $projektID, PDO::PARAM_STR);
             if ($starten->execute()) {
                 header ("Location: einzelprojekt.php");
+                echo "<p>Projekt gestartet</p>";
             }
     }       
 }
-
 //Projekt archivieren
 if (isset($_POST['aktion']) and $_POST['aktion']=='Archivieren') {
     $projektIDarchivieren = $_POST['projektID'];
