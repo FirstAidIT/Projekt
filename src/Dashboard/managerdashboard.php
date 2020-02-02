@@ -60,7 +60,8 @@ $sql = "SELECT projekt.projektname, projekt.kunde, projekt.dauer, zeitkonto.stun
         WHERE Arbeiten_an.mitarbeiterID = person.mitarbeiterID
         AND Arbeiten_an.projektID = projekt.projektID
         AND projekt.ist_archiviert is null";
-
+echo $sql;
+/*
 	echo '<table class="table">'; 
 	echo 	"<thead>";
 	echo		"<tr>";
@@ -89,5 +90,5 @@ $sql = "SELECT projekt.projektname, projekt.kunde, projekt.dauer, zeitkonto.stun
   echo "<td><a href='einzelprojekt.php' &projektID >Bearbeiten</a></td>";
 	echo "</tr>";}
 
-    echo "</table>";
+    echo "</table>";*/
 ?>
