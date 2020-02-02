@@ -67,7 +67,7 @@ include 'database.php';
 													<span aria-hidden="true">&times;</span>
 												</button>
 									</div>
-									<div class="modal-body-skill">			   
+									<div class="modal-skill">			   
 									</div>
 									<div class="modal-footer">
 									</div>
@@ -91,7 +91,7 @@ include 'database.php';
 											<span aria-hidden="true">&times;</span>
 										</button>
 								</div>
-								<div class="modal-body-project">			   
+								<div class="modal-project">			   
 								</div>
 							<div class="modal-footer">
 							</div>
