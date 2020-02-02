@@ -5,7 +5,6 @@ include 'database.php';
 
 session_start();
 $mitarbeiterid = $_SESSION['mitarbeiterID'];
-$mitarbeiterID = 1;
 
     
 
