@@ -5,6 +5,7 @@
     <?php 
     include 'check_login.php';
     include 'database.php';
+    include_once('timescheduling.php');
     ?>
     <!-- Required Meta tags -->
      <meta charset = 'utf-8'>
@@ -72,6 +73,5 @@
     <link href="//rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.css" rel="stylesheet">
 </head>
 <body>
- <?php include_once('timescheduling.php'); ?> 
 </body>
 </html>
