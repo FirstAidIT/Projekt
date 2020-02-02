@@ -21,6 +21,7 @@ include 'database.php';
 
 	foreach ($db->query($sql) as $row) {
 	echo "<tr>";
+	echo $row;
 	echo "<td>".$row['name'] . "</td>";
 	echo "<td>".$row['skillname'] . "</td>";
 	echo "<td>". $row['auspraegung'] . "</td>";
