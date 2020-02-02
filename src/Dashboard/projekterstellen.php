@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
-<title>WI-Projekt</title>
+<title>Projekt erstellen</title>
 <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" type="text/css" href="css/projekterstellen.css">
@@ -171,8 +171,8 @@ $_SESSION['geaendert'] = false;
        
         else {
             if ($anzahl_projektname > 0){
-                $_SESSION['check'] = "Email bereits vergeben";
-                header("Location: mitarbeiterverwaltungma.php");
+                $_SESSION['check'] = "Projektname bereits vergeben";
+                header("Location: projekterstellen.php");
             }
                     else{
                 
@@ -188,12 +188,12 @@ $_SESSION['geaendert'] = false;
                         $einfuegen->bindParam(8, $erstellungsdatum, PDO::PARAM_STR);
                 
                         $einfuegen = $conn->prepare("INSERT INTO braucht VALUES(?,?)");
-                        $einfuegen->bindParam(9, $projektID, PDO::PARAM_INT);
-                        $einfuegen->bindParam(10, $skillID, PDO::PARAM_INT);
+                        $einfuegen->bindParam(1, $projektID, PDO::PARAM_INT);
+                        $einfuegen->bindParam(2, $skillID, PDO::PARAM_INT);
 
                         $einfuegen = $conn->prepare("INSERT INTO Arbeiten_an VALUES(?,?)");
                         $einfuegen->bindParam(1, $projektID, PDO::PARAM_INT);
-                        $einfuegen->bindParam(1, $mitarbeiterID, PDO::PARAM_INT);
+                        $einfuegen->bindParam(2, $mitarbeiterID, PDO::PARAM_INT);
   
 
                         if ($einfuegen->execute()) {
