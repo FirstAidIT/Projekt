@@ -2,14 +2,9 @@
 <!DOCTYPE html>
 <html lang="de">
   <head>
-<<<<<<< HEAD:src/zeitkonto/zeitkonto.php
-=======
-    <?php 
+  <?php 
     include 'check_login.php';
-    include 'database.php';
-    include 'timescheduling.php';
-    ?>
->>>>>>> de3aff901b5f22aaa5fe2cbed4a620788b5c427e:src/zeitkonto/zeitkontostart.php
+  ?>
     <!-- Required Meta tags -->
      <meta charset = 'utf-8'>
      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
@@ -77,7 +72,6 @@
 </head>
 <body>
   <?php 
-    include 'check_login.php';
     include_once ('timescheduling.php') 
   ?>
 </body>

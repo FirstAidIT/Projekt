@@ -1,25 +1,29 @@
 <?php
-//include 'datenbank/db_connection.php';
 include 'get_entries.php';
 include 'database.php';
 
 SESSION_START();
 
-$rolle_zeit = $conn->prepare(sprintf("SELECT rolle 
-FROM person 
-where mitarbeiterID = %d", $_SESSION['userid'])); 
-$rolle_zeit->execute(); 
-$dbRolle1 = $rolle_zeit->fetch()['rolle']; 
-switch($dbRolle){ 
-case "Management": $link = "management.php"; break; case "Vertrieb": $link = "vertrieb.php"; break; case "Mitarbeiter": $link = "start.php"; break; } 
-
+$rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
+$rolle->execute();
+$dbRolle = $rolle->fetch()['rolle'];
+switch($dbRolle){
+    case "Management": 
+        $link = "management.php";
+        break;
+    case "Vertrieb":
+        $link = "vertrieb.php";
+        break;
+    case "Mitarbeiter":
+        $link = "start.php";
+        break;
+}    
 ?>
-
 <nav class="navbar navbar-default navbar-expand-sm">
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
             <a class="btn btn-light custom-btn" href="
-<?php echo $link ?>">Zurück zum Hauptmenü</a>
+            <?php echo $link ?>">Zurück zum Hauptmenü</a>
         </li>
     </ul>
     <ul class="navbar-nav ml-auto">
