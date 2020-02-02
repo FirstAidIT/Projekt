@@ -30,6 +30,22 @@ include 'database.php';
             $link = "start.php";
             break;
     }
+    $datenperson = array();
+    if ($erg = $conn->query("SELECT * FROM person")) {
+        if ($erg->rowCount()) {
+            while($datensatz = $erg->fetchObject()) {
+                $datenperson[] = $datensatz;
+            }
+        }	
+    }
+    $datenskills = array();
+    if ($erg = $conn->query("SELECT * FROM skills")) {
+        if ($erg->rowCount()) {
+            while($datensatz = $erg->fetchObject()) {
+                $datenskills[] = $datensatz;
+            }
+        }	
+    }  
     ?>
 
       <nav class="navbar navbar-default navbar-expand-sm">
@@ -49,25 +65,25 @@ include 'database.php';
 <body>
 <h3>Neues Projekt erstellen</h3>
 <form class = "form-horizontal" action="projekterstellen.php" method="post">
-    <label>projektname:  <br>
+    <label>Projektname:  <br>
         <input type="text" name="projektname" id="projektname">
     </label><br>
-    <label>kunde: <br>
+    <label>Kunde: <br>
         <input type="text" name="kunde" id="kunde">
     </label>	<br>
-    <label>budget: <br>
+    <label>Budget: <br>
         <input type="number" name="budget" id="budget" value=""> 
     </label><br>
-	<label>aufwand: <br>
+	<label>Aufwand: <br>
         <input type="number" name="aufwand" id="aufwand" value=""> 
     </label><br>
-	<label>dauer: <br>
+	<label>Dauer: <br>
         <input type="number" name="dauer" id="dauer" value=""> 
     </label><br>
-	 <label>wahrscheinlichkeit: <br>
+	 <label>Wahrscheinlichkeit: <br>
         <input type="number" name="wahrscheinlichkeit" id="wahrscheinlichkeit" value="">       
     </label><br>
-	 potenzial:<br>
+	 Potenzial:<br>
     <select name = "potenzial">
         <option value ="+">+</option>
         <option value ="++">++</option>
@@ -75,21 +91,16 @@ include 'database.php';
         value=""
     </select><br> 	
 	Mitarbeiter:<br>	
-  <?php 
-	$sql = "SELECT name FROM person WHERE rolle = Mitarbeiter ORDER by name";
-	foreach ($db->query($sql) as $row) {
-		echo "<input type=\"checkbox\">" .$row['name']. " ";
-	}
-    ?><br>
+    <?php
+       foreach ($datenperson as $inhalt) {
+            ?>			
+                <input type="checkbox"> <?php echo sicherheit($inhalt->name); ?> }
+    <br>
 	Skills:<br>	
-  <?php 
-	$sql = "SELECT skillname FROM skills ORDER by skillID";
-	foreach ($db->query($sql) as $row) {
-		echo "<input type=\"checkbox\">" .$row['skillname']. " ";
-	}
-    ?>
-
-
+    <?php
+       foreach ($datenskills as $inhalt) {
+            ?>			
+                <input type="checkbox"> <?php echo sicherheit($inhalt->skillname); ?> }
 </br>
 
     <input type="submit" name="aktion" onclick="return confirm('Soll das Projekt erstellt werden?')" value="speichern" class="w3-btn w3-green">
@@ -97,15 +108,11 @@ include 'database.php';
 
 
 </form>
-
 </body>
 </html>
 
 <?php
 
-
-
- 
 SESSION_START();
 
 $_SESSION['check'] = "";
@@ -117,10 +124,6 @@ $_SESSION['checkchange'] = "";
 $_SESSION['checkaendern']= "";
 
 $_SESSION['geaendert'] = false;
-
-
-
-
 
    if(isset(§_Post['aktion'])){
         $projektname = $_POST['projektname'];
@@ -174,7 +177,7 @@ $_SESSION['geaendert'] = false;
                     else{
                 
                         // speichern
-                        $einfuegen = $conn->prepare("INSERT INTO projekt(projetname, aufwand, wahrscheinlichkeit, kunde, budget, dauer, potenzial, erstellungsdatum) VALUES (?,?,?,?,?,?,?,time)");
+                        $einfuegen = $conn->prepare("INSERT INTO projekt(projetname, aufwand, wahrscheinlichkeit, kunde, budget, dauer, potenzial, erstellungsdatum VALUES (?,?,?,?,?,?,?,time)");
                         $einfuegen->bindParam(1, $projektname, PDO::PARAM_STR);
                         $einfuegen->bindParam(2, $aufwand, PDO::PARAM_INT);
                         $einfuegen->bindParam(3, $wahrscheinlichkeit, PDO::PARAM_INT);
@@ -184,17 +187,14 @@ $_SESSION['geaendert'] = false;
                         $einfuegen->bindParam(7, $potenzial, PDO::PARAM_STR);
                         $einfuegen->bindParam(8, $erstellungsdatum, PDO::PARAM_STR);
                 
-                        $einfuegen = $conn->prepare("INSERT INTO braucht) VALUES(?,?)");
+                        $einfuegen = $conn->prepare("INSERT INTO braucht VALUES(?,?)");
                         $einfuegen->bindParam(9, $projektID, PDO::PARAM_INT);
                         $einfuegen->bindParam(10, $skillID, PDO::PARAM_INT);
 
-                        $einfuegen = $conn->prepare("INSERT INTO Arbeiten_an) VALUES(?,?)");
+                        $einfuegen = $conn->prepare("INSERT INTO Arbeiten_an VALUES(?,?)");
                         $einfuegen->bindParam(1, $projektID, PDO::PARAM_INT);
                         $einfuegen->bindParam(1, $mitarbeiterID, PDO::PARAM_INT);
-
   
-
-
 
                         if ($einfuegen->execute()) {
                         //header('Location: benutzerverwaltungma.php?aktion=feedbackgespeichert');
@@ -203,11 +203,5 @@ $_SESSION['geaendert'] = false;
                         //die();
                         }
                     }
-
-                }
-   
-
-
-
-
- 
+                }}}
+               

@@ -74,7 +74,7 @@ $sql = "SELECT projekt.projektname, projekt.kunde, projekt.dauer, zeitkonto.stun
 	echo		"</tr>";
 	echo	  "</thead>";
 
-	foreach ($db->query($sql) as $row) {
+	foreach ($conn->query($sql) as $row) {
 	echo "<tr>";
 	echo "<td>".$row['projektname'] . "</td>";
 	echo "<td>".$row['kunde'] . "</td>";

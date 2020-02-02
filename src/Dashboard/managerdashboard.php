@@ -42,7 +42,7 @@ $datenprojekt = array();
 if ($erg = $conn->query("SELECT * FROM projekt")) {
 	if ($erg->rowCount()) {
 		while($datensatz = $erg->fetchObject()) {
-			$datenporjekt[] = $datensatz;
+			$datenprojekt[] = $datensatz;
 		}
 	}	
 }
@@ -87,6 +87,8 @@ if (!count($daten)) {
         <tbody>
             <?php
             foreach ($datenprojekt as $inhalt) {
+                foreach ($datenperson as $inhalt) {
+                    foreach ($datenskills as $inhalt){          
             ?>			
                 <tr>
                     <td><?php echo sicherheit($inhalt->projektname); ?> <br> <?php echo sicherheit($inhalt->potenzial); ?></td>
@@ -102,6 +104,8 @@ if (!count($daten)) {
                 </tr>
                 <?php
             }
+        }
+    }
 
 
 function sicherheit($inhalt='') {
