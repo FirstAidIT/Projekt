@@ -178,9 +178,9 @@ function PassStrength($Password) {
 
 
 <?php
-    $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
-    $rolle->execute();
-    $dbRolle = $rolle->fetch()['rolle'];
+    $rolle2 = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
+    $rolle2->execute();
+    $dbRolle = $rolle2->fetch()['rolle'];
     switch($dbRolle){
         case "Management": 
             $link = "management.php";
