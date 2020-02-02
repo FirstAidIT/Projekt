@@ -4,6 +4,7 @@ include 'create_entry.php';
 include 'check_login.php';
 include 'database.php';
 
+SESSION_START();
  
 	if(ISSET($_POST['update'])){
   $stunden_anzahl = calculateTime($_POST['stunden_anzahl']);
