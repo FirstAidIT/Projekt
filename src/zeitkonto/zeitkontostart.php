@@ -5,8 +5,6 @@
     <?php 
     include 'check_login.php';
     include 'database.php';
-    session_start();
-  $mitarbeiterid = $_SESSION['mitarbeiterID'];
     ?>
     <!-- Required Meta tags -->
      <meta charset = 'utf-8'>

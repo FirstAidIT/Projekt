@@ -17,9 +17,6 @@
 
 <?php
 
-
-
-
 SESSION_START();
 
 
@@ -42,7 +39,7 @@ $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = 
     }
 
 $daten = array();
-if ($erg = $conn->query("SELECT * FROM projekt, skills, personen, arbeiten_an, braucht")) {
+if ($erg = $conn->query("SELECT * FROM projekt, skills, person, Arbeiten_an, braucht")) {
 	if ($erg->rowCount()) {
 		while($datensatz = $erg->fetchObject()) {
 			$daten[] = $datensatz;
