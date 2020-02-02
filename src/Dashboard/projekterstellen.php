@@ -30,22 +30,6 @@ include 'database.php';
             $link = "start.php";
             break;
     }
-    $datenperson = array();
-    if ($erg = $conn->query("SELECT * FROM person")) {
-        if ($erg->rowCount()) {
-            while($datensatz = $erg->fetchObject()) {
-                $datenperson[] = $datensatz;
-            }
-        }	
-    }
-    $datenskills = array();
-    if ($erg = $conn->query("SELECT * FROM skills")) {
-        if ($erg->rowCount()) {
-            while($datensatz = $erg->fetchObject()) {
-                $datenskills[] = $datensatz;
-            }
-        }	
-    }  
     ?>
 
       <nav class="navbar navbar-default navbar-expand-sm">
@@ -91,16 +75,20 @@ include 'database.php';
         value=""
     </select><br> 	
 	Mitarbeiter:<br>	
-    <?php
-       foreach ($datenperson as $inhalt) {
-            ?>			
-                <input type="checkbox"> <?php echo sicherheit($inhalt->name); ?> }
+    <?php 
+	$sql = "SELECT kunde FROM person";
+	foreach ($conn->query($sql) as $row) {
+		echo "<input type=\"checkbox\">" .$row['kunde']. "";
+    }
+    ?>
     <br>
 	Skills:<br>	
     <?php
-       foreach ($datenskills as $inhalt) {
-            ?>			
-                <input type="checkbox"> <?php echo sicherheit($inhalt->skillname); ?> }
+    $sql = "SELECT skillname FROM skills";
+	foreach ($conn->query($sql) as $row) {
+		echo "<input type=\"checkbox\">" .$row['skillname']. "";
+    }
+    ?>
 </br>
 
     <input type="submit" name="aktion" onclick="return confirm('Soll das Projekt erstellt werden?')" value="speichern" class="w3-btn w3-green">
@@ -203,5 +191,5 @@ $_SESSION['geaendert'] = false;
                         //die();
                         }
                     }
-                }}}
+                }
                
