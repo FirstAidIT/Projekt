@@ -83,7 +83,7 @@ if ($erg = $conn->query("SELECT * FROM skills")) {
 	}	
 }
 $datengesamt = array_merge($datenprojekt, $datenperson, $datenskills);
-print_r(array_merge($datenprojekt, $datenperson, $datenskills));
+
 
 ?>
 
