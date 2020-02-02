@@ -8,7 +8,7 @@ include 'database.php';
 	FROM besitzt, person, skills
 	WHERE person.mitarbeiterID = besitzt.mitarbeiterID 
 	AND besitzt.skillID = skills.skillID
-	AND besitzt.timestmp >= now() - INTERVAL 1 WEEK";
+	AND besitzt.timestmp >= time() - INTERVAL 1 WEEK";
 
 	echo '<table class="table">'; 
 	echo 	"<thead>";
