@@ -338,7 +338,7 @@ if ($modus_aendern == true){
             <input type="hidden" name="projektID" class= "form-control" id="projektID" value="<?php echo $projektID; ?>">
         </label><br>
         <label>Projektame: <br>
-            <input type="text" name="projektname" class= "form-control" id="projektname" value="<?php echo $projektname; ?>">       
+            <input type="text" name="projektname" class= "form-control" id="projektname" value="<?php echo $projektname; ?>"<?php  if ($dh>=$ds){?> readonly <?php }?>>       
         </label><br>
 
         <input type="hidden" name="projektnamealt" id="projektnamealt" value="<?php echo $projektname; ?>">       
@@ -353,7 +353,7 @@ if ($modus_aendern == true){
             <input type="date" name="startdatum" class= "form-control" id="startdatum" value="<?php echo $startdatum; ?>">
         </label><br>
         <label>Wahrscheinlichkeit: <br>
-            <input type="text" name="wahrscheinlichkeit" class= "form-control" id="wahrscheinlichkeit" value="<?php echo $wahrscheinlichkeit; ?>">       
+            <input type="text" name="wahrscheinlichkeit" class= "form-control" id="wahrscheinlichkeit" value="<?php echo $wahrscheinlichkeit; ?>" <?php  if ($dh>=$ds){?> readonly <?php }?>>       
         </label><br>
         <label>Kunde: <br>
             <input type="text" name="kunde" class= "form-control" id="kunde" value="<?php echo $kunde; ?>" readonly>       
@@ -373,6 +373,7 @@ if ($modus_aendern == true){
         <label><br>
             <input type="hidden" name="ist_archiviert" id="ist_archiviert" value="<?php echo $ist_archiviert; ?>">       
         </label>
+        <?php  if ($dh<$ds){?>
         Potenzial:<br>
         <select name = "potenzial">
             <option value='<?php echo $potenzial?>' selected='selected'><?php echo $potenzial?></option>
@@ -380,6 +381,7 @@ if ($modus_aendern == true){
             <option value ="++">++</option>
             <option value ="+++">+++</option>
         </select><br>
+        <?php }?>
         <br>
         <!--<a href = "?aktion=loeschen&projektID=<?php echo $inhalt->projektID; ?>" onclick="return confirm('Soll das Projekt wirklich gelöscht werden?')"  class="btn btn-danger">Löschen</a></td>-->
         <input type="submit"  name="aktion" value="Übernehmen" class="btn btn-success">
