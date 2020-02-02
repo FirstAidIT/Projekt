@@ -12,6 +12,10 @@
 </head>
 <body>
 <?php
+
+include 'check_login.php';
+include 'database.php';
+
 SESSION_START();
 
 $_SESSION['check'] = "";
@@ -28,8 +32,7 @@ $_SESSION['geaendert'] = false;
 //require 'inc/db.php';
 
 
-include 'check_login.php';
-include 'database.php';
+
 
 
 

@@ -12,12 +12,15 @@
 <body>
 <?php
 
+
+include 'check_login.php';
+include 'database.php';
+
 session_start();
 
 //require 'inc/db.php';
 
-include 'check_login.php';
-include 'database.php';
+
 
 
 $id_einlesen = $_SESSION['id'];

@@ -26,6 +26,8 @@ $erfolg = false;
 include 'check_login.php';
 include 'database.php';
 
+session_start();
+
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
 
@@ -191,7 +193,7 @@ function PassStrength($Password) {
     }
     ?>
 
-    
+
 <nav class="navbar navbar-default navbar-expand-sm">
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">

@@ -16,11 +16,13 @@
 
 //require 'inc/db.php';
 
+include 'check_login.php';
+include 'database.php';
+
 SESSION_START();
 
 
-include 'check_login.php';
-include 'database.php';
+
 
 // Rolle abfragen
 

@@ -13,10 +13,13 @@
 
 
 //require 'inc/db.php';
-SESSION_START();
 
 include 'check_login.php';
 include 'database.php';
+
+SESSION_START();
+
+
 
 
 ?>
@@ -38,7 +41,7 @@ include 'database.php';
             break;
     }
     ?>
-    
+
 <nav class="navbar navbar-default navbar-expand-sm">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
