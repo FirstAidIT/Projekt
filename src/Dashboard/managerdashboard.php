@@ -62,7 +62,7 @@ $datenprojekt = array();
 if ($erg = $conn->query("SELECT * FROM projekt")) {
 	if ($erg->rowCount()) {
 		while($datensatz = $erg->fetchObject()) {
-			$datenprojekt[] = $datensatz;
+			$datenprojekt[] = $datensatzeins;
 		}
 	}	
 }
@@ -70,7 +70,7 @@ $datenperson = array();
 if ($erg = $conn->query("SELECT * FROM person")) {
 	if ($erg->rowCount()) {
 		while($datensatz = $erg->fetchObject()) {
-			$datenperson[] = $datensatz;
+			$datenperson[] = $datensatz ;
 		}
 	}	
 }
@@ -115,7 +115,7 @@ print_r(array_merge($datenprojekt, $datenperson, $datenskills));
                     <td><?php echo sicherheit($inhalt->skillname); ?></td>
                     <td><?php echo sicherheit($inhalt->mitarbeiter); ?></td>
                     <?php if ($inhalt->ist_archiviert ==false){?><td><?php echo "laufend"; ?></td><?php }?>
-                    <td><a href = "einzelprojekt.php&projektID=<?php echo $inhalt->projektID; ?>" class="btn btn-secondary">Bearbeiten</a></td>
+                    <td><a href = "einzelprojekt.php & projektID=<?php echo $inhalt->projektID; ?>" class="btn btn-secondary">Bearbeiten</a></td>
                 </tr>
                 <?php
             }

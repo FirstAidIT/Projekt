@@ -76,17 +76,17 @@ include 'database.php';
     </select><br> 	
 	Mitarbeiter:<br>	
     <?php 
-	$sql = "SELECT name FROM person";
+	$sql = "SELECT person.name FROM person";
 	foreach ($conn->query($sql) as $row) {
-		echo "<input type=\"checkbox\">" .$row['name']. "";
+		echo "<input type=\"checkbox\">" . $row['person.name']. "";
     }
     ?>
     <br>
 	Skills:<br>	
     <?php
-    $sql = "SELECT skillname FROM skills";
+    $sql = "SELECT skills.skillname FROM skills";
 	foreach ($conn->query($sql) as $row) {
-		echo "<input type=\"checkbox\">" .$row['skillname']. "";
+		echo "<input type=\"checkbox\">" . $row['skills.skillname']. "";
     }
     ?>
 <br>
@@ -165,7 +165,7 @@ $_SESSION['geaendert'] = false;
                     else{
                 
                         // speichern
-                        $einfuegen = $conn->prepare("INSERT INTO projekt(projetname, aufwand, wahrscheinlichkeit, kunde, budget, dauer, potenzial, erstellungsdatum VALUES (?,?,?,?,?,?,?,time)");
+                        $einfuegen = $conn->prepare("INSERT INTO projekt(projektname, aufwand, wahrscheinlichkeit, kunde, budget, dauer, potenzial, erstellungsdatum VALUES (?,?,?,?,?,?,?,time)");
                         $einfuegen->bindParam(1, $projektname, PDO::PARAM_STR);
                         $einfuegen->bindParam(2, $aufwand, PDO::PARAM_INT);
                         $einfuegen->bindParam(3, $wahrscheinlichkeit, PDO::PARAM_INT);
@@ -192,4 +192,4 @@ $_SESSION['geaendert'] = false;
                         }
                     }
                 }
-               
+  ?>             
