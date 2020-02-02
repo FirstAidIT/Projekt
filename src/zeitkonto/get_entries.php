@@ -61,12 +61,15 @@ $e = function($value) {
 };
 
 
-$projekt = "SELECT projektID, projektname , kunde, startzeit, endzeit
+/*$projekt = sprintf("SELECT projektID, projektname , kunde, startzeit, endzeit
 FROM projekt 
-WHERE EXISTS ( SELECT * FROM Arbeiten_an WHERE mitarbeiterID=?)
-AND ist_archiviert is null";
+WHERE EXISTS ( SELECT * FROM Arbeiten_an WHERE mitarbeiterID = %d)
+AND ist_archiviert is null", $_SESSION['userid']);*/
 
-$stmt = $conn->prepare($projekt);
+$stmt = $conn->prepare(sprintf("SELECT projektID, projektname , kunde, startzeit, endzeit
+FROM projekt 
+WHERE EXISTS ( SELECT * FROM Arbeiten_an WHERE mitarbeiterID = %d)
+AND ist_archiviert is null", $_SESSION['userid']));
 $stmt-> execute([$mitarbeiterID]);
 $projects = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 

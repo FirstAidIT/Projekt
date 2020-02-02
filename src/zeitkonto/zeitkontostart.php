@@ -10,7 +10,7 @@
     <!-- Required Meta tags -->
      <meta charset = 'utf-8'>
      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
-     <link rel="stylesheet" href="/zeitkonto.css">
+     <link rel="stylesheet" href="css/zeitkonto.css">
      
      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
      <!-- Bootstrap CSS -->
