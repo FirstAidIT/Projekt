@@ -209,8 +209,7 @@ function PassStrength($Password) {
 </nav>
 
 <form class = "form-horizontal" style= "width:400;  margin:auto;" action="mitarbeiterverwaltung.php" method="post">
-<div class="container">
-            <div class="row d-flex justify-content-center">
+
 
     <h3>Eigene Informationen bearbeiten</h3>
     
@@ -267,8 +266,7 @@ function PassStrength($Password) {
       
 
 </form>
-        </div>
-        </div>
+       
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
