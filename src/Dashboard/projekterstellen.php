@@ -89,7 +89,7 @@ include 'database.php';
 		echo "<input type=\"checkbox\">" .$row['skillname']. "";
     }
     ?>
-</br>
+<br>
 
     <input type="submit" name="aktion" onclick="return confirm('Soll das Projekt erstellt werden?')" value="speichern" class="w3-btn w3-green">
     <input type="submit" name="back" value="Zurück" class="w3-btn w3-black" href = "managerdashboard.php">
