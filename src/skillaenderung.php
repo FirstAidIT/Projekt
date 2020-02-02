@@ -19,7 +19,7 @@ include 'database.php';
 	echo		"</tr>";
 	echo	  "</thead>";
 
-	foreach ($db->query($sql) as $row) {
+	foreach ($conn->query($sql) as $row) {
 	echo "<tr>";
 	echo $row;
 	echo "<td>".$row['name'] . "</td>";
