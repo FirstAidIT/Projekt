@@ -5,13 +5,17 @@
 <meta charset="utf-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/benutzerverwaltungma.css">
+    <link rel="stylesheet" href="/main.css">
 <title>Benutzerverwaltung Manager</title>
 <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
 <?php
+
+include 'check_login.php';
+include 'database.php';
+
 SESSION_START();
 
 $_SESSION['check'] = "";
@@ -28,8 +32,7 @@ $_SESSION['geaendert'] = false;
 //require 'inc/db.php';
 
 
-include 'check_login.php';
-include 'database.php';
+
 
 
 
@@ -40,15 +43,16 @@ $modus_aenderung;
 $modus_mail = false;
 if (isset($_POST['aktion']) and $_POST['aktion']=='Löschen') {
     if (isset($_POST['mitarbeiterID'])) {
-        $modus_aendern = true;
         $mitarbeiterloeschen = $_POST['mitarbeiterID'];
+        if ($mitarbeiterloeschen > 0)
+        {
             $update = $conn->prepare("DELETE FROM person WHERE mitarbeiterID=?");
             $update->execute([$mitarbeiterloeschen]); 
                 header("Location: benutzerverwaltungma.php");
-            echo "<p>Datensatz wurde gelöscht</p>";
-        }
-}       
-
+                echo "<p>Datensatz wurde gelöscht</p>";
+            }
+        }       
+}
 
 
 //Benutzer deaktivieren
@@ -262,11 +266,12 @@ if (!count($daten)) {
 } else {
 ?>
 
+
 <!-- navbar mit custom-link je nach Recht -->
 <?php
-    $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
-    $rolle->execute();
-    $dbRolle = $rolle->fetch()['rolle'];
+    $rolle2 = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
+    $rolle2->execute();
+    $dbRolle = $rolle2->fetch()['rolle'];
     switch($dbRolle){
         case "Management": 
             $link = "management.php";
@@ -292,6 +297,7 @@ if (!count($daten)) {
                 </li>
             </ul>
         </nav>
+
 <br>
 <form class = "form-inline" action="" method="get">
     <div class="form-group mb-2">
@@ -504,9 +510,9 @@ if ($modus_aendern == true){
 ?>
 <!-- navbar mit custom-link je nach Recht -->
 <?php
-    $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
-    $rolle->execute();
-    $dbRolle = $rolle->fetch()['rolle'];
+    $rolle2 = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
+    $rolle2->execute();
+    $dbRolle = $rolle2->fetch()['rolle'];
     switch($dbRolle){
         case "Management": 
             $link = "management.php";
@@ -576,7 +582,9 @@ if ($modus_aendern == true)
 <?php if ($modus_aendern == false){
 ?>
 
-<a class="btn btn-dark custom-btn" href="mitarbeiterverwaltungma.php">Neuen Benutzer anlegen</a>
+<form method="get" action="mitarbeiterverwaltungma.php"> 
+    <a href = "mitarbeiterverwaltungma.php"><input type="submit" value="Neuen Benutzer anlegen" class="btn btn-primary"></a>
+</form>
 
 <?php } ?>
 

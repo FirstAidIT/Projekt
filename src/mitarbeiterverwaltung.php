@@ -5,7 +5,7 @@
 <meta charset="utf-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-    
+    <link rel="stylesheet" href="/main.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="/resources/demos/style.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -13,7 +13,6 @@
 <title>Mitarbeiterverwaltung</title>
 <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="css/mitarbeiterverwaltung.css">
 
 
 </head>
@@ -26,8 +25,6 @@ $erfolg = false;
 
 include 'check_login.php';
 include 'database.php';
-
-session_start();
 
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
@@ -105,8 +102,7 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen') {
     }
 }
 
-$id = $_SESSION['userid'];
-$dseinlesen = $conn->prepare("SELECT mitarbeiterID, email, passwort, name, rolle FROM person WHERE mitarbeiterID = '$id'");
+$dseinlesen = $conn->prepare("SELECT mitarbeiterID, email, passwort, name, rolle FROM person WHERE email = 'andreas@kerscher.de' ");
         $dseinlesen->execute();
         while ($row = $dseinlesen->fetch()) {
             $mitarbeiterID = $row['mitarbeiterID'];
@@ -176,7 +172,7 @@ function PassStrength($Password) {
 
 ?>
 
-
+<!-- navbar mit custom-link je nach Recht -->
 <?php
     $rolle2 = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
     $rolle2->execute();
@@ -191,25 +187,24 @@ function PassStrength($Password) {
         case "Mitarbeiter":
             $link = "start.php";
             break;
-    }
+    }    
     ?>
 
-
-<nav class="navbar navbar-default navbar-expand-sm">
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-                <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
-        </li>
-    </ul>
-    <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-                <a class="btn btn-light custom-btn" href="logout.php">Logout</a>
-        </li>
-    </ul>
-</nav>
+      <nav class="navbar navbar-default navbar-expand-sm">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                        <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                        <a class="btn btn-light custom-btn" href="logout.php">Logout</a>
+                </li>
+            </ul>
+        </nav>
 
 <form class = "form-horizontal" style= "width:400;  margin:auto;" action="mitarbeiterverwaltung.php" method="post">
-
+    
 
     <h3>Eigene Informationen bearbeiten</h3>
     
@@ -220,7 +215,7 @@ function PassStrength($Password) {
         <input type="hidden" name="email" id="email" value="<?php echo $email;?>">
     </label><br>
     <label>Name:<br>
-        <input type="text" name="name" class= "form-control" id="name" value="<?php echo $name; ?>"readonly>        
+        <input type="text" name="name" class= "form-control" id="name" value="<?php echo $name; ?>" readonly>        
     </label><br>
     <label>Neues Passwort:<br>
         <input type="password" name="passwortneu1" class= "form-control" id="passwortneu1" value="">
@@ -229,7 +224,7 @@ function PassStrength($Password) {
         <input type="password" name="passwortneu2" class= "form-control" id="passwortneu2" value="">    
     </label><br>
     <label>Rolle:<br>
-    <input type="text" class="form-control" name ="rolle" value="<?php echo $rolle; ?>" readonly><br>
+    <input type = "text" class= "form-control" name = "rolle" value="<?php echo $rolle; ?>" readonly><br>
     </label>
     <?php $check = "";?>
     <?php   if (isset($_POST['aktion']) and $_POST['aktion']=='Übernehmen'){ 
@@ -253,20 +248,17 @@ function PassStrength($Password) {
             }
 
             if ($erfolg == true){
-                $check ="Die Daten wurden geändert.";
-                
+                $check = "Die Daten wurden geändert.";
             }
     ?><br>
 
     <?php echo "<font color='#FF0000'> $check</font>"; ?><br><br>
             
     <input type="submit"  class="btn btn-success" name = "aktion" value="Übernehmen">
-    <br><br>
-    
       
 
 </form>
-       
+
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>

@@ -7,7 +7,6 @@
 <title>WI-Projekt</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="css/mitarbeiterverwaltungma.css">
 </head>
 <body>
 <?php
@@ -22,14 +21,13 @@ SESSION_START();
 
 
 
-
 ?>
 
-
+<!-- navbar mit custom-link je nach Recht -->
 <?php
-    $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
-    $rolle->execute();
-    $dbRolle = $rolle->fetch()['rolle'];
+    $rolle2 = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
+    $rolle2->execute();
+    $dbRolle = $rolle2->fetch()['rolle'];
     switch($dbRolle){
         case "Management": 
             $link = "management.php";
@@ -40,21 +38,21 @@ SESSION_START();
         case "Mitarbeiter":
             $link = "start.php";
             break;
-    }
+    }    
     ?>
 
-<nav class="navbar navbar-default navbar-expand-sm">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                    <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
-            </li>
-        </ul>
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                    <a class="btn btn-light custom-btn" href="logout.php">Logout</a>
-            </li>
-        </ul>
-</nav>
+      <nav class="navbar navbar-default navbar-expand-sm">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                        <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                        <a class="btn btn-light custom-btn" href="logout.php">Logout</a>
+                </li>
+            </ul>
+        </nav>
 
 
 <form action="benutzerverwaltungma.php" method="post">

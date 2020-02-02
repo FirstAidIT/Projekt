@@ -12,14 +12,12 @@
 <body>
 <?php
 
-
 include 'check_login.php';
 include 'database.php';
 
 session_start();
 
 //require 'inc/db.php';
-
 
 
 
@@ -58,19 +56,18 @@ while ($row = $dseinlesen->fetch()) {
     }    
     ?>
 
-
-<nav class="navbar navbar-default navbar-expand-sm">
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-                <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
-        </li>
-    </ul>
-    <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-                <a class="btn btn-light custom-btn" href="logout.php">Logout</a>
-        </li>
-    </ul>
-</nav>
+      <nav class="navbar navbar-default navbar-expand-sm">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                        <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                        <a class="btn btn-light custom-btn" href="logout.php">Logout</a>
+                </li>
+            </ul>
+        </nav>
 
 
 
@@ -131,6 +128,7 @@ Rolle:<br>
 
     ?>
     <br><br>
+    <a href = "benutzerverwaltungma.php" class="btn btn-dark">Zurück zur Benutzerverwaltung</a></td>
     </form>
 <?php
 function sicherheit($inhalt='') {

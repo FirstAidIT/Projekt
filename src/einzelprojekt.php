@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="stylesheet" href="/main.css">
 <title>Einzelprojektansicht</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
@@ -24,53 +24,14 @@ SESSION_START();
 $mitarbeiter = $_SESSION['userid'];
 
 
-// Rolle abfragen
-
-//$id = $_SESSION['mitarbeiterid'];
-//$bearbeitung_projektid = $_POST['projektID'];
-
-/*$abfrage = $conn->prepare("SELECT * from person where mitarbeiterID = $id");
-$abfrage -> execute();
-while ($row = $abfrage ->fetch()){
-    $rolle_eingeloggt = $row['rolle'];
-}
-
-//Beteiligte Mitarbeiter abfragen
-
-$abfrage_ma = $conn->prepare("SELECT mitarbeiterID from Arbeiten_an where projektID = $bearbeitung_projektid");
-$abfrage_ma -> execute();
-while ($row_ma = $abfrage_ma ->fetch()){
-    $ma_beteiligt = $row_ma['rolle'];
-    echo $ma_beteiligt;
-}
-
-//Skills abfragen
-
-$abfrage_sk = $conn->prepare("SELECT skillID from braucht where projektID = $bearbeitung_projektid");
-$abfrage_sk -> execute();
-while ($row_sk = $abfrage_sk ->fetch()){
-    $sk_projekt = $row_sk['skillID'];
-    echo $sk_projekt;
-}*/
-
-// Projekt löschen
-
-
 $abfrage = $conn->prepare("SELECT * from person where mitarbeiterID = $mitarbeiter");
 $abfrage -> execute();
 while ($row = $abfrage ->fetch()){
-    echo $row['rolle'];
-    echo $row['name'];
-
     $rolle_eingeloggt = $row['rolle'];
 }
 
 
 
-
-
-//include 'check_login.php';
-//include 'database.php';
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt loeschen') {
     if (isset($_POST['projektID'])) {
@@ -116,6 +77,23 @@ if (isset($_POST['aktion']) and $_POST['aktion']=='Projekt beenden') {
             }
     }       
 }
+
+if (isset($_POST['aktion']) and $_POST['aktion']=='Mitarbeiter hinzufügen') {
+    $projektIDadd = $_POST['projektID'];
+    $mitarbeiterID_add = $_POST['hinzufügen'];
+    $update = $conn->prepare("INSERT INTO Arbeiten_an (projektID, mitarbeiterID) VALUES ('$projektIDadd', '$mitarbeiterID_add')");
+    $update -> execute();
+    header ("Location: ?aktion=bearbeiten&projektID=$projektIDadd");
+}
+
+if (isset($_POST['löschen'])){
+    $projektIDdelete = $_POST['projektID'];
+    $mitarbeiterID_delete = $_POST['entfernenID'];
+    $update = $conn->prepare("DELETE FROM Arbeiten_an WHERE projektID = '$projektIDdelete'");
+    $update -> execute();
+    header ("Location: ?aktion=bearbeiten&projektID=$projektIDdelete");
+}
+
 
 if (isset($_POST['aktion']) and $_POST['aktion']=='Archivieren') {
     $projektIDarchivieren = $_POST['projektID'];
@@ -223,26 +201,36 @@ if (!count($daten)) {
 } else {
 ?>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<!-- navbar mit custom-link je nach Recht -->
+<?php
+    $rolle2 = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
+    $rolle2->execute();
+    $dbRolle = $rolle2->fetch()['rolle'];
+    switch($dbRolle){
+        case "Management": 
+            $link = "management.php";
+            break;
+        case "Vertrieb":
+            $link = "vertrieb.php";
+            break;
+        case "Mitarbeiter":
+            $link = "start.php";
+            break;
+    }    
+    ?>
 
-  <div class="collapse navbar-collapse" id="navbarText">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="benutzerverwaltungma.php">Benutzerverwaltung <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="einzelprojekt.php">Projekt bearbeiten</a>
-      </li>
-    </ul>
-
-    <ul class="navbar-nav ml-auto">
-    </li>
-    <li class="nav-item ">
-        <a class="fas fa-user fa-2x" href="mitarbeiterverwaltung.php" ></a>
-    </li>
-    </ul>
-  </div>
-</nav>
+      <nav class="navbar navbar-default navbar-expand-sm">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                        <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                        <a class="btn btn-light custom-btn" href="logout.php">Logout</a>
+                </li>
+            </ul>
+        </nav>
 
 <br>
 <?php
@@ -381,8 +369,37 @@ if ($modus_aendern == true){
             <option value ="++">++</option>
             <option value ="+++">+++</option>
         </select><br>
-        <?php }?>
+        <?php }?><br>
+        <label>Beteiligte Mitarbeiter:<br>
+        <?php 
+        $abfrage2 = $conn->prepare("SELECT * FROM Arbeiten_an WHERE projektID = $projektID");
+        $abfrage2 -> execute();
+        while ($row2 = $abfrage2 ->fetch()){
+            $mitarbeiter2 = $row2['mitarbeiterID'];
+            $abfrage4 = $conn->prepare("SELECT * FROM person WHERE mitarbeiterID = $mitarbeiter2");
+            $abfrage4 -> execute();
+            while ($row4 = $abfrage4 ->fetch()){
+            $beteiligter = $row4['name'];
+            $beteiligterID = $row4['mitarbeiterID']?>
+            <input type="hidden" class= "form-control" name="entfernenID" id="dauer" value="<?php echo "$beteiligterID"; ?>">
+            <input type="hidden" class= "form-control" name="entfernenprojektID" id="dauer" value="<?php echo "$projektID"; ?>">
+            <input type="text" class= "form-control" name="beteiligter" id="beteiligter" value="<?php echo "$beteiligter"; ?>">
+            <?php
+        }}?>
+        <br><input type="submit"  name="löschen" value="Mitarbeiter entfernen" class="btn btn-danger"></label><br>
         <br>
+        <select name = "hinzufügen">
+        <?php
+                    $abfrage5 = $conn->prepare("SELECT name, mitarbeiterID FROM person");
+                    $abfrage5 -> execute();
+                    while ($row5 = $abfrage5 ->fetch()){
+                    $maID = $row5['mitarbeiterID'];
+                    $maauswahl = $row5['name'];
+                    ?>
+                    <option value='<?php echo $maID?>'><?php echo $maauswahl?></option>
+                    <?php }?>
+        </select><br><br><input type="submit"  name="aktion" value="Mitarbeiter hinzufügen" class="btn btn-success">
+        <br><br>
         <!--<a href = "?aktion=loeschen&projektID=<?php echo $inhalt->projektID; ?>" onclick="return confirm('Soll das Projekt wirklich gelöscht werden?')"  class="btn btn-danger">Löschen</a></td>-->
         <input type="submit"  name="aktion" value="Übernehmen" class="btn btn-success">
         <input type ="submit" onclick="return confirm('Soll das Projekt wirklich gelöscht werden?')" name ="aktion" value ="Projekt loeschen" class="btn btn-danger">
@@ -404,7 +421,6 @@ if ($modus_aendern == true){
         }?>
         <!--<input type="hidden" name="aktion" value="speichern">-->
         <br><br>
-        <a href = "einzelprojekt.php" class="btn btn-dark">Zurück zum Dashboard</a></td>
         </form>  
         <?php
 } 
