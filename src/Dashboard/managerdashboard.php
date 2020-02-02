@@ -97,7 +97,6 @@ $datengesamt = array_merge($datenprojekt, $datenperson, $datenskills);
             <th scope="col">Aufwand</th>
             <th scope="col">Skills</th>
             <th scope="col">Mitarbeiter</th>
-            <!--<th scope="col">ProjektID</th>-->
             <th scope="col">Projektstatus</th>
             <th scope="col">Bearbeiten</th>
             </tr>
@@ -107,8 +106,8 @@ $datengesamt = array_merge($datenprojekt, $datenperson, $datenskills);
             foreach ($datengesamt as $inhalt) {      
             ?>			
                 <tr>
-                    <td><?php echo sicherheit($inhalt->projektname); ?> <br> <?php echo sicherheit($inhalt->potenzial); ?></td>
-                    <td><?php echo sicherheit($inhalt->kunde); ?></td>
+                    <td><?php echo sicherheit($inhalt->projektname); ?> <br> <?php echo sicherheit($inhalt->wahrscheinlichkeit); ?></td>
+                    <td><?php echo sicherheit($inhalt->kunde); ?> <br> <?php echo sicherheit($inhalt->potenzial); ?></td>
                     <td><?php echo sicherheit($inhalt->dauer); ?></td>
                     <td><?php echo sicherheit($inhalt->budget); ?></td>
                     <td><?php echo sicherheit($inhalt->aufwand); ?></td>
