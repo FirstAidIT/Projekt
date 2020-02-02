@@ -7,7 +7,7 @@ include 'database.php';
 	$sql = "SELECT person.name, skills.skillname, besitzt.auspraegung, besitzt.timestmp 
 	FROM besitzt, person, skills
 	WHERE person.mitarbeiterID = besitzt.mitarbeiterID 
-	AND besitzt.skillID = skills.skillID";"
+	AND besitzt.skillID = skills.skillID";
 
 	echo '<table class="table">'; 
 	echo 	"<thead>";
