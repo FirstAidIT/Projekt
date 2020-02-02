@@ -4,10 +4,10 @@
 <head>
 <meta charset="utf-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="css/managerdashboard.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" type="text/css" href="css/managerdashboard.css">
 </head>
 <body>
 
@@ -79,7 +79,7 @@ if ($erg = $conn->query("SELECT * FROM skills")) {
 		}
 	}	
 }
-
+$datengesamt = array_merge($datenprojekt, $datenperson, $datenskills);
 
 ?>
 
@@ -101,7 +101,7 @@ if ($erg = $conn->query("SELECT * FROM skills")) {
         </thead>
         <tbody>
             <?php
-            foreach ($datenprojekt as $inhalt) {      
+            foreach ($datengesamt as $inhalt) {      
             ?>			
                 <tr>
                     <td><?php echo sicherheit($inhalt->projektname); ?> <br> <?php echo sicherheit($inhalt->potenzial); ?></td>
