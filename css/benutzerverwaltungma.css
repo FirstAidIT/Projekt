@@ -13,3 +13,13 @@
 .navbar-default{
     background-color:#e9ecef;
 }
+
+.btn-dark.custom-btn{
+    background-color: #8DC640;
+    border-color: #fff;
+    color: #000;
+}
+
+.btn-dark.custom-btn:hover{
+    background-color: #7CB53F;
+}
