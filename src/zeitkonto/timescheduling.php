@@ -1,15 +1,17 @@
 <?php
 //include 'datenbank/db_connection.php';
 include 'get_entries.php';
-include 'check_login.php';
 include 'database.php';
 
 SESSION_START();
 
-$rolle = $conn->prepare(sprintf("SELECT rolle 
+$rolle_zeit = $conn->prepare(sprintf("SELECT rolle 
 FROM person 
 where mitarbeiterID = %d", $_SESSION['userid'])); 
-$rolle->execute(); $dbRolle = $rolle->fetch()['rolle']; switch($dbRolle){ case "Management": $link = "management.php"; break; case "Vertrieb": $link = "vertrieb.php"; break; case "Mitarbeiter": $link = "start.php"; break; } 
+$rolle_zeit->execute(); 
+$dbRolle1 = $rolle_zeit->fetch()['rolle']; 
+switch($dbRolle){ 
+case "Management": $link = "management.php"; break; case "Vertrieb": $link = "vertrieb.php"; break; case "Mitarbeiter": $link = "start.php"; break; } 
 
 ?>
 
@@ -149,7 +151,7 @@ $rolle->execute(); $dbRolle = $rolle->fetch()['rolle']; switch($dbRolle){ case "
                 <h4 class="modal-title">Stunden erfassen</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-            <form method="post" action="./src/zeitkonto/create_entry.php">
+            <form method="post" action="./create_entry.php">
                 <!-- Modal Body -->
                 <div class="modal-body">
                     <nav>
@@ -251,7 +253,7 @@ $rolle->execute(); $dbRolle = $rolle->fetch()['rolle']; switch($dbRolle){ case "
 
             <div class="modal-body">
 
-                <form method="POST" action="src/zeitkonto/update_entry.php">
+                <form method="POST" action="./update_entry.php">
 
                     <input type="hidden" id="zeit-id" name="zeitkontoID" value="">
 

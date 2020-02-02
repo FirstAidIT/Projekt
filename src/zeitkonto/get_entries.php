@@ -1,6 +1,5 @@
 <?php
 //include 'datenbank/db_connection.php'; 
-include 'check_login.php';
 include 'database.php';
 
 SESSION_START(); 
@@ -79,7 +78,7 @@ $projects = $stmt->fetchAll(\PDO::FETCH_ASSOC);
   $sql_week_hours = "SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(stunden_anzahl))) as weekhours
   FROM zeitkonto
   WHERE erfassungs_tag between curdate() - interval 7 day and curdate()";
-  $week_hours= $db->query($sql_week_hours);
+  $week_hours= $conn->query($sql_week_hours);
   $e = function($value) {
       return htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
   
