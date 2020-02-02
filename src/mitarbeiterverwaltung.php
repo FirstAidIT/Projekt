@@ -220,7 +220,7 @@ function PassStrength($Password) {
         <input type="hidden" name="email" id="email" value="<?php echo $email;?>">
     </label><br>
     <label>Name:<br>
-        <input type="text" name="name" class= "form-control" id="name" value="<?php echo $name; ?>">        
+        <input type="text" name="name" class= "form-control" id="name" value="<?php echo $name; ?>"readonly>        
     </label><br>
     <label>Neues Passwort:<br>
         <input type="password" name="passwortneu1" class= "form-control" id="passwortneu1" value="">
