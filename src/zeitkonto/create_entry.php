@@ -3,7 +3,7 @@ include 'check_login.php';
 include 'database.php';
 
 SESSION_START();
-$_SESSION['userid'] = $mitarbeiterID;
+/*$_SESSION['userid'] = $mitarbeiterID;
 
     
 
@@ -86,6 +86,6 @@ $_SESSION['userid'] = $mitarbeiterID;
         return $stunden_anzahl;
     }
 
-  
+  */
 
 ?>
