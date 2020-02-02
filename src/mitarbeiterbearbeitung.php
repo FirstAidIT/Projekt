@@ -23,7 +23,7 @@ session_start();
 
 
 
-$id_einlesen = $_SESSION['id'];
+$id_einlesen = $_SESSION['userid'];
 
 $dseinlesen = $conn->prepare("SELECT* FROM person where mitarbeiterID = ?");
 $dseinlesen->execute([$id_einlesen]);
@@ -39,6 +39,25 @@ while ($row = $dseinlesen->fetch()) {
 };
 ?>
 
+
+<!-- navbar mit custom-link je nach Recht -->
+<?php
+    $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
+    $rolle->execute();
+    $dbRolle = $rolle->fetch()['rolle'];
+    switch($dbRolle){
+        case "Management": 
+            $link = "management.php";
+            break;
+        case "Vertrieb":
+            $link = "vertrieb.php";
+            break;
+        case "Mitarbeiter":
+            $link = "start.php";
+            break;
+    }    
+    ?>
+    
 
 <nav class="navbar navbar-default navbar-expand-sm">
     <ul class="navbar-nav mr-auto">
