@@ -59,7 +59,7 @@ $sql = "SELECT projekt.projektname, projekt.kunde, projekt.dauer, zeitkonto.stun
         FROM projekt, zeitkonto, Arbeiten_an, person
         WHERE Arbeiten_an.mitarbeiterID = person.mitarbeiterID
         AND Arbeiten_an.projektID = projekt.projektID
-        AND projekt.ist_archiviert = 0";
+        AND projekt.ist_archiviert is null";
 
 	echo '<table class="table">'; 
 	echo 	"<thead>";
