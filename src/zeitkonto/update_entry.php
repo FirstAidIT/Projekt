@@ -5,7 +5,7 @@ include 'check_login.php';
 include 'database.php';
 
 SESSION_START();
- 
+ /*
 	if(ISSET($_POST['update'])){
   $stunden_anzahl = calculateTime($_POST['stunden_anzahl']);
 	//$update_entry = "UPDATE zeitkonto SET zuordnung=?, erfassungs_tag=?, stunden_anzahl=?, kommentar=? WHERE zeitkontoID =?";
@@ -15,7 +15,7 @@ SESSION_START();
        
  
 		header("location: zeitkontostart.php");
-    }
+    }*/
     
 
 ?>

@@ -4,7 +4,7 @@ include 'check_login.php';
 include 'database.php';
 
 SESSION_START(); 
-$_SESSION['userid'] = $mitarbeiterID;
+/*$_SESSION['userid'] = $mitarbeiterID;
 
 // SQL Abfrage für Monatsübersicht - Projektebene
 
@@ -65,7 +65,7 @@ $e = function($value) {
 FROM projekt 
 WHERE EXISTS ( SELECT * FROM Arbeiten_an WHERE mitarbeiterID = %d)
 AND ist_archiviert is null", $_SESSION['userid']);*/
-
+/*
 $stmt = $conn->prepare(sprintf("SELECT projektID, projektname , kunde, startzeit, endzeit
 FROM projekt 
 WHERE EXISTS ( SELECT * FROM Arbeiten_an WHERE mitarbeiterID = %d)
@@ -97,7 +97,7 @@ $today = $year . '-' . $month . '-' . $day;
 
 
 
-
+*/
 
 
 
