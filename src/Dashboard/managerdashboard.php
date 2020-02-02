@@ -16,6 +16,8 @@
 <body>
 
 <?php
+include 'check_login.php';
+include 'database.php'; 
     $rolle = $conn->prepare(sprintf("SELECT rolle FROM person where mitarbeiterID = %d", $_SESSION['userid']));
     $rolle->execute();
     $dbRolle = $rolle->fetch()['rolle'];
@@ -51,14 +53,13 @@
 
 <?php
 
-include 'check_login.php';
-include 'database.php'; 
+
 
 $sql = "SELECT projekt.projektname, projekt.kunde, projekt.dauer, zeitkonto.stunden_anzahl, projekt.projektID, projekt.startzeit
         FROM projekt, zeitkonto, Arbeiten_an, person
         WHERE Arbeiten_an.mitarbeiterID = person.mitarbeiterID
         AND Arbeiten_an.projektID = projekt.projektID
-        AND projekt.ist_archiviert = '0'";
+        AND projekt.ist_archiviert = 0";
 
 	echo '<table class="table">'; 
 	echo 	"<thead>";
