@@ -1,0 +1,15 @@
+.btn-light.custom-btn{
+    background-color: #8DC640;
+    border-color: #e9ecef;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    padding: 5px 20px;
+}
+
+.btn-light.custom-btn:hover{
+    background-color: #7CB53F;
+}
+
+.navbar-default{
+    background-color:#e9ecef;
+}
