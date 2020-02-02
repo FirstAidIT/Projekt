@@ -578,9 +578,7 @@ if ($modus_aendern == true)
 <?php if ($modus_aendern == false){
 ?>
 
-<form method="get" action="mitarbeiterverwaltungma.php"> 
-    <a href = "mitarbeiterverwaltungma.php"><input type="submit" value="Neuen Benutzer anlegen" class="btn btn-primary"></a>
-</form>
+<a class="btn btn-dark custom-btn" href="mitarbeiterverwaltungma.php">Neuen Benutzer anlegen</a>
 
 <?php } ?>
 
