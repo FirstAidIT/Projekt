@@ -27,6 +27,7 @@
                 <div class="col d-flex justify-content-center">
                     <div class="btn-group-vertical">
                         <button type="button" class="btn btn-dark custom-btn">Dashboard</button>
+                        <a class="btn btn-dark custom-btn" href="zeitkonto.php">Zeikonto</a>
                         <a class="btn btn-dark custom-btn" href="einstellungen.php">Einstellungen</a>
                     </div>
                 </div>

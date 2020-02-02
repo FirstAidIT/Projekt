@@ -14,6 +14,7 @@
             $config['DB_USERNAME'],
             $config['DB_PASSWORD']
         );
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     } catch(PDOException $e) {
         echo "Currently out of order.";
         die();

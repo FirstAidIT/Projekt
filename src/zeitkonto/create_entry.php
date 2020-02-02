@@ -1,5 +1,4 @@
 <?php
-include 'check_login.php';
 include 'database.php';
 
 SESSION_START();
@@ -27,7 +26,7 @@ $_SESSION['userid'] = $mitarbeiterID;
 
             $stmt_update = $conn->prepare($create_allocate);
             $stmt_update->execute([$zuordnung, $kunde, $erfassungs_tag , $stunden_anzahl, $mitarbeiterID ]);
-           header("location: zeitkontostart.php");
+           header("location: zeitkonto.php");
             }
 
     if(ISSET($_POST['erfassen2'])) {
@@ -39,7 +38,7 @@ $_SESSION['userid'] = $mitarbeiterID;
 
         $stmt_update = $conn->prepare($create_no_allocate);
         $stmt_update->execute([$erfassungs_tag , $stunden_anzahl, $kommentar, $mitarbeiterID ]);
-        header("location: zeitkontostart.php");
+        header("location: zeitkonto.php");
     }
 
     

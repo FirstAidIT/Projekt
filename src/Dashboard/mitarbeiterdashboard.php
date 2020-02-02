@@ -39,7 +39,7 @@ include 'database.php';
                         <a class="btn btn-light custom-btn" href="<?php echo $link ?>">Zurück zum Hauptmenü</a>
                 </li>
                 <li class="nav-item">
-        <a class="nav-link" href="zeitkontostart.php">Gesamtstundenübersicht</a> 
+        <a class="nav-link" href="zeitkonto.php">Gesamtstundenübersicht</a> 
             </li>
             </ul>
             <ul class="navbar-nav ml-auto">
